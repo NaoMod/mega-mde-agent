@@ -79,21 +79,33 @@ class MCPServer:
     def __post_init__(self):
         if not self.name:
             self.name = f"server_{self.host}_{self.port}"
+
+    @property
+    def endpoint_url(self) -> str:
+        return f"http://{self.host}:{self.port}"
     
 
     
     def connect(self) -> bool:
-        """Test connection to the MCP server"""
+        """Test connection to the MCP server using /tools endpoint"""
         try:
-            #check in the documetation how to ping the server
-            response = requests.get(f"{self.endpoint_url}/health", timeout=5)
+            response = requests.get(f"{self.endpoint_url}/tools", timeout=5)
             if response.status_code == 200:
-                self.status = ServerStatus.CONNECTED
-                return True
+                # Optionally check if response is valid JSON and contains 'tools'
+                try:
+                    data = response.json()
+                    if "tools" in data:
+                        self.status = ServerStatus.CONNECTED
+                        return True
+                except Exception:
+                    pass
+                self.status = ServerStatus.ERROR
+                return False
             else:
                 self.status = ServerStatus.ERROR
                 return False
-        except Exception:
+        except Exception as e:
+            print(f"Connection error: {e}")
             self.status = ServerStatus.ERROR
             return False
     
@@ -152,3 +164,12 @@ class MCPServer:
             "resources_count": len(self.resources),
             "metadata": self.metadata
         }
+
+# Simple test block
+if __name__ == "__main__":
+    # Change port to 8081 for ATL or 8082 for EMF MCP server
+    server = MCPServer(host="localhost", port=8081, name="atl_server")
+    print(f"Connecting to {server.endpoint_url}/tools ...")
+    connected = server.connect()
+    print(f"Connected: {connected}, Status: {server.status}")
+    print("Server info:", server.get_server_info())
