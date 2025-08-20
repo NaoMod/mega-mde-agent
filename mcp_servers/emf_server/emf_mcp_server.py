@@ -419,6 +419,33 @@ async def debug_tools() -> str:
         return f"Error: {str(e)}"
 
 if __name__ == "__main__":
+    # Add /tools endpoint to expose all registered tools
+    from fastapi import FastAPI
+    import uvicorn
+
+    app = FastAPI()
+
+    @app.get("/tools")
+    def get_tools():
+        tool_manager = mcp._tool_manager
+        tools = []
+        if hasattr(tool_manager, 'tools'):
+            for name, tool in tool_manager.tools.items():
+                desc = getattr(tool, 'description', '')
+                tools.append({"name": name, "description": desc})
+        elif hasattr(tool_manager, '_tools'):
+            for name, tool in tool_manager._tools.items():
+                desc = getattr(tool, 'description', '')
+                tools.append({"name": name, "description": desc})
+        return {"tools": tools}
+
+    import threading
+    def run_fastapi():
+        uvicorn.run(app, host="0.0.0.0", port=8082, log_level="info")
+
+    # Start FastAPI server in a separate thread
+    threading.Thread(target=run_fastapi, daemon=True).start()
+
     try:
         mcp.run(transport='stdio')
     except Exception as e:

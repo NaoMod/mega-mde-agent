@@ -98,6 +98,7 @@ async def get_input_metamodel(file_path: str) -> str:
         return f"Error: File not found at path: {file_path}"
     except Exception as e:
         return f"An error occurred while processing the file: {str(e)}"
+    
 
 def get_transformation_names() -> List[str]:
     """Get list of enabled transformation names from the ATL server."""
@@ -156,8 +157,36 @@ for t in transformations:
     create_get_transformation(name)
 
 if __name__ == "__main__":
+    # Add /tools endpoint to expose all registered tools
+    from fastapi import FastAPI
+    import uvicorn
+
+    app = FastAPI()
+
+    @app.get("/tools")
+    def get_tools():
+        # Access tool manager from MCP
+        tool_manager = mcp._tool_manager
+        tools = []
+        if hasattr(tool_manager, 'tools'):
+            for name, tool in tool_manager.tools.items():
+                desc = getattr(tool, 'description', '')
+                tools.append({"name": name, "description": desc})
+        elif hasattr(tool_manager, '_tools'):
+            for name, tool in tool_manager._tools.items():
+                desc = getattr(tool, 'description', '')
+                tools.append({"name": name, "description": desc})
+        return {"tools": tools}
+
+    import threading
+    def run_fastapi():
+        uvicorn.run(app, host="0.0.0.0", port=8081, log_level="info")
+
+    # Start FastAPI server in a separate thread
+    threading.Thread(target=run_fastapi, daemon=True).start()
+
     try:
         mcp.run(transport='stdio')
     except Exception as e:
         logger.error(f"Server error: {str(e)}")
-        sys.exit(1) 
+        sys.exit(1)
