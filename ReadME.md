@@ -85,3 +85,5 @@ The system provides a **megamodel** that acts as:
 - **Traceability** – Logs all operations and decisions for auditing and reproducibility.
 - **Adaptability** – Can adjust workflows based on execution results.
 - **Learning** – Captures successful workflow patterns for reuse.
+
+![Alt text](images/megamodel_without_relationships.png)
