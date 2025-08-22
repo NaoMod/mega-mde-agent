@@ -12,7 +12,7 @@ API_USER = os.getenv("API_USER")
 API_PASSWORD = os.getenv("API_PASSWORD")
 
 # Ollama's Configuration
-OLLAMA_MODEL = "llama3.2"
+OLLAMA_MODEL = "llama3.3"
 OLLAMA_TEMPERATURE = 0.1
 OLLAMA_MAX_RETRIES = 2
 
@@ -42,38 +42,40 @@ class MCPAgent:
         # Filter relevant tools by goal keywords (simple heuristic)
         keywords = [w.lower() for w in user_goal.split()]
         all_tools = self.registry.discover_tools()
+        
+        # Generic keyword-based selection only (no hardcoded name patterns)
         relevant_tools = []
+        def clean_token(tok: str) -> str:
+            return tok.strip("'\".,:;!?()[]{}")
+        norm_keywords = [clean_token(k) for k in keywords]
         for tool in all_tools:
             name = getattr(tool, "name", str(tool)).lower()
             desc = getattr(tool, "description", "").lower()
-            if any(k in name or k in desc for k in keywords):
+            if any(k and (k in name or k in desc) for k in norm_keywords):
                 relevant_tools.append(tool)
-        # If no relevant tools found, fallback to first 5
         if not relevant_tools:
             relevant_tools = all_tools[:5]
-
-        # Filter relevant models by goal keywords
+        
+        # Models selection unchanged
         all_models = self.registry.find_entities_by_type(self.registry.entities.get("Model", type(None)))
         relevant_models = []
         for model in all_models:
             name = getattr(model, "name", str(model)).lower()
-            if any(k in name for k in keywords):
+            if any(k in name for k in norm_keywords):
                 relevant_models.append(model)
-        # If no relevant models found, fallback to first 5
         if not relevant_models:
             relevant_models = all_models[:5]
-
-        # Limit to top 10 relevant tools/models and only include names
+        
         tool_names = [getattr(tool, "name", str(tool)) for tool in relevant_tools[:10]]
         model_names = [getattr(model, "name", str(model)) for model in relevant_models[:10]]
-        # Expose available server names
         available_servers = list(self.registry.tools_by_server.keys())
+        
         prompt = (
             f"You are an MDE agent. Your goal is: {user_goal}\n"
             f"Relevant tools: {tool_names}\n"
             f"Relevant models: {model_names}\n"
             f"Available server names: {available_servers}\n"
-            "Generate a workflow plan as a JSON list of steps. Each step must be a JSON object with keys: tool_name, server_name, parameters, description. Output ONLY the JSON list, no extra text. Example: [ {\"tool_name\": ..., \"server_name\": ..., \"parameters\": {...}, \"description\": ...}, ... ]"
+            "Generate a workflow plan as a JSON list of steps. Each step must be a JSON object with keys: tool_name, server_name, parameters, description. Output ONLY the JSON list, no extra text. Example: [{\"tool_name\": ..., \"server_name\": ..., \"parameters\": {...}, \"description\": ...}]"
         )
 
         print("\n--- LLM Prompt ---")
@@ -116,15 +118,21 @@ class MCPAgent:
                             print(f"Line parsing error: {e2} | Line: {line.strip()}")
                             continue
 
+        # Build a lookup to resolve server_name by tool name when missing
+        tool_index = {getattr(t, "name", ""): t for t in all_tools}
+        
         for step in steps:
             if isinstance(step, dict):
-                # Default to atl_server if server_name is missing or empty
+                tool_name = step.get("tool_name")
                 server_name = step.get("server_name")
                 if not server_name:
-                    server_name = available_servers[0] if available_servers else "atl_server"
+                    if tool_name in tool_index and getattr(tool_index[tool_name], "server_name", ""):
+                        server_name = tool_index[tool_name].server_name
+                    else:
+                        server_name = available_servers[0] if available_servers else ""
                 plan.add_step(PlanStep(
-                    tool_name=step.get("tool_name"),
-                    server_name=step.get("server_name"),
+                    tool_name=tool_name,
+                    server_name=server_name,
                     parameters=step.get("parameters", {}),
                     description=step.get("description", "")
                 ))

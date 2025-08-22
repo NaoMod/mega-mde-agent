@@ -16,8 +16,26 @@ class WorkflowExecutor:
     
     def __init__(self, registry: MegamodelRegistry):
         self.registry = registry
-        self.atl_client = ATLServerClient()
-        self.emf_client = EMFServerClient()
+        
+        # Get port configurations from the registry servers
+        atl_server = self.registry.get_mcp_server("atl_server")
+        emf_server = self.registry.get_mcp_server("emf_server")
+        
+        # Default port values if servers not configured
+        atl_api_port = getattr(atl_server, "port", 8080) if atl_server else 8080
+        atl_tools_port = getattr(atl_server, "tools_port", 8081) if atl_server else 8081
+        emf_api_port = getattr(emf_server, "port", 8080) if emf_server else 8080
+        emf_tools_port = getattr(emf_server, "tools_port", 8082) if emf_server else 8082
+        
+        # Initialize clients with proper port configurations
+        self.atl_client = ATLServerClient(
+            base_url=f"http://localhost:{atl_api_port}", 
+            tools_port=atl_tools_port
+        )
+        self.emf_client = EMFServerClient(
+            base_url=f"http://localhost:{emf_api_port}", 
+            tools_port=emf_tools_port
+        )
     
     def execute_step(self, step: PlanStep) -> Dict[str, Any]:
         """Execute a single workflow step using generic HTTP client"""
@@ -96,15 +114,35 @@ class WorkflowExecutor:
                 # Normalize endpoint to start with '/'
                 if isinstance(endpoint, str) and not endpoint.startswith('/'):
                     endpoint = f"/{endpoint}"
+                
+                # Determine proper HTTP method based on endpoint or tool name
+                endpoint_method = method
+                if isinstance(endpoint, str) and "list_transformation" in step.tool_name:
+                    endpoint_method = "GET"
+                    print(f"[DEBUG] Using GET method for list_transformation tool: {step.tool_name}")
+                
                 # Route to the correct client based on server_for_tool
                 if server_for_tool == "atl_server":
                     file_path = step.parameters.get("file_path") if isinstance(step.parameters, dict) else None
-                    if file_path and os.path.exists(file_path):
-                        with open(file_path, "rb") as f:
-                            files = {"IN": f}
-                            result = self.atl_client.call_tool(endpoint, method=method, files=files)
+                    # Check if we're doing a transformation - handle file upload properly
+                    if (isinstance(step.parameters, dict) and 
+                        ("input_file" in step.parameters or "file_path" in step.parameters)):
+                        
+                        file_path = step.parameters.get("input_file") or step.parameters.get("file_path")
+                        
+                        # Ensure we have the correct /apply endpoint for transformations
+                        if isinstance(endpoint, str) and "transformation" in endpoint and not endpoint.endswith("/apply"):
+                            if "apply" in step.tool_name.lower():
+                                endpoint = f"{endpoint}/apply"
+                                print(f"[DEBUG] Added /apply to endpoint: {endpoint}")
+                        
+                        if file_path and os.path.exists(file_path):
+                            print(f"[DEBUG] Executing ATL transformation with file: {file_path} to endpoint: {endpoint}")
+                            with open(file_path, "rb") as f:
+                                files = {"IN": (os.path.basename(file_path), f)}
+                                result = self.atl_client.call_tool(endpoint, method="POST", files=files)
                     else:
-                        result = self.atl_client.call_tool(endpoint, method=method, params=params, data=data, files=files)
+                        result = self.atl_client.call_tool(endpoint, method=endpoint_method, params=params, data=data, files=files)
                 elif server_for_tool == "emf_server":
                     result = self.emf_client.call_model_tool(endpoint)
                 else:

@@ -10,9 +10,9 @@ from typing import Dict, Any, List
 # Constants
 ATL_SERVER_BASE = "http://localhost:8080"
 
-# Set up logging to stderr as required by MCP
+# Set up logging
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[logging.StreamHandler(sys.stderr)]
 )
@@ -23,13 +23,13 @@ mcp = FastMCP("atl")
 
 def fetch_transformations() -> list:
     """Fetch enabled transformations from the ATL server."""
-    result = subprocess.run(['curl', '-X', 'GET', 'localhost:8080/transformations/enabled'], 
+    result = subprocess.run(['curl', '-X', 'GET', f'{ATL_SERVER_BASE}/transformations/enabled'], 
                           capture_output=True, text=True, check=True)
     return json.loads(result.stdout)
 
 def get_transformation_details(transformation_name: str) -> Dict[str, Any]:
     """Get details of a specific transformation."""
-    result = subprocess.run(['curl', '-X', 'GET', 'localhost:8080/transformations/enabled'], 
+    result = subprocess.run(['curl', '-X', 'GET', f'{ATL_SERVER_BASE}/transformations/enabled'], 
                           capture_output=True, text=True, check=True)
     transformations = json.loads(result.stdout)
     return next((t for t in transformations if t["name"] == transformation_name), None)
@@ -46,7 +46,7 @@ def create_transformation_description(transformation_name: str) -> str:
     output_path = transformation["output_metamodels"][0]["path"]
     output_model = output_path.split("/")[-1].replace(".ecore", "")
     
-    return f"Input metamodel: {input_model}, Output metamodel: {output_model}. This tool takes: {input_model} model as input and produces {output_model} model."
+    return f"Input metamodel: {input_model}, Output metamodel: {output_model}. This tool transforms {input_model} model into {output_model} model."
 
 def generate_get_tool_description(transformation_name: str) -> str:
     """Create a description for the get transformation tool."""
@@ -60,7 +60,7 @@ def generate_get_tool_description(transformation_name: str) -> str:
     output_path = transformation["output_metamodels"][0]["path"]
     output_model = output_path.split("/")[-1].replace(".ecore", "")
     
-    return f"This tool displays the details of the transformation {transformation_name} that transforms: {input_model} model into {output_model} model."
+    return f"Displays details of transformation {transformation_name} that transforms {input_model} model into {output_model} model."
 
 def _extract_from_content(content: str) -> str:
     """Extract metamodel name from XMI file content."""
@@ -85,7 +85,7 @@ def _extract_from_content(content: str) -> str:
 
     return None
 
-@mcp.tool(name="extract_input_metamodel_name", description="Extracts the metamodel name from an XMI file. The input should be exactly a file path to an XMI file. Returns the metamodel name (like 'Class', 'Grafcet', 'ECORE', or 'KM3').")
+@mcp.tool(name="extract_input_metamodel_name", description="Extracts the metamodel name from an XMI file. The input should be a file path to an XMI file. Returns the metamodel name (like 'Class', 'Grafcet', 'ECORE', or 'KM3').")
 async def get_input_metamodel(file_path: str) -> str:
     """Extract the metamodel name from an XMI file."""
     try:
@@ -102,7 +102,7 @@ async def get_input_metamodel(file_path: str) -> str:
 
 def get_transformation_names() -> List[str]:
     """Get list of enabled transformation names from the ATL server."""
-    result = subprocess.run(['curl', '-X', 'GET', 'localhost:8080/transformations/enabled'], 
+    result = subprocess.run(['curl', '-X', 'GET', f'{ATL_SERVER_BASE}/transformations/enabled'], 
                           capture_output=True, text=True, check=True)
     transformations = json.loads(result.stdout)
     return [t["name"] for t in transformations]
@@ -113,11 +113,12 @@ for t in transformations:
     name = t["name"]
     
     def create_apply_transformation(trans_name: str):
-        @mcp.tool(name=f"apply_{trans_name}_transformation_tool", description=create_transformation_description(trans_name))
+        @mcp.tool(name=f"apply_{trans_name}_transformation_tool", 
+                 description=create_transformation_description(trans_name))
         async def apply_transformation(file_path: str) -> str:
             """Apply an ATL transformation to a model file."""
             try:
-                # Handle dictionary input by taking the first value
+                # Handle dictionary input if needed
                 if isinstance(file_path, dict):
                     file_path = next(iter(file_path.values()), '')
                 
@@ -126,30 +127,33 @@ for t in transformations:
                     return f"Error: File not found at {file_path}"
                 
                 transformation_name = trans_name
+                # Prepare the command for the transformation
                 command = [
                     'curl', 
-                    f'localhost:8080/transformation/{transformation_name}/apply', 
+                    '-X', 'POST',
+                    f'{ATL_SERVER_BASE}/transformation/{transformation_name}/apply', 
                     '-F', f'IN=@{file_path}'
                 ]
                 result = subprocess.run(command, capture_output=True, text=True, check=True)
-                return f"Transformation {transformation_name} applied:\n{result.stdout}"
+                return f"Transformation {transformation_name} applied successfully:\n{result.stdout}"
             except subprocess.CalledProcessError as e:
-                return f"An error occurred while applying transformation: {e.stderr}"
+                return f"Error applying transformation: {e.stderr}"
             except Exception as e:
-                return f"An error occurred: {str(e)}"
+                return f"Error: {str(e)}"
         return apply_transformation
 
     def create_get_transformation(trans_name: str):
-        @mcp.tool(name=f"list_transformation_{trans_name}_tool", description=generate_get_tool_description(trans_name))
+        @mcp.tool(name=f"list_transformation_{trans_name}_tool", 
+                 description=generate_get_tool_description(trans_name))
         async def get_transformation_info() -> str:
             """Get details about a specific ATL transformation."""
             try:
                 transformation_name = trans_name
-                command = ['curl', '-X', 'GET', f'localhost:8080/transformation/{transformation_name}']
+                command = ['curl', '-X', 'GET', f'{ATL_SERVER_BASE}/transformation/{transformation_name}']
                 result = subprocess.run(command, capture_output=True, text=True, check=True)
-                return f"The transformation '{transformation_name}':\n{result.stdout} successfully fetched."
+                return f"Transformation '{transformation_name}':\n{result.stdout}"
             except subprocess.CalledProcessError as e:
-                return f"An error occurred while fetching the transformation: {e.stderr}"
+                return f"Error fetching transformation: {e.stderr}"
         return get_transformation_info
 
     # Register the tools with the correct closure
@@ -178,14 +182,16 @@ if __name__ == "__main__":
                 tools.append({"name": name, "description": desc})
         return {"tools": tools}
 
+    # Start FastAPI server in a separate thread
     import threading
     def run_fastapi():
+        logger.info("Starting FastAPI server on port 8081")
         uvicorn.run(app, host="0.0.0.0", port=8081, log_level="info")
 
-    # Start FastAPI server in a separate thread
     threading.Thread(target=run_fastapi, daemon=True).start()
 
     try:
+        logger.info("Starting ATL MCP server")
         mcp.run(transport='stdio')
     except Exception as e:
         logger.error(f"Server error: {str(e)}")

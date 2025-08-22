@@ -6,12 +6,12 @@ import requests
 from typing import Dict, Any, List, Union
 from mcp.server.fastmcp import FastMCP
 
-
+# Constants
 EMF_SERVER_BASE = "http://localhost:8080"
 
-
+# Configure logging
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[logging.StreamHandler(sys.stderr)]
 )
@@ -22,19 +22,20 @@ mcp = FastMCP("emf_dynamic")
 
 # Session storage
 active_sessions = {}
-# Store object IDs by session and class - IDs can be any type
-session_objects = {}  # {session_id: {class_name: [object_ids]}}
+# Store object IDs by session and class
+session_objects = {}
 
 
 def parse_id_from_user_input(user_input: str) -> Union[str, int]:
+    """Convert user input to appropriate ID type."""
     if not user_input or user_input.lower() in ['none', '']:
         return user_input
     
-    # All object IDs are integers
+    # Try to convert to integer if possible (most object IDs)
     try:
         return int(user_input)
     except ValueError:
-        # Return as string (for UUIDs like session IDs)
+        # Return as string (for session IDs and other string-based IDs)
         return user_input
 
 def remove_object_from_session(session_id: str, class_name: str, object_id: Any):
@@ -48,14 +49,13 @@ def remove_object_from_session(session_id: str, class_name: str, object_id: Any)
 
 def add_object_to_session(session_id: str, class_name: str, object_id: Any):
     """Add an object ID to session tracking."""
-
-    # Initialize empty containers before we can append to them, bcs Python dictionaries don't auto-create nested structures
+    # Initialize empty containers
     if session_id not in session_objects:
         session_objects[session_id] = {}
     if class_name not in session_objects[session_id]:
         session_objects[session_id][class_name] = []
     
-    # Store the original ID 
+    # Store the ID
     session_objects[session_id][class_name].append(object_id)
 
 def get_session_objects(session_id: str, class_name: str = None) -> Dict[str, List[Any]]:
@@ -69,7 +69,7 @@ def get_session_objects(session_id: str, class_name: str = None) -> Dict[str, Li
     return session_objects[session_id]
 
 def format_object_list(session_id: str, class_name: str) -> str:
-    """Format object list with optional details."""
+    """Format object list for display."""
     objects = get_session_objects(session_id, class_name)
     if not objects or class_name not in objects or not objects[class_name]:
         return f"No {class_name} objects found in session."
@@ -163,13 +163,11 @@ def create_object_creation_tool(session_id: str, class_name: str, spec: Dict[str
             
             if response.status_code == 200:
                 result = response.json()
-                object_id = result.get('id')  # Keep original type
+                object_id = result.get('id')
                 
                 if object_id is not None:
-                    # Store the object ID with its original type
                     add_object_to_session(session_id, class_name, object_id)
-                    
-                    return f"{class_name} object created successfully!\nID: {object_id} (type: {type(object_id).__name__})\nFull response: {json.dumps(result, indent=2)}"
+                    return f"{class_name} object created successfully!\nID: {object_id}\nFull response: {json.dumps(result, indent=2)}"
                 else:
                     return f"{class_name} object created but no ID returned: {json.dumps(result, indent=2)}"
             else:
@@ -177,11 +175,11 @@ def create_object_creation_tool(session_id: str, class_name: str, spec: Dict[str
                 
         except Exception as e:
             return f"Error: {str(e)}"
-    mcp.add_tool(fn= create_object_dynamic, name=tool_name)
+    mcp.add_tool(fn=create_object_dynamic, name=tool_name)
 
 
 def create_feature_update_tool(session_id: str, class_name: str, feature_name: str, 
-                             spec: Dict[str, Any], feature_info: Dict[str, Any]):
+                              spec: Dict[str, Any], feature_info: Dict[str, Any]):
     """Create a tool for updating a specific feature of a class."""
     tool_name = f"update_{class_name.lower()}_{feature_name}_{session_id[:8]}"
     
@@ -202,11 +200,10 @@ def create_feature_update_tool(session_id: str, class_name: str, feature_name: s
             
             # Parse the object_id to the correct type
             parsed_object_id = parse_id_from_user_input(object_id)
-           
-                
+            
             data = {'value': value}
             response = make_request('PUT', f'/metamodel/{session_id}/{class_name}/{parsed_object_id}/{feature_name}', 
-                                  json=data)
+                                   json=data)
             
             if response.status_code == 200:
                 result = response.json()
@@ -216,7 +213,7 @@ def create_feature_update_tool(session_id: str, class_name: str, feature_name: s
                 
         except Exception as e:
             return f"Error: {str(e)}"
-    mcp.add_tool(fn=update_feature_dynamic,name=tool_name)
+    mcp.add_tool(fn=update_feature_dynamic, name=tool_name)
 
 def create_delete_tools_for_session(session_id: str, openapi_spec: Dict[str, Any]):
     """Create delete tools for each class in the session."""
@@ -227,10 +224,9 @@ def create_delete_tools_for_session(session_id: str, openapi_spec: Dict[str, Any
         tool_name = f"delete_{class_name.lower()}_{session_id[:8]}"
         
         @mcp.tool(name=tool_name, 
-                 description=f"Delete a {class_name} object in session {session_id[:8]}... .")
+                 description=f"Delete a {class_name} object in session {session_id[:8]}.")
         async def delete_object_dynamic(object_id: str = "", cls_name: str = class_name) -> str:
             try:
-                
                 parsed_object_id = parse_id_from_user_input(object_id)
                 response = make_request('DELETE', f'/metamodel/{session_id}/{cls_name}/{parsed_object_id}')
                 
@@ -244,7 +240,7 @@ def create_delete_tools_for_session(session_id: str, openapi_spec: Dict[str, Any
                     
             except Exception as e:
                 return f"Error: {str(e)}"
-        mcp.add_tool(fn=delete_object_dynamic,name=tool_name)
+        mcp.add_tool(fn=delete_object_dynamic, name=tool_name)
         
         # Create clear feature tools for each feature
         features = extract_features_from_openapi(openapi_spec, class_name)
@@ -252,10 +248,9 @@ def create_delete_tools_for_session(session_id: str, openapi_spec: Dict[str, Any
             clear_tool_name = f"clear_{class_name.lower()}_{feature_name}_{session_id[:8]}"
             
             @mcp.tool(name=clear_tool_name, 
-                     description=f"Clear {feature_name} of {class_name} in session {session_id[:8]}... .")
+                     description=f"Clear {feature_name} of {class_name} in session {session_id[:8]}.")
             async def clear_feature_dynamic(object_id: str = "", cls_name: str = class_name, feat_name: str = feature_name) -> str:
                 try:
-                    
                     parsed_object_id = parse_id_from_user_input(object_id)
                     response = make_request('DELETE', f'/metamodel/{session_id}/{cls_name}/{parsed_object_id}/{feat_name}')
                     
@@ -267,7 +262,7 @@ def create_delete_tools_for_session(session_id: str, openapi_spec: Dict[str, Any
                         
                 except Exception as e:
                     return f"Error: {str(e)}"
-        mcp.add_tool(fn=clear_feature_dynamic, name=clear_tool_name)
+            mcp.add_tool(fn=clear_feature_dynamic, name=clear_tool_name)
 
 @mcp.tool(name="list_session_objects", 
           description="List all objects created in a session, organized by class type.")
@@ -287,7 +282,7 @@ async def list_session_objects(session_id: str) -> str:
         if object_ids:
             result_lines.append(f"\n{class_name} ({len(object_ids)} objects):")
             for obj_id in object_ids:
-                result_lines.append(f"  ID {obj_id} ({type(obj_id).__name__})")
+                result_lines.append(f"  ID {obj_id}")
             total_objects += len(object_ids)
     
     result_lines.append(f"\nTotal objects: {total_objects}")
@@ -323,11 +318,9 @@ async def start_metamodel_session(metamodel_file_path: str) -> str:
             create_dynamic_tools_for_session(session_id, openapi_spec)
             create_delete_tools_for_session(session_id, openapi_spec)
 
-
             session_info = {
                 'sessionId': session_id,
                 'availableClasses': classes,
-                'createdTools': len([name for name in dir() if name.startswith(f"create_{classes[0].lower()}_{session_id[:8]}") or name.startswith(f"update_")]) if classes else 0,
                 'message': f"Session started successfully. Created dynamic tools for classes: {', '.join(classes)}"
             }
             
@@ -368,28 +361,23 @@ async def get_session_info(session_id: str) -> str:
 async def debug_tools() -> str:
     """Show all registered tools."""
     try:
-        result = [
-            f"Active sessions: {len(active_sessions)}",
-            "",
-        ]
+        result = [f"Active sessions: {len(active_sessions)}", ""]
         
         # Access the tool manager
         tool_manager = mcp._tool_manager
         
-        
-        # Try to access tools through tool manager
-        result.append("\n=== REGISTERED TOOLS ===")
+        result.append("=== REGISTERED TOOLS ===")
         
         tool_names = []
         tool_count = 0
         
-        # Try different ways to get tools from tool manager
+        # Try to access tools through tool manager
         if hasattr(tool_manager, 'tools'):
             tools = tool_manager.tools
             if hasattr(tools, 'keys'):
                 tool_names = list(tools.keys())
                 tool_count = len(tool_names)
-                result.append(f"Found {tool_count} tools via tool_manager.tools:")
+                result.append(f"Found {tool_count} tools:")
                 for name in sorted(tool_names):
                     result.append(f"  - {name}")
         
@@ -398,17 +386,9 @@ async def debug_tools() -> str:
             if hasattr(tools, 'keys'):
                 tool_names = list(tools.keys())
                 tool_count = len(tool_names)
-                result.append(f"Found {tool_count} tools via tool_manager._tools:")
+                result.append(f"Found {tool_count} tools:")
                 for name in sorted(tool_names):
                     result.append(f"  - {name}")
-        
-        else:
-            # Try to call list_tools method
-            try:
-                tools_list = mcp.list_tools()
-                result.append(f"Tools from list_tools(): {tools_list}")
-            except Exception as e:
-                result.append(f"Error calling list_tools(): {e}")
         
         if tool_count == 0:
             result.append("No tools found in tool manager!")
@@ -429,6 +409,7 @@ if __name__ == "__main__":
     def get_tools():
         tool_manager = mcp._tool_manager
         tools = []
+        
         if hasattr(tool_manager, 'tools'):
             for name, tool in tool_manager.tools.items():
                 desc = getattr(tool, 'description', '')
@@ -437,16 +418,19 @@ if __name__ == "__main__":
             for name, tool in tool_manager._tools.items():
                 desc = getattr(tool, 'description', '')
                 tools.append({"name": name, "description": desc})
+                
         return {"tools": tools}
 
+    # Start FastAPI server in a separate thread
     import threading
     def run_fastapi():
+        logger.info("Starting FastAPI server on port 8082")
         uvicorn.run(app, host="0.0.0.0", port=8082, log_level="info")
 
-    # Start FastAPI server in a separate thread
     threading.Thread(target=run_fastapi, daemon=True).start()
 
     try:
+        logger.info("Starting EMF MCP server")
         mcp.run(transport='stdio')
     except Exception as e:
         logger.error(f"Server error: {str(e)}")

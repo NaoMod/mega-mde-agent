@@ -70,6 +70,7 @@ class MCPServer:
     host: str
     port: int
     name: str = ""
+    tools_port: int = None  # Separate port for tools discovery
     status: ServerStatus = ServerStatus.DISCONNECTED
     capabilities: List[MCPCapability] = field(default_factory=list)
     tools: List[MCPTool] = field(default_factory=list)
@@ -79,17 +80,22 @@ class MCPServer:
     def __post_init__(self):
         if not self.name:
             self.name = f"server_{self.host}_{self.port}"
+        if not self.tools_port:
+            self.tools_port = self.port
 
     @property
     def endpoint_url(self) -> str:
         return f"http://{self.host}:{self.port}"
     
+    @property
+    def tools_url(self) -> str:
+        return f"http://{self.host}:{self.tools_port}"
 
     
     def connect(self) -> bool:
         """Test connection to the MCP server using /tools endpoint"""
         try:
-            response = requests.get(f"{self.endpoint_url}/tools", timeout=5)
+            response = requests.get(f"{self.tools_url}/tools", timeout=5)
             if response.status_code == 200:
                 # Optionally check if response is valid JSON and contains 'tools'
                 try:

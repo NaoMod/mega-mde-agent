@@ -1,13 +1,20 @@
 
 
-
 import os
 import requests
 
 class ATLServerClient:
     """Client for ATL server using HTTP requests"""
-    def __init__(self, base_url: str = "http://localhost:8080"):
+    def __init__(self, base_url: str = "http://localhost:8080", tools_port: int = 8081):
         self.base_url = base_url
+        self.tools_port = tools_port
+        
+    def get_tools(self):
+        """Get list of tools from the tools port"""
+        tools_url = f"{self.base_url.rsplit(':', 1)[0]}:{self.tools_port}/tools"
+        response = requests.get(tools_url)
+        response.raise_for_status()
+        return response.json()
 
     def call_tool(self, endpoint: str, method: str = "GET", params=None, data=None, files=None):
         url = f"{self.base_url}{endpoint}"
@@ -26,8 +33,16 @@ class ATLServerClient:
 
 class EMFServerClient:
     """Client for EMF server using HTTP requests"""
-    def __init__(self, base_url: str = "http://localhost:8080"):
+    def __init__(self, base_url: str = "http://localhost:8080", tools_port: int = 8082):
         self.base_url = base_url
+        self.tools_port = tools_port
+        
+    def get_tools(self):
+        """Get list of tools from the tools port"""
+        tools_url = f"{self.base_url.rsplit(':', 1)[0]}:{self.tools_port}/tools"
+        response = requests.get(tools_url)
+        response.raise_for_status()
+        return response.json()
 
     def call_model_tool(self, endpoint: str, method: str = "GET", data=None, files=None):
         url = f"{self.base_url}{endpoint}"

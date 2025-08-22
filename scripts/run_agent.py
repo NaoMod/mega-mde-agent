@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 from core.megamodel import MegamodelRegistry
 from core.am3 import ReferenceModel, TransformationModel
 from mcp.integrator import MCPServerIntegrator
-from mcp.client import ATLServerClient
+from mcp.client import ATLServerClient, EMFServerClient
 from agents.agent import MCPAgent
 from mcp.infrastructure import MCPTool
 
@@ -22,15 +22,14 @@ def populate_registry(registry):
     print(f"ATL Server tools: {atl_server.tools}")
     print(f"EMF Server tools: {emf_server.tools}")
 
-    # Fetch and register tools for ATL server (port 8081)
+    # Fetch and register tools for ATL server
     atl_tools = []
-    atl_client = ATLServerClient(base_url=f"http://{atl_server.host}:{atl_server.port}")
+    atl_client = ATLServerClient(base_url=f"http://{atl_server.host}:{atl_server.port}", tools_port=atl_server.tools_port)
     try:
-        atl_tools_response = requests.get(f"http://{atl_server.host}:8081/tools")
-        print(f"Raw ATL /tools response: {atl_tools_response.text}")
-        atl_tools_json = atl_tools_response.json()
-        if "tools" in atl_tools_json:
-            for tool in atl_tools_json["tools"]:
+        atl_tools_response = atl_client.get_tools()
+        print(f"Raw ATL /tools response: {atl_tools_response}")
+        if "tools" in atl_tools_response:
+            for tool in atl_tools_response["tools"]:
                 tool_name = tool.get("name")
                 desc = tool.get("description", "")
                 # If tool is an apply transformation tool, set endpoint to REST endpoint
@@ -55,14 +54,14 @@ def populate_registry(registry):
     except Exception as e:
         print(f"Could not fetch ATL server tools: {e}")
 
-    # Fetch and register tools for EMF server (port 8082)
+    # Fetch and register tools for EMF server
     emf_tools = []
+    emf_client = EMFServerClient(base_url=f"http://{emf_server.host}:{emf_server.port}", tools_port=emf_server.tools_port)
     try:
-        emf_tools_response = requests.get(f"http://{emf_server.host}:8082/tools")
-        print(f"Raw EMF /tools response: {emf_tools_response.text}")
-        emf_tools_json = emf_tools_response.json()
-        if "tools" in emf_tools_json:
-            for tool in emf_tools_json["tools"]:
+        emf_tools_response = emf_client.get_tools()
+        print(f"Raw EMF /tools response: {emf_tools_response}")
+        if "tools" in emf_tools_response:
+            for tool in emf_tools_response["tools"]:
                 tool_obj = MCPTool(
                     name=tool.get("name"),
                     description=tool.get("description", ""),
@@ -153,7 +152,8 @@ if __name__ == "__main__":
 
     agent = MCPAgent(registry)
 
-    user_goal = "Transform this class model '/Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi' into a relational model"
+    # Ask the agent to list details for a specific transformation, without forcing a tool
+    user_goal = "List details for the transformation 'Class2Relational'"
     print(f"\nAgent user goal: {user_goal}")
 
     print("\n--- Agent Planning Debug ---")
@@ -161,6 +161,8 @@ if __name__ == "__main__":
     for i, step in enumerate(plan.steps):
         print(f"Step {i+1}: tool={step.tool_name}, server={step.server_name}, params={step.parameters}, desc={step.description}")
     print("--- End Agent Planning Debug ---\n")
+
+    # Do not inject any manual parameters; let the agent choose the correct tool and inputs
 
     print("\n--- Agent Execution Debug ---")
     result = agent.executor.execute_workflow(plan)
