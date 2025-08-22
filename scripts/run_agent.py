@@ -31,10 +31,21 @@ def populate_registry(registry):
         atl_tools_json = atl_tools_response.json()
         if "tools" in atl_tools_json:
             for tool in atl_tools_json["tools"]:
+                tool_name = tool.get("name")
+                desc = tool.get("description", "")
+                # If tool is an apply transformation tool, set endpoint to REST endpoint
+                if tool_name.startswith("apply_") and tool_name.endswith("_transformation_tool"):
+                    transfo_name = tool_name[len("apply_"):-len("_transformation_tool")]
+                    endpoint = f"/transformation/{transfo_name}/apply"
+                elif tool_name.startswith("list_transformation_") and tool_name.endswith("_tool"):
+                    transfo_name = tool_name[len("list_transformation_"):-len("_tool")]
+                    endpoint = f"/transformation/{transfo_name}"
+                else:
+                    endpoint = tool_name
                 tool_obj = MCPTool(
-                    name=tool.get("name"),
-                    description=tool.get("description", ""),
-                    endpoint=tool.get("name"),
+                    name=tool_name,
+                    description=desc,
+                    endpoint=endpoint,
                     server_name=atl_server.name
                 )
                 atl_tools.append(tool_obj)
