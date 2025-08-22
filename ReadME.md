@@ -1,89 +1,131 @@
-# LLM-Based Autonomous Agents for Model-Driven Engineering (MDE)
+# Intelligent Model-Driven Engineering Agent
 
-This project implements autonomous agents powered by large language models (LLMs) to orchestrate Model-Driven Engineering (MDE) tools. It provides reasoning, planning, execution, and traceability over MDE workflows.
+This project creates an intelligent agent that helps automate Model-Driven Engineering (MDE) tasks using Large Language Models. The agent can understand natural language instructions, plan the necessary steps, and execute model transformations automatically.
 
-## Overview
+## What Does It Do?
 
-### Problem
+The agent serves as a bridge between your instructions and various MDE tools. When you tell it what you want to accomplish with your models, it:
 
-MDE tools such as ATL transformations and EMF models run as MCP servers. Orchestrating these tools automatically requires agents capable of reasoning about models, transformations, and workflows while maintaining full traceability.
+1. Understands your goal
+2. Finds the relevant tools and models
+3. Creates a step-by-step plan
+4. Executes the plan using available servers
+5. Keeps track of everything that happens
 
-### Solution
+## How It Works
 
-The system provides a **megamodel** that acts as:
+The system is built around three main components:
 
-- **Registry** – Maintains knowledge of all models, transformations, and MCP servers.
-- **Reasoning Engine** – Checks compatibility and generates workflow plans.
-- **Execution Engine** – Executes multi-step workflows using MCP servers.
-- **Audit System** – Tracks all operations for full traceability.
+1. A central registry (megamodel) that keeps track of:
+   - Available tools and what they can do
+   - Different types of models
+   - Transformation rules
+   - Server connections
 
-### Example Workflow
+2. A planning system that:
+   - Takes your instructions in plain English
+   - Matches them with available tools
+   - Creates a workflow plan
 
-1. Agent receives a task: transform a Class model into a Relational model.
-2. Agent queries the megamodel for available transformations.
-3. Agent plans the workflow: select the Class2Relational transformation.
-4. Agent executes the workflow: call ATL server, apply transformation, validate results.
-5. All steps are logged in traces and sessions for traceability.
+3. An execution engine that:
+   - Runs the planned steps
+   - Coordinates between different servers
+   - Records what was done
+
+## A Simple Example
+
+Let's say you want to transform a Class model into a Relational database model. Here's what happens:
+
+1. You tell the agent: "transform Class model to Relational model"
+
+2. The agent analyzes your request and:
+   - Looks for tools related to "class", "model", "transform", and "relational"
+   - Finds the relevant model types (Class and Relational models)
+   - Identifies the servers that can help
+
+3. The agent creates a plan like:
+   ```json
+   [
+     {
+       "tool_name": "loadClassModel",
+       "server_name": "emf_server",
+       "parameters": {"model_path": "input/class.xmi"},
+       "description": "Load the Class model"
+     },
+     {
+       "tool_name": "transformToRelational",
+       "server_name": "atl_server",
+       "parameters": {"source": "class.xmi", "target": "relational.xmi"},
+       "description": "Transform Class to Relational"
+     }
+   ]
+   ```
+
+4. The agent executes each step and keeps track of what was done
+
+## Project Structure
+
+The code is organized in a way that separates different concerns:
+
+### Core (`src/core/`)
+- `am3.py` - Defines what models and transformations are
+- `megamodel.py` - Keeps track of all available tools and models
+
+### Server Communication (`src/mcp/`)
+- `infrastructure.py` - Defines how to talk to different servers
+- `integrator.py` - Connects to ATL and EMF servers
+- `client.py` - Handles sending commands to servers
+
+### Agent Logic (`src/agents/`)
+- `planning.py` - Creates step-by-step plans
+- `execution.py` - Keeps track of what's being done
+- `workflow.py` - Runs the plans
+
+### Examples
+- `src/examples/main.py` - Shows how to use the system
 
 ---
 
-## Reading Order to Understand the Code
+## Key Components
 
-### Phase 1: Core Concepts
+### Models and Transformations
 
-- **`src/core/am3.py`** – Defines core entities, models, and relationships.  
-  Provides the foundational vocabulary of the MDE environment.
-- **`src/core/megamodel.py`** – Implements the registry.  
-  Stores all entities and manages their interconnections.
+Each model in the system has:
+- A type (like Class or Relational)
+- A format (like XMI)
+- Rules about how it can be used
 
-### Phase 2: MCP Integration
+Transformations are tools that:
+- Take one type of model as input
+- Produce another type of model as output
+- Follow specific rules about how to convert between them
 
-- **`src/mcp/infrastructure.py`** – Abstract representations of MCP servers, tools, and capabilities.
-- **`src/mcp/integrator.py`** – Connects existing ATL/EMF servers to the megamodel.
-- **`src/mcp/client.py`** – Handles communication and invocation of server tools.
+### Servers
 
-### Phase 3: Agent Behavior
+The system works with two types of servers:
+- EMF servers that handle loading and saving models
+- ATL servers that perform model transformations
 
-- **`src/agents/planning.py`** – Defines goals, plans, and workflow steps.
-- **`src/agents/execution.py`** – Manages sessions, traces, and execution tracking.
-- **`src/agents/workflow.py`** – Orchestrates the execution of workflow plans.
+### The Agent's Brain
 
-### Phase 4: Examples
+The agent makes decisions by:
+1. Understanding what you want to do
+2. Looking through available tools
+3. Matching your goal with the right tools
+4. Creating a sequence of steps
+5. Running those steps in order
 
-- **`src/examples/main.py`** – Demonstrates the complete workflow from start to finish.
+## System Features
 
----
+The agent can:
+- Figure out which transformations will work for your models
+- Create multi-step plans when needed
+- Work with different types of servers
+- Keep track of everything it does
+- Learn from successful operations
 
-## Key Concepts
+## Visual Overview
 
-### AM3 Megamodel (Core)
+Below is a diagram showing how the different parts of the system connect:
 
-- **Entity** – Represents any MDE artifact (models, transformations, etc.).
-- **Relationship** – Defines connections between entities (`conformsTo`, `transforms`).
-- **Registry** – Central store maintaining knowledge of all entities.
-
-### MCP Integration
-
-- **Server** – Existing ATL/EMF servers.
-- **Tool** – Operations available on a server (e.g., applying a transformation).
-- **Capability** – Supported input and output model types for each tool.
-
-### Agent System
-
-- **Goal** – Desired outcome for the agent.
-- **Plan** – Step-by-step workflow to achieve the goal.
-- **Session** – Execution context capturing traceable history.
-- **Trace** – Record of operations performed during execution.
-
----
-
-## Features
-
-- **Reasoning** – Determines whether transformations can be applied to given models.
-- **Planning** – Generates multi-step workflows to reach complex goals.
-- **Execution** – Interfaces with MCP servers to perform transformations.
-- **Traceability** – Logs all operations and decisions for auditing and reproducibility.
-- **Adaptability** – Can adjust workflows based on execution results.
-- **Learning** – Captures successful workflow patterns for reuse.
-
-![Alt text](images/megamodel_without_relationships.png)
+![System Architecture](images/megamodel_without_relationships.png)
