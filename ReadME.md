@@ -61,7 +61,10 @@ Let's say you want to transform a Class model into a Relational database model. 
    ]
    ```
 
-4. The agent executes each step and keeps track of what was done
+4. The agent integrates with a separate WorkflowExecutor system:
+Plans are converted into WorkflowPlan objects with PlanStep instances
+Each step specifies: tool_name, server_name, parameters, and description
+The executor handles the actual tool invocation and result collection
 
 ## Project Structure
 
