@@ -153,7 +153,7 @@ if __name__ == "__main__":
     agent = MCPAgent(registry)
 
     # Ask the agent to list details for a specific transformation, without forcing a tool
-    user_goal = "List details for the transformation 'Class2Relational'"
+    user_goal = "transform this model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model "
     print(f"\nAgent user goal: {user_goal}")
 
     print("\n--- Agent Planning Debug ---")
