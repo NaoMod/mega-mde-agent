@@ -10,7 +10,7 @@ from core.am3 import ReferenceModel, TransformationModel
 from mcp.integrator import MCPServerIntegrator
 from mcp.client import ATLServerClient, EMFServerClient
 from agents.agent import MCPAgent
-from mcp.infrastructure import MCPTool
+from mcp.infrastructure import MCPServer, MCPTool
 
 def populate_registry(registry):
     print("Populating MegamodelRegistry with ATL/EMF servers, tools, and transformations...")
@@ -58,22 +58,28 @@ def populate_registry(registry):
     emf_tools = []
     emf_client = EMFServerClient(base_url=f"http://{emf_server.host}:{emf_server.port}", tools_port=emf_server.tools_port)
     try:
-        emf_tools_response = emf_client.get_tools()
-        print(f"Raw EMF /tools response: {emf_tools_response}")
-        if "tools" in emf_tools_response:
-            for tool in emf_tools_response["tools"]:
-                tool_obj = MCPTool(
-                    name=tool.get("name"),
-                    description=tool.get("description", ""),
-                    endpoint=tool.get("name"),
-                    server_name=emf_server.name
-                )
-                emf_tools.append(tool_obj)
-        emf_server.tools = emf_tools
-        registry.tools_by_server[emf_server.name] = emf_tools
-        print(f"EMF server tool objects registered: {emf_tools}")
+            emf_stateless_base = "http://localhost:8082"
+            resp = requests.get(f"{emf_stateless_base}/tools", timeout=5)
+            resp.raise_for_status()
+            tools_payload = resp.json().get("tools", [])
+            emf_stateless_tools = []
+            emf_stateless_server = MCPServer(name="emf_stateless_server", base_url=emf_stateless_base)
+            for t in tools_payload:
+                tool_name = t.get("name")
+                desc = t.get("description", "")
+                if not tool_name:
+                    continue
+                emf_stateless_tools.append(MCPTool(
+                    name=tool_name,
+                    description=desc,
+                    endpoint=tool_name,          # endpoint is the MCP tool name (planning use)
+                    server_name=emf_stateless_server.name
+                ))
+            emf_stateless_server.tools = emf_stateless_tools
+            registry.tools_by_server[emf_stateless_server.name] = emf_stateless_tools
+            print(f"Registered {len(emf_stateless_tools)} tools from EMF stateless server ({emf_stateless_base})")
     except Exception as e:
-        print(f"Could not fetch EMF server tools: {e}")
+            print(f"Warning: failed to discover EMF stateless tools: {e}")
 
     # Call ATL server to get enabled transformations
     enabled_transformations = atl_client.call_tool("/transformations/enabled", method="GET")
