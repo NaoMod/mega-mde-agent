@@ -38,11 +38,10 @@ class MCPAgent:
         for t in all_tools:
             name = getattr(t, "name", "")
             desc = getattr(t, "description", "")
-            endpoint = getattr(t, "endpoint", "")
             server = getattr(t, "server_name", "")
-            text = f"tool name: {name}\nserver: {server}\nendpoint: {endpoint}\ndescription: {desc}"
+            text = f"tool name: {name}\nserver: {server}\ndescription: {desc}"
             tool_texts.append(text)
-            tool_metas.append({"name": name, "server": server, "endpoint": endpoint})
+            tool_metas.append({"name": name, "server": server})
         if tool_texts:
             self.tool_index = DocArrayInMemorySearch.from_texts(tool_texts, self.embeddings, metadatas=tool_metas)
         else:

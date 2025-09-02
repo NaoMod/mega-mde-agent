@@ -23,20 +23,6 @@ class MCPCapability:
     can_execute: bool = True
     description: str = ""
 
-@dataclass
-class MCPEndpoint:
-    """MCP API endpoint"""
-    path: str
-    method: HttpMethod
-    description: str = ""
-    parameters: Dict[str, Any] = field(default_factory=dict)
-    
-    def build_url(self, base_url: str, **path_params) -> str:
-        """Build complete URL with path parameters"""
-        url = f"{base_url}{self.path}"
-        for key, value in path_params.items():
-            url = url.replace(f"{{{key}}}", str(value))
-        return url
 
 @dataclass
 class MCPTool:
@@ -44,7 +30,6 @@ class MCPTool:
     name: str
     description: str
     parameters: Dict[str, Any] = field(default_factory=dict)
-    endpoint: Optional[MCPEndpoint] = None
     server_name: str = ""
     
     def get_parameter_info(self) -> Dict[str, Any]:
@@ -83,9 +68,7 @@ class MCPServer:
         if not self.tools_port:
             self.tools_port = self.port
 
-    @property
-    def endpoint_url(self) -> str:
-        return f"http://{self.host}:{self.port}"
+
     
     @property
     def tools_url(self) -> str:
@@ -156,7 +139,6 @@ class MCPServer:
             "host": self.host,
             "port": self.port,
             "status": self.status.value,
-            "endpoint_url": self.endpoint_url,
             "tools_count": len(self.tools),
             "tools": [tool.name for tool in self.tools],
             "capabilities_count": len(self.capabilities),
@@ -175,7 +157,6 @@ class MCPServer:
 if __name__ == "__main__":
     # Change port to 8081 for ATL or 8082 for EMF MCP server
     server = MCPServer(host="localhost", port=8081, name="atl_server")
-    print(f"Connecting to {server.endpoint_url}/tools ...")
     connected = server.connect()
     print(f"Connected: {connected}, Status: {server.status}")
     print("Server info:", server.get_server_info())

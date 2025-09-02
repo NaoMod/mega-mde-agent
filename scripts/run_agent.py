@@ -1,16 +1,21 @@
 import sys
 import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from mcp_servers.atl_server.atl_mcp_server import fetch_transformations
+import sys
+import os
 import requests
 
 # Add src to path FIRST
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from core.megamodel import MegamodelRegistry
-from core.am3 import ReferenceModel, TransformationModel
-from mcp.integrator import MCPServerIntegrator
-from mcp.client import ATLServerClient, EMFServerClient
-from agents.agent import MCPAgent
-from mcp.infrastructure import MCPServer, MCPTool
+from src.core.megamodel import MegamodelRegistry
+from src.core.am3 import ReferenceModel, TransformationModel
+from src.mcp.integrator import MCPServerIntegrator
+
+from src.agents.agent import MCPAgent
+from src.mcp.infrastructure import MCPTool
 
 def populate_registry(registry):
     print("Populating MegamodelRegistry with ATL/EMF servers, tools, and transformations...")
@@ -22,67 +27,32 @@ def populate_registry(registry):
     print(f"ATL Server tools: {atl_server.tools}")
     print(f"EMF Server tools: {emf_server.tools}")
 
-    # Fetch and register tools for ATL server
-    atl_tools = []
-    atl_client = ATLServerClient(base_url=f"http://{atl_server.host}:{atl_server.port}", tools_port=atl_server.tools_port)
-    try:
-        atl_tools_response = atl_client.get_tools()
-        print(f"Raw ATL /tools response: {atl_tools_response}")
-        if "tools" in atl_tools_response:
-            for tool in atl_tools_response["tools"]:
-                tool_name = tool.get("name")
-                desc = tool.get("description", "")
-                # If tool is an apply transformation tool, set endpoint to REST endpoint
-                if tool_name.startswith("apply_") and tool_name.endswith("_transformation_tool"):
-                    transfo_name = tool_name[len("apply_"):-len("_transformation_tool")]
-                    endpoint = f"/transformation/{transfo_name}/apply"
-                elif tool_name.startswith("list_transformation_") and tool_name.endswith("_tool"):
-                    transfo_name = tool_name[len("list_transformation_"):-len("_tool")]
-                    endpoint = f"/transformation/{transfo_name}"
-                else:
-                    endpoint = tool_name
-                tool_obj = MCPTool(
-                    name=tool_name,
-                    description=desc,
-                    endpoint=endpoint,
-                    server_name=atl_server.name
-                )
-                atl_tools.append(tool_obj)
-        atl_server.tools = atl_tools
-        registry.tools_by_server[atl_server.name] = atl_tools
-        print(f"ATL server tool objects registered: {atl_tools}")
-    except Exception as e:
-        print(f"Could not fetch ATL server tools: {e}")
+    # Discover ATL tools using MCP protocol
+    from src.mcp.client import MCPClient
+    atl_server_script = os.path.join(os.path.dirname(__file__), '..', 'mcp_servers', 'atl_server', 'atl_mcp_server.py')
+    atl_client = MCPClient()
+    import asyncio
+    async def get_atl_tools():
+        await atl_client.connect_to_server(atl_server_script)
+        session = await atl_client.get_session()
+        response = await session.list_tools()
+        return response.tools
+    atl_tools = asyncio.run(get_atl_tools())
 
-    # Fetch and register tools for EMF server
-    emf_tools = []
-    emf_client = EMFServerClient(base_url=f"http://{emf_server.host}:{emf_server.port}", tools_port=emf_server.tools_port)
-    try:
-            emf_stateless_base = "http://localhost:8082"
-            resp = requests.get(f"{emf_stateless_base}/tools", timeout=5)
-            resp.raise_for_status()
-            tools_payload = resp.json().get("tools", [])
-            emf_stateless_tools = []
-            emf_stateless_server = MCPServer(name="emf_stateless_server", base_url=emf_stateless_base)
-            for t in tools_payload:
-                tool_name = t.get("name")
-                desc = t.get("description", "")
-                if not tool_name:
-                    continue
-                emf_stateless_tools.append(MCPTool(
-                    name=tool_name,
-                    description=desc,
-                    endpoint=tool_name,          # endpoint is the MCP tool name (planning use)
-                    server_name=emf_stateless_server.name
-                ))
-            emf_stateless_server.tools = emf_stateless_tools
-            registry.tools_by_server[emf_stateless_server.name] = emf_stateless_tools
-            print(f"Registered {len(emf_stateless_tools)} tools from EMF stateless server ({emf_stateless_base})")
-    except Exception as e:
-            print(f"Warning: failed to discover EMF stateless tools: {e}")
+
+    # Discover EMF tools using MCP protocol
+    emf_server_script = os.path.join(os.path.dirname(__file__), '..', 'mcp_servers', 'emf_server', 'stateless_emf_server.py')
+    emf_client = MCPClient()
+    async def get_emf_tools():
+        await emf_client.connect_to_server(emf_server_script)
+        session = await emf_client.get_session()
+        response = await session.list_tools()
+        return response.tools
+    emf_tools = asyncio.run(get_emf_tools())
 
     # Call ATL server to get enabled transformations
-    enabled_transformations = atl_client.call_tool("/transformations/enabled", method="GET")
+    # enabled_transformations should be fetched using MCP protocol, not atl_client.call_tool
+    enabled_transformations = fetch_transformations()
     print(f"Enabled ATL transformations: {enabled_transformations}")
 
     # Register transformation tools for ATL server
@@ -90,21 +60,17 @@ def populate_registry(registry):
     for transfo_data in enabled_transformations:
         transfo_name = transfo_data.get('name')
         # Apply transformation tool
-        apply_endpoint = f"/transformation/{transfo_name}/apply"
         apply_tool = MCPTool(
             name=f"apply_{transfo_name}_transformation_tool",
             description=f"Apply transformation {transfo_name}",
-            endpoint=apply_endpoint,
             server_name=atl_server.name
         )
         atl_tools.append(apply_tool)
         print(f"Registered transformation tool: {apply_tool}")
         # Info tool
-        info_endpoint = f"/transformation/{transfo_name}"
         info_tool = MCPTool(
             name=f"list_transformation_{transfo_name}_tool",
             description=f"Get info for transformation {transfo_name}",
-            endpoint=info_endpoint,
             server_name=atl_server.name
         )
         atl_tools.append(info_tool)
@@ -113,7 +79,8 @@ def populate_registry(registry):
     registry.tools_by_server[atl_server.name] = atl_tools
 
     # Call ATL server to get enabled transformations
-    enabled_transformations = atl_client.call_tool("/transformations/enabled", method="GET")
+    # enabled_transformations should be fetched using MCP protocol, not atl_client.call_tool
+    enabled_transformations = fetch_transformations()
     print(f"Enabled ATL transformations: {enabled_transformations}")
 
     # Extract and register all transformations and metamodels
