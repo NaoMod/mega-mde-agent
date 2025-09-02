@@ -2,9 +2,9 @@ from typing import Dict, List, Optional, Any
 import json
 import uuid
 from datetime import datetime
-from agents.execution import AgentSession
-from core.am3 import Entity, Relationship, Model, ReferenceModel, TransformationModel, TerminalModel
-from agents.planning import WorkflowPlan
+from src.agents.execution import AgentSession
+from src.core.am3 import Entity, Relationship, Model, ReferenceModel, TransformationModel, TerminalModel
+from src.agents.planning import WorkflowPlan
 
 class MegamodelRegistry:
     """Central registry for the extended AM3 megamodel"""
@@ -72,6 +72,14 @@ class MegamodelRegistry:
         """Register MCP server"""
         self.mcp_servers[name] = server
         self.tools_by_server[name] = getattr(server, 'tools', [])
+    
+    def register_mcp_server_with_script(self, name: str, server: Any, script_path: str) -> None:
+        """Register MCP server with script path for async client connection"""
+        # Add script path to server metadata
+        if not hasattr(server, 'metadata'):
+            server.metadata = {}
+        server.metadata['script_path'] = script_path
+        self.register_mcp_server(name, server)
     
     def get_mcp_server(self, name: str) -> Optional[Any]:
         """Get MCP server by name"""

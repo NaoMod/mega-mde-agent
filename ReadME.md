@@ -23,7 +23,7 @@ The system is built around three main components:
    - Server connections
 
 2. A planning system that:
-   - Takes your instructions in plain English
+   - Takes your instructions
    - Matches them with available tools
    - Creates a workflow plan
 

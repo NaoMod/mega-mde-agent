@@ -1,75 +1,56 @@
+import asyncio
+import sys
+from typing import Optional
+from contextlib import AsyncExitStack
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+from dotenv import load_dotenv
 
+load_dotenv()  # Load environment variables from .env
 
-import os
-import requests
+class MCPClient:
+    def __init__(self):
+        self.session: Optional[ClientSession] = None
+        self.exit_stack = AsyncExitStack()
 
-class ATLServerClient:
-    """Client for ATL server using HTTP requests"""
-    def __init__(self, base_url: str = "http://localhost:8080", tools_port: int = 8081):
-        self.base_url = base_url
-        self.tools_port = tools_port
-        
-    def get_tools(self):
-        """Get list of tools from the tools port"""
-        tools_url = f"{self.base_url.rsplit(':', 1)[0]}:{self.tools_port}/tools"
-        # DEBUG: outgoing request
-        print(f"[HTTP] GET {tools_url}")
-        response = requests.get(tools_url)
-        print(f"[HTTP] -> {response.status_code} {response.reason}")
-        response.raise_for_status()
-        return response.json()
+    async def connect_to_server(self, server_script_path: str):
+        """Connect to an MCP server."""
+        is_python = server_script_path.endswith('.py')
+        is_js = server_script_path.endswith('.js')
+        if not (is_python or is_js):
+            raise ValueError("Server script must be a .py or .js file")
 
-    def call_tool(self, endpoint: str, method: str = "GET", params=None, data=None, files=None):
-        url = f"{self.base_url}{endpoint}"
-        # DEBUG: outgoing request summary
-        file_keys = list((files or {}).keys()) if isinstance(files, dict) else []
-        print(f"[HTTP] {method.upper()} {url} params={bool(params)} data={bool(data)} files={file_keys}")
-        if method == "GET":
-            response = requests.get(url, params=params)
-        elif method == "POST":
-            response = requests.post(url, params=params, data=data, files=files)
-        elif method == "PUT":
-            response = requests.put(url, params=params, data=data, files=files)
-        elif method == "DELETE":
-            response = requests.delete(url, params=params)
-        else:
-            raise ValueError(f"Unsupported method: {method}")
-        print(f"[HTTP] -> {response.status_code} {response.reason}")
-        response.raise_for_status()
-        return response.json() if response.headers.get('Content-Type', '').startswith('application/json') else response.text
+        command = "python3" if is_python else "node"
+        server_params = StdioServerParameters(
+            command=command,
+            args=[server_script_path],
+            env=None
+        )
 
-class EMFServerClient:
-    """Client for EMF server using HTTP requests"""
-    def __init__(self, base_url: str = "http://localhost:8080", tools_port: int = 8082):
-        self.base_url = base_url
-        self.tools_port = tools_port
-        
-    def get_tools(self):
-        """Get list of tools from the tools port"""
-        tools_url = f"{self.base_url.rsplit(':', 1)[0]}:{self.tools_port}/tools"
-        # DEBUG: outgoing request
-        print(f"[HTTP] GET {tools_url}")
-        response = requests.get(tools_url)
-        print(f"[HTTP] -> {response.status_code} {response.reason}")
-        response.raise_for_status()
-        return response.json()
+        try:
+            stdio_transport = await self.exit_stack.enter_async_context(stdio_client(server_params))
+            self.stdio, self.write = stdio_transport
+            self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
 
-    def call_model_tool(self, endpoint: str, method: str = "GET", data=None, files=None):
-        url = f"{self.base_url}{endpoint}"
-        # DEBUG: outgoing request summary
-        file_keys = list((files or {}).keys()) if isinstance(files, dict) else []
-        print(f"[HTTP] {method.upper()} {url} data={bool(data)} files={file_keys}")
-        if method == "GET":
-            response = requests.get(url)
-        elif method == "POST":
-            response = requests.post(url, data=data, files=files)
-        elif method == "PUT":
-            response = requests.put(url, data=data, files=files)
-        elif method == "DELETE":
-            response = requests.delete(url)
-        else:
-            raise ValueError(f"Unsupported method: {method}")
-        print(f"[HTTP] -> {response.status_code} {response.reason}")
-        response.raise_for_status()
-        return response.json() if response.headers.get('Content-Type', '').startswith('application/json') else response.text
-    
+            await self.session.initialize()
+
+            # List available tools
+            response = await self.session.list_tools()
+            tools = response.tools
+            print("\nConnected to server with tools:", [tool.name for tool in tools])
+        except Exception as e:
+            await self.cleanup()  # Ensure cleanup on failure
+            raise e
+
+    async def cleanup(self):
+        """Clean up resources"""
+        try:
+            await self.exit_stack.aclose()
+        except RuntimeError as cleanup_error:
+            print(f"Cleanup error: {cleanup_error}")
+
+    async def get_session(self):
+        """Get the current session."""
+        if not self.session:
+            raise RuntimeError("Not connected to server")
+        return self.session

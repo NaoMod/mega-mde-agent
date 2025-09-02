@@ -160,6 +160,7 @@ if __name__ == "__main__":
 
     # Ask the agent to list details for a specific transformation, without forcing a tool
     user_goal = "transform this model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model "
+    #user_goal= "can you add a class object to this model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi"
     print(f"\nAgent user goal: {user_goal}")
 
     print("\n--- Agent Planning Debug ---")
