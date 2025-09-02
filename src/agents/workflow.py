@@ -9,8 +9,8 @@ import time
 
 from src.core.megamodel import MegamodelRegistry
 from src.mcp.client import MCPClient
-from src.agents.execution import AgentSession, ExecutionTrace, MCPInvocation
-from src.agents.planning import WorkflowPlan, PlanStep, AgentGoal, StepStatus
+from src.agents.execution import MCPInvocation
+from src.agents.planning import WorkflowPlan, PlanStep, AgentGoal
 
 class WorkflowExecutor:
     """Simple workflow executor"""
