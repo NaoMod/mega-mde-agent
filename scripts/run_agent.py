@@ -9,10 +9,9 @@ import asyncio
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 from src.core.megamodel import MegamodelRegistry
 from src.core.am3 import ReferenceModel, TransformationModel
-from src.mcp.integrator import MCPServerIntegrator
+from src.mcp_ext.integrator import MCPServerIntegrator
 from src.agents.agent import MCPAgent
-from src.mcp.infrastructure import MCPTool
-from src.mcp.client import MCPClient
+from src.mcp_ext.client import MCPClient
 
 def populate_registry(registry):
     print("Populating MegamodelRegistry with ATL/EMF servers, tools, and transformations...")
@@ -105,7 +104,7 @@ if __name__ == "__main__":
     print("--- End ATL Transformations ---\n")
 
     # Ask the agent to list details for a specific transformation, without forcing a tool
-    user_goal = "transform this model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model;  then list me the transformation that transform an Ant file to a maven model"
+    user_goal = "transform this Class model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model;  then list me the transformation that transform an Ant file to a maven model"
     #user_goal= "can you add a class object to this model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi"
     print(f"\nAgent user goal: {user_goal}")
 

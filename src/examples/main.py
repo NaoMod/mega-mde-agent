@@ -4,13 +4,15 @@ Main Entry Point - Simple demonstration
 import sys
 import os
 
+from scripts.run_agent import populate_registry
+
 # Add src to path FIRST
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 # Import AFTER path is set up
 from core.megamodel import MegamodelRegistry
 from core.am3 import ReferenceModel, TransformationModel
-from mcp.integrator import MCPServerIntegrator
+from mcp_ext.integrator import MCPServerIntegrator
 from agents.workflow import WorkflowExecutor
 from agents.planning import AgentGoal, WorkflowPlan, PlanStep
 
@@ -18,6 +20,7 @@ def main():
     """Simple main entry point"""
     # initialize MegamodelRegistry and print its attributes
     registry = MegamodelRegistry()
+    populate_registry(registry)
     print("\n--- MegamodelRegistry Attributes After Initialization ---")
     print(f"entities: {registry.entities}")
     print(f"relationships: {registry.relationships}")

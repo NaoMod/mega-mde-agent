@@ -15,7 +15,7 @@ sys.path.insert(0, parent_dir)
 from src.agents.workflow import WorkflowExecutor
 from src.core.megamodel import MegamodelRegistry
 from src.agents.planning import AgentGoal, PlanStep, WorkflowPlan
-from src.mcp.client import MCPClient
+from src.mcp_ext.client import MCPClient
 
 async def test_mcp_client():
     """Test the MCP client"""
