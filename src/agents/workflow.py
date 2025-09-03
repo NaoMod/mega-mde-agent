@@ -12,6 +12,7 @@ from src.mcp_ext.client import MCPClient
 from src.agents.execution import MCPInvocation
 from src.agents.planning import WorkflowPlan, PlanStep, AgentGoal
 
+# TODO: perform an Object grounding. Check the feasability to cover other LLM planning criteria
 class WorkflowExecutor:
     """Simple workflow executor"""
     
