@@ -6,8 +6,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from core.megamodel import MegamodelRegistry
 from core.am3 import ReferenceModel, TransformationModel
-from mcp.integrator import MCPServerIntegrator
-from mcp.client import ATLServerClient
+from mcp_ext.integrator import MCPServerIntegrator
+from mcp_ext.client import ATLServerClient
 import requests
 
 def main():
