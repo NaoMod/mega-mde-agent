@@ -2,7 +2,7 @@ import json
 import os
 import asyncio
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 import sys
 WORKDIR = Path(__file__).resolve().parents[1]
 if str(WORKDIR) not in sys.path:
@@ -22,7 +22,7 @@ from src.core.megamodel import MegamodelRegistry
 
 
 # --- 1) Start with a megamodel repository (populate registry) ---
-def query_megamodel_repo(config: Dict[str, Any]) -> Dict[str, Any]:
+def query_megamodel_repo() -> Dict[str, Any]:
     registry = MegamodelRegistry()
     # Populate the registry exactly like the agent does
     populate_registry(registry)
@@ -93,80 +93,118 @@ def sample_apis(components: Dict[str, Any], insights: Dict[str, Any]) -> List[Di
 def select_apis(sampled: List[Dict[str, Any]], k: int = 3) -> List[Dict[str, Any]]:
     return sampled[:k]
 
-# --- 7) LLM-based generation ---
-def llm_generation(
+# --- 7) LLM-based generation (single vs multi tool) ---
+def _derive_api(tool_name: str) -> Tuple[str, str]:
+    if tool_name.startswith("list_transformation_") and tool_name.endswith("_tool"):
+        base = tool_name[len("list_transformation_"):-len("_tool")]
+        return f"{base}.get_tool", "get"
+    if tool_name.startswith("apply_") and tool_name.endswith("_transformation_tool"):
+        base = tool_name[len("apply_"):-len("_transformation_tool")]
+        return f"{base}.apply", "apply"
+    if tool_name.startswith("extract_"):
+        return f"model.{tool_name}", "extract"
+    return tool_name, "call"
+
+def generate_single_tool_instructions(
     selected_apis: List[Dict[str, Any]],
-    prompt_template: str,
-    per_api_instructions: int = 1,
+    per_api: int = 1,
     llm_max_calls: int = 5,
+    prompt: str | None = None,
 ) -> List[Dict[str, Any]]:
-    """Generate per_api_instructions instructions for each selected API.
-    LLM calls are capped by llm_max_calls; remaining use the template.
-    """
     model_name = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
-    llm = None
-    if ChatOpenAI is not None and os.getenv("OPENAI_API_KEY"):
-        llm = ChatOpenAI(model=model_name, temperature=0.1, max_retries=2)
-
-    examples: List[Dict[str, Any]] = []
+    llm = ChatOpenAI(model=model_name, temperature=0.1, max_retries=2) if (ChatOpenAI and os.getenv("OPENAI_API_KEY")) else None
+    items: List[Dict[str, Any]] = []
     if not selected_apis:
-        return examples
-
+        return items
     llm_calls = 0
-    n = max(1, int(per_api_instructions))
+    n = max(1, int(per_api))
     for tool in selected_apis:
-        name = tool.get("name", "unknown_tool")
-        desc = tool.get("description", "")
-        server = tool.get("server_name", "")
+        name, desc = tool.get("name", ""), tool.get("description", "")
+        api_name, pattern = _derive_api(name)
         for _ in range(n):
-            # Only use LLM; if unavailable or capped, skip generating this entry
             if llm is None or llm_calls >= llm_max_calls:
                 continue
-            prompt = (
-                f"API: {name}\n"
-                f"Description: {desc}\n"
-                f"Task: Write one short user instruction that would require calling this API in an MDE scenario.\n"
-                f"Return only the instruction text."
+            p = prompt or (
+                "Write one short user instruction for a modeling task that requires a specific API.\n"
+                f"Capability description:\n{desc}\n"
+                "Constraints:\n- Do NOT mention any tool/API names.\n- Keep it concise and task-oriented.\nReturn only the instruction text."
             )
             try:
-                resp = llm.invoke(prompt)
-                instruction = getattr(resp, "content", str(resp)).strip()
+                msg = llm.invoke(p)
+                instruction = getattr(msg, "content", str(msg)).strip()
                 llm_calls += 1
             except Exception:
-                # Skip this entry on LLM error
                 continue
-
-            api_call = {
-                "tool_name": name,
-                "server_name": server,
-                "parameters": {},
-            }
-            examples.append({
+            items.append({
+                "level": 1,
+                "pattern": pattern,
                 "instruction": instruction,
-                "api_call": api_call,
+                "relevant_apis": [{"api_name": api_name, "arguments": ""}],
             })
+    return items
 
-    return examples
+def generate_multi_tool_instructions(
+    selected_apis: List[Dict[str, Any]],
+    chain_len: int = 2,
+    per_item: int = 1,
+    llm_max_calls: int = 5,
+    prompt: str | None = None,
+) -> List[Dict[str, Any]]:
+    from itertools import islice, combinations
+    model_name = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+    llm = ChatOpenAI(model=model_name, temperature=0.2, max_retries=2) if (ChatOpenAI and os.getenv("OPENAI_API_KEY")) else None
+    items: List[Dict[str, Any]] = []
+    tools = [t for t in selected_apis]
+    if len(tools) < chain_len:
+        return items
+    llm_calls = 0
+    combos = combinations(tools, chain_len)
+    for combo in combos:
+        # Build API chain
+        apis = []
+        patterns = []
+        for t in combo:
+            api, pat = _derive_api(t.get("name", ""))
+            apis.append({"api_name": api, "arguments": ""})
+            patterns.append(pat)
+        for _ in range(max(1, int(per_item))):
+            if llm is None or llm_calls >= llm_max_calls:
+                continue
+            p = prompt or (
+                "Propose one concise user instruction for a multi-step modeling workflow.\n"
+                "Requirements:\n- The task should naturally require multiple APIs in sequence.\n"
+                "- Do NOT mention any tool/API names.\n- Return only the instruction text."
+            )
+            try:
+                msg = llm.invoke(p)
+                instruction = getattr(msg, "content", str(msg)).strip()
+                llm_calls += 1
+            except Exception:
+                continue
+            items.append({
+                "level": 2,
+                "pattern": ">".join(patterns),
+                "instruction": instruction,
+                "relevant_apis": apis,
+            })
+    return items
 
-# --- 8) Output creation ---
-def create_output_examples(examples: List[Dict[str, Any]], path: Path) -> None:
-    path.write_text(json.dumps(examples, indent=2))
-
-# --- 9) Validation ---
 def validate_dataset(examples: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    # Minimal check: ensure required fields exist
     ok: List[Dict[str, Any]] = []
     for e in examples:
         if not isinstance(e, dict):
             continue
         instr = e.get("instruction")
-        call = e.get("api_call", {})
-        if instr and isinstance(call, dict) and call.get("tool_name") and call.get("server_name") is not None:
+        apis = e.get("relevant_apis", [])
+        if instr and isinstance(apis, list) and apis and all(isinstance(a, dict) and a.get("api_name") for a in apis):
             ok.append(e)
     return ok
 
 # --- 10) Final dataset ---
 def write_final_dataset(examples: List[Dict[str, Any]], path: Path) -> None:
+    path.write_text(json.dumps(examples, indent=2))
+
+def create_output_examples(examples: List[Dict[str, Any]], path: Path) -> None:
     path.write_text(json.dumps(examples, indent=2))
 
 
@@ -178,7 +216,7 @@ def main() -> None:
     "per_api_instructions": 3,
     "llm_max_calls": 5,
     }
-    dump = query_megamodel_repo(cfg)
+    dump = query_megamodel_repo()
     components = extract_components(dump)
 
     cap = analyze_capabilities(components)
@@ -188,13 +226,22 @@ def main() -> None:
     sampled = sample_apis(components, insights)
     selected = select_apis(sampled, k=cfg["k"])
 
-    prompt = Path(cfg["prompt_path"]).read_text() if Path(cfg["prompt_path"]).exists() else "Use API {{API_NAME}}"
-    examples = llm_generation(
+    # Generation settings
+    single = generate_single_tool_instructions(
         selected,
-        prompt,
-        per_api_instructions=cfg["per_api_instructions"],
+        per_api=cfg["per_api_instructions"],
         llm_max_calls=cfg["llm_max_calls"],
     )
+    # Optional multi-tool examples (disabled by default); set cfg["multi_chain_len"] > 1 to enable
+    multi = []
+    if cfg.get("multi_chain_len", 0) and cfg["multi_chain_len"] > 1:
+        multi = generate_multi_tool_instructions(
+            selected,
+            chain_len=int(cfg["multi_chain_len"]),
+            per_item=cfg.get("per_multi_instructions", 1),
+            llm_max_calls=max(0, cfg["llm_max_calls"] - len(single)),
+        )
+    examples = single + multi
 
     create_output_examples(examples, OUT / "examples.json")
     validated = validate_dataset(examples)
