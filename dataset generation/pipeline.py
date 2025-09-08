@@ -110,62 +110,7 @@ def _serialize_historical_executions(registry: MegamodelRegistry) -> List[Dict[s
         })
     return executions
 
-# def query_megamodel_repo() -> Dict[str, Any]:
-#     registry = MegamodelRegistry()
-#     # Populate the registry exactly like the agent does
-#     populate_registry(registry)
 
-#     # Pull tools from the populated registry
-#     atl_tools = registry.tools_by_server.get("atl_server", [])
-#     emf_tools = registry.tools_by_server.get("emf_server", [])
-
-#     # Flatten tools into a dump format the rest of the pipeline expects
-#     def tool_to_dict(t: Any, server_name: str) -> Dict[str, Any]:
-#         return {
-#             "name": getattr(t, "name", ""),
-#             "description": getattr(t, "description", ""),
-#             "server_name": server_name,
-#         }
-
-#     # Build inferred capabilities from registry entities (transformations)
-#     all_tools = [*(tool_to_dict(t, "atl_server") for t in atl_tools), *(tool_to_dict(t, "emf_server") for t in emf_tools)]
-#     inferred_caps = _infer_capabilities_from_registry(registry, all_tools)
-
-#     dump = {
-#         "MCPServers": [
-#             {"name": "atl_server"},
-#             {"name": "emf_server"},
-#         ],
-#         "MCPTools": all_tools,
-#         "MCPCapabilities": inferred_caps,
-#         # Pull successfully executed AgentTraces (if any from prior runs in this process)
-#         "HistoricalExecutions": _serialize_historical_executions(registry),
-#     }
-#     return dump
-
-# # --- 2) Extract component info ---
-# def extract_components(repo_dump: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
-#     return {
-#         "servers": repo_dump.get("MCPServers", []),
-#         "tools": repo_dump.get("MCPTools", []),
-#         "capabilities": repo_dump.get("MCPCapabilities", []),
-#         "executions": repo_dump.get("HistoricalExecutions", []),
-#     }
-
-# # --- 3a) Capability analysis ---
-# def analyze_capabilities(components: Dict[str, Any]) -> Dict[str, Any]:
-#     caps = components.get("capabilities", []) or []
-#     summaries = [
-#         {
-#             "tool_name": c.get("tool_name"),
-#             "input_types": c.get("input_types", []),
-#             "output_types": c.get("output_types", []),
-#         }
-#         for c in caps
-#     ]
-#     return {"capability_summaries": summaries}
-
-# --- 3b) Pattern discovery ---
 def discover_patterns(components: Dict[str, Any]) -> Dict[str, Any]:
     """Identify historical workflow patterns from successful AgentTraces.
 
@@ -200,14 +145,8 @@ def discover_patterns(components: Dict[str, Any]) -> Dict[str, Any]:
     type_graph = _build_type_graph(components.get("capabilities", []) or [])
     return {"common_patterns": common_patterns, "type_graph": type_graph}
 
-# --- 4) Generate insights ---
-def generate_insights(capability_report: Dict[str, Any], pattern_report: Dict[str, Any]) -> Dict[str, Any]:
-    return {
-        "specific_capabilities": capability_report.get("capability_summaries", []),
-        "common_workflows": pattern_report.get("common_patterns", []),
-    }
 
-# --- 5) API sampling ---
+
 def sample_apis(components: Dict[str, Any], insights: Dict[str, Any]) -> List[Dict[str, Any]]:
     # Prefer tools seen in historical patterns; add bias from type connectivity; fallback to first N tools.
     tools = components.get("tools", [])
@@ -235,9 +174,7 @@ def sample_apis(components: Dict[str, Any], insights: Dict[str, Any]) -> List[Di
     fallback = [t for t in tools if t.get("name", "") not in by_name]
     return (ranked + fallback)[:10]
 
-# --- 6) API selection ---
-def select_apis(sampled: List[Dict[str, Any]], k: int = 3) -> List[Dict[str, Any]]:
-    return sampled[:k]
+
 
 # --- 7) LLM-based generation (single vs multi tool) ---
 def _derive_api(tool_name: str) -> Tuple[str, str]:
@@ -364,106 +301,3 @@ def write_final_dataset(examples: List[Dict[str, Any]], path: Path) -> None:
 
 def create_output_examples(examples: List[Dict[str, Any]], path: Path) -> None:
     path.write_text(json.dumps(examples, indent=2))
-
-
-
-def main() -> None:
-    # 1. Get a populated registry
-    registry = MegamodelRegistry()
-    populate_registry(registry)
-    
-    # Then run the agent to generate some execution history
-    print("\nExecuting agent to generate history...")
-    from src.agents.agent import MCPAgent
-    agent = MCPAgent(registry)  # Use same registry instance
-
-    # Ask the agent to transform Class to Relational 
-    user_goal = "transform this Class model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model"
-    result = agent.run(user_goal)  # This will create session/traces in our registry
-    
-    print("\nAgent execution completed. Now testing pipeline components...")
-
-
-
-    # # 2. Get actual tools from the registry
-    # atl_tools = registry.tools_by_server.get("atl_server", [])
-    # emf_tools = registry.tools_by_server.get("emf_server", [])
-    
-    # # First get the capabilities
-    # tools = [
-    #     {"name": getattr(t, "name", ""), "description": getattr(t, "description", "")}
-    #     for t in [*atl_tools, *emf_tools]
-    # ]
-    # capabilities = _infer_capabilities_from_registry(registry, tools)
-    
-    # Test 1: Capability inference (commented out)
-    #print("\nInferred Capabilities:")
-    #for cap in capabilities:
-    #    print(f"\nTool: {cap['tool_name']}")
-    #    print(f"Input types: {cap['input_types']}")
-    #    print(f"Output types: {cap['output_types']}")
-    
-    # # Test 2: Type graph building
-    # print("\nTesting _build_type_graph:")
-    # type_graph = _build_type_graph(capabilities)
-    
-    # print("\n Tool Chains (Follow Edges):")
-    # for tool_name, followers in type_graph["follow_edges"].items():
-    #     if followers:  # Only show tools that can be followed by others
-    #         print(f"\n{tool_name} can be followed by:")
-    #         for follower in followers:
-    #             print(f"  {follower}")
-    
-    # print("\n Tool Dependencies (Precede Edges):")
-    # for tool_name, predecessors in type_graph["precede_edges"].items():
-    #     if predecessors:  # Only show tools that have predecessors
-    #         print(f"\n{tool_name} can be preceded by:")
-    #         for pred in predecessors:
-    #             print(f"  {pred}")
-
-    # Test 3: Historical executions serialization
-    print("\nTesting _serialize_historical_executions:")
-    executions = _serialize_historical_executions(registry)
-    
-    # if not executions:
-    #     print("No execution history found.")
-    # else:
-    #     print("\nFound execution history:")
-    #     for execution in executions:
-    #         print(f"\nSession: {execution['session_id']} (Status: {execution['status']})")
-    #         for trace in execution['traces']:
-    #             print(f"\n  Trace: {trace['trace_id']}")
-    #             for inv in trace['invocations']:
-    #                 success = "success" if inv['success'] else "failed"
-    #                 print(f"    {success} {inv['tool_name']} ({inv['server_name']}) at {inv['timestamp']}")
-
-    # Test 4: Pattern Discovery
-    print("\nTesting discover_patterns:")
-    # Get tools and capabilities first
-    atl_tools = registry.tools_by_server.get("atl_server", [])
-    emf_tools = registry.tools_by_server.get("emf_server", [])
-    tools = [
-        {"name": getattr(t, "name", ""), "description": getattr(t, "description", "")}
-        for t in [*atl_tools, *emf_tools]
-    ]
-    capabilities = _infer_capabilities_from_registry(registry, tools)
-    
-    # Create components dictionary
-    components = {
-        "executions": executions,
-        "capabilities": capabilities
-    }
-    
-    # Run pattern discovery
-    patterns_result = discover_patterns(components)
-    
-    # Print results
-    print("\nDiscovered Patterns:")
-    for pattern in patterns_result["common_patterns"]:
-        print(f"\nPattern: {pattern['pattern']}")
-        print(f"Tools: {' -> '.join(pattern['tools'])}")
-        print(f"Frequency: {pattern['count']}")
-    
-
-if __name__ == "__main__":
-    main()
