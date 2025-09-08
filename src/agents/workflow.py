@@ -60,7 +60,7 @@ class WorkflowExecutor:
             
             # Get session and call the tool using the async MCP client
             session = await client.get_session()
-            result = await session.call_tool(step.tool_name, **(step.parameters or {}))
+            result = await session.call_tool(step.tool_name, step.parameters or {})
             
             duration = time.time() - start_time
             step.mark_completed(result)

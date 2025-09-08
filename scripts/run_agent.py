@@ -16,8 +16,19 @@ from src.mcp_ext.client import MCPClient
 def populate_registry(registry):
     print("Populating MegamodelRegistry with ATL/EMF servers, tools, and transformations...")
     integrator = MCPServerIntegrator(registry)
+    
+    # Get server script paths
+    atl_server_script = os.path.join(os.path.dirname(__file__), '..', 'mcp_servers', 'atl_server', 'atl_mcp_server.py')
+    emf_server_script = os.path.join(os.path.dirname(__file__), '..', 'mcp_servers', 'emf_server', 'stateless_emf_server.py')
+    
+    # Setup servers with script paths in metadata
     atl_server = integrator.setup_atl_server()
     emf_server = integrator.setup_emf_server()
+    
+    # Add script paths to metadata
+    atl_server.metadata["script_path"] = atl_server_script
+    emf_server.metadata["script_path"] = emf_server_script
+    
     print(f"ATL Server registered: {atl_server.name}")
     print(f"EMF Server registered: {emf_server.name}")
     print(f"ATL Server tools: {atl_server.tools}")
