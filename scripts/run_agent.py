@@ -104,7 +104,7 @@ if __name__ == "__main__":
     print("--- End ATL Transformations ---\n")
 
     # Ask the agent to list details for a specific transformation, without forcing a tool
-    user_goal = "transform this Class model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model once you transfomed it tell me all the transformations that can transform the resulting model"
+    user_goal = "transform this Class model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model"
     #user_goal= "can you add a class object to this model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi"
     print(f"\nAgent user goal: {user_goal}")
 
