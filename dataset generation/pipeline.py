@@ -55,7 +55,60 @@ def _infer_capabilities_from_registry(registry: MegamodelRegistry, tools: List[D
     ]
 
 
+def _build_type_graph(capabilities: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Build a simple type graph to find possible 2-tool chains.
 
+    Returns dict with:
+      - tool_io: {tool_name: {"in": set, "out": set}}
+      - follow_edges: {tool_name: [tool_name,...]} where out intersects next.in
+      - precede_edges: inverse of follow_edges
+    """
+    tool_io: Dict[str, Dict[str, set]] = {}
+    for c in capabilities or []:
+        name = c.get("tool_name", "")
+        ins = set(c.get("input_types", []) or [])
+        outs = set(c.get("output_types", []) or [])
+        tool_io[name] = {"in": ins, "out": outs}
+
+    follow_edges: Dict[str, List[str]] = {k: [] for k in tool_io.keys()}
+    names = list(tool_io.keys())
+    for i, a in enumerate(names):
+        for b in names:
+            if a == b:
+                continue
+            if tool_io[a]["out"] and tool_io[a]["out"].intersection(tool_io[b]["in"]):
+                follow_edges[a].append(b)
+    precede_edges: Dict[str, List[str]] = {k: [] for k in tool_io.keys()}
+    for a, bs in follow_edges.items():
+        for b in bs:
+            precede_edges[b].append(a)
+    return {"tool_io": tool_io, "follow_edges": follow_edges, "precede_edges": precede_edges}
+
+
+def _serialize_historical_executions(registry: MegamodelRegistry) -> List[Dict[str, Any]]:
+    """Extract successfully executed AgentTraces from the registry."""
+    executions: List[Dict[str, Any]] = []
+    for session_id, session in getattr(registry, "sessions", {}).items():
+        traces_payload = []
+        for trace in getattr(session, "execution_traces", []) or []:
+            invocs = []
+            for inv in getattr(trace, "invocations", []) or []:
+                invocs.append({
+                    "tool_name": getattr(inv, "tool_name", None),
+                    "server_name": getattr(inv, "server_name", None),
+                    "success": bool(getattr(inv, "success", False)),
+                    "timestamp": getattr(getattr(inv, "timestamp", None), "isoformat", lambda: None)(),
+                })
+            traces_payload.append({
+                "trace_id": getattr(trace, "trace_id", ""),
+                "invocations": invocs,
+            })
+        executions.append({
+            "session_id": session_id,
+            "status": getattr(session, "status", "unknown"),
+            "traces": traces_payload,
+        })
+    return executions
 
 def main() -> None:
     # 1. Get a populated registry
@@ -66,20 +119,38 @@ def main() -> None:
     atl_tools = registry.tools_by_server.get("atl_server", [])
     emf_tools = registry.tools_by_server.get("emf_server", [])
     
-    # Convert to the dict format expected by infer_capabilities
+    # First get the capabilities
     tools = [
         {"name": getattr(t, "name", ""), "description": getattr(t, "description", "")}
         for t in [*atl_tools, *emf_tools]
     ]
+    capabilities = _infer_capabilities_from_registry(registry, tools)
+    
+    # Test 1: Capability inference (commented out)
+    #print("\nInferred Capabilities:")
+    #for cap in capabilities:
+    #    print(f"\nTool: {cap['tool_name']}")
+    #    print(f"Input types: {cap['input_types']}")
+    #    print(f"Output types: {cap['output_types']}")
+    
+    # Test 2: Type graph building
+    print("\nTesting _build_type_graph:")
+    type_graph = _build_type_graph(capabilities)
+    
 
-    # 3. Test the capability inference
-    caps = _infer_capabilities_from_registry(registry, tools)
-    print("\nInferred Capabilities:")
-    for cap in caps:
-        print(f"\nTool: {cap['tool_name']}")
-        print(f"Input types: {cap['input_types']}")
-        print(f"Output types: {cap['output_types']}")
-
+    print("\n Tool Chains (Follow Edges):")
+    for tool_name, followers in type_graph["follow_edges"].items():
+        if followers:  # Only show tools that can be followed by others
+            print(f"\n{tool_name} can be followed by:")
+            for follower in followers:
+                print(f"  → {follower}")
+    
+    print("\n Tool Dependencies (Precede Edges):")
+    for tool_name, predecessors in type_graph["precede_edges"].items():
+        if predecessors:  # Only show tools that have predecessors
+            print(f"\n{tool_name} can be preceded by:")
+            for pred in predecessors:
+                print(f"  ← {pred}")
 
 if __name__ == "__main__":
     main()
