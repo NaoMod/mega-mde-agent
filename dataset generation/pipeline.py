@@ -176,7 +176,8 @@ def sample_apis(components: Dict[str, Any], insights: Dict[str, Any]) -> List[Di
 
 
 
-# --- 7) LLM-based generation (single vs multi tool) ---
+
+# --- Utilité: Instead of working with long tool names like "apply_Class2Relational_transformation_tool", We get simple patterns like "apply" or "get" 
 def _derive_api(tool_name: str) -> Tuple[str, str]:
     if tool_name.startswith("list_transformation_") and tool_name.endswith("_tool"):
         base = tool_name[len("list_transformation_"):-len("_tool")]
