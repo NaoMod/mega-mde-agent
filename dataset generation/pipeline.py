@@ -7,7 +7,7 @@ import sys
 WORKDIR = Path(__file__).resolve().parents[1]
 if str(WORKDIR) not in sys.path:
     sys.path.insert(0, str(WORKDIR))
-
+from collections import Counter
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "outputs"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -110,60 +110,60 @@ def _serialize_historical_executions(registry: MegamodelRegistry) -> List[Dict[s
         })
     return executions
 
-def query_megamodel_repo() -> Dict[str, Any]:
-    registry = MegamodelRegistry()
-    # Populate the registry exactly like the agent does
-    populate_registry(registry)
+# def query_megamodel_repo() -> Dict[str, Any]:
+#     registry = MegamodelRegistry()
+#     # Populate the registry exactly like the agent does
+#     populate_registry(registry)
 
-    # Pull tools from the populated registry
-    atl_tools = registry.tools_by_server.get("atl_server", [])
-    emf_tools = registry.tools_by_server.get("emf_server", [])
+#     # Pull tools from the populated registry
+#     atl_tools = registry.tools_by_server.get("atl_server", [])
+#     emf_tools = registry.tools_by_server.get("emf_server", [])
 
-    # Flatten tools into a dump format the rest of the pipeline expects
-    def tool_to_dict(t: Any, server_name: str) -> Dict[str, Any]:
-        return {
-            "name": getattr(t, "name", ""),
-            "description": getattr(t, "description", ""),
-            "server_name": server_name,
-        }
+#     # Flatten tools into a dump format the rest of the pipeline expects
+#     def tool_to_dict(t: Any, server_name: str) -> Dict[str, Any]:
+#         return {
+#             "name": getattr(t, "name", ""),
+#             "description": getattr(t, "description", ""),
+#             "server_name": server_name,
+#         }
 
-    # Build inferred capabilities from registry entities (transformations)
-    all_tools = [*(tool_to_dict(t, "atl_server") for t in atl_tools), *(tool_to_dict(t, "emf_server") for t in emf_tools)]
-    inferred_caps = _infer_capabilities_from_registry(registry, all_tools)
+#     # Build inferred capabilities from registry entities (transformations)
+#     all_tools = [*(tool_to_dict(t, "atl_server") for t in atl_tools), *(tool_to_dict(t, "emf_server") for t in emf_tools)]
+#     inferred_caps = _infer_capabilities_from_registry(registry, all_tools)
 
-    dump = {
-        "MCPServers": [
-            {"name": "atl_server"},
-            {"name": "emf_server"},
-        ],
-        "MCPTools": all_tools,
-        "MCPCapabilities": inferred_caps,
-        # Pull successfully executed AgentTraces (if any from prior runs in this process)
-        "HistoricalExecutions": _serialize_historical_executions(registry),
-    }
-    return dump
+#     dump = {
+#         "MCPServers": [
+#             {"name": "atl_server"},
+#             {"name": "emf_server"},
+#         ],
+#         "MCPTools": all_tools,
+#         "MCPCapabilities": inferred_caps,
+#         # Pull successfully executed AgentTraces (if any from prior runs in this process)
+#         "HistoricalExecutions": _serialize_historical_executions(registry),
+#     }
+#     return dump
 
-# --- 2) Extract component info ---
-def extract_components(repo_dump: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
-    return {
-        "servers": repo_dump.get("MCPServers", []),
-        "tools": repo_dump.get("MCPTools", []),
-        "capabilities": repo_dump.get("MCPCapabilities", []),
-        "executions": repo_dump.get("HistoricalExecutions", []),
-    }
+# # --- 2) Extract component info ---
+# def extract_components(repo_dump: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
+#     return {
+#         "servers": repo_dump.get("MCPServers", []),
+#         "tools": repo_dump.get("MCPTools", []),
+#         "capabilities": repo_dump.get("MCPCapabilities", []),
+#         "executions": repo_dump.get("HistoricalExecutions", []),
+#     }
 
-# --- 3a) Capability analysis ---
-def analyze_capabilities(components: Dict[str, Any]) -> Dict[str, Any]:
-    caps = components.get("capabilities", []) or []
-    summaries = [
-        {
-            "tool_name": c.get("tool_name"),
-            "input_types": c.get("input_types", []),
-            "output_types": c.get("output_types", []),
-        }
-        for c in caps
-    ]
-    return {"capability_summaries": summaries}
+# # --- 3a) Capability analysis ---
+# def analyze_capabilities(components: Dict[str, Any]) -> Dict[str, Any]:
+#     caps = components.get("capabilities", []) or []
+#     summaries = [
+#         {
+#             "tool_name": c.get("tool_name"),
+#             "input_types": c.get("input_types", []),
+#             "output_types": c.get("output_types", []),
+#         }
+#         for c in caps
+#     ]
+#     return {"capability_summaries": summaries}
 
 # --- 3b) Pattern discovery ---
 def discover_patterns(components: Dict[str, Any]) -> Dict[str, Any]:
@@ -175,7 +175,6 @@ def discover_patterns(components: Dict[str, Any]) -> Dict[str, Any]:
     - count: frequency observed across traces
     """
     executions = components.get("executions", []) or []
-    from collections import Counter
     pattern_counter: Counter = Counter()
     pattern_examples: Dict[str, List[str]] = {}
 
@@ -426,17 +425,45 @@ def main() -> None:
     print("\nTesting _serialize_historical_executions:")
     executions = _serialize_historical_executions(registry)
     
-    if not executions:
-        print("No execution history found.")
-    else:
-        print("\nFound execution history:")
-        for execution in executions:
-            print(f"\nSession: {execution['session_id']} (Status: {execution['status']})")
-            for trace in execution['traces']:
-                print(f"\n  Trace: {trace['trace_id']}")
-                for inv in trace['invocations']:
-                    success = "success" if inv['success'] else "failed"
-                    print(f"    {success} {inv['tool_name']} ({inv['server_name']}) at {inv['timestamp']}")
+    # if not executions:
+    #     print("No execution history found.")
+    # else:
+    #     print("\nFound execution history:")
+    #     for execution in executions:
+    #         print(f"\nSession: {execution['session_id']} (Status: {execution['status']})")
+    #         for trace in execution['traces']:
+    #             print(f"\n  Trace: {trace['trace_id']}")
+    #             for inv in trace['invocations']:
+    #                 success = "success" if inv['success'] else "failed"
+    #                 print(f"    {success} {inv['tool_name']} ({inv['server_name']}) at {inv['timestamp']}")
+
+    # Test 4: Pattern Discovery
+    print("\nTesting discover_patterns:")
+    # Get tools and capabilities first
+    atl_tools = registry.tools_by_server.get("atl_server", [])
+    emf_tools = registry.tools_by_server.get("emf_server", [])
+    tools = [
+        {"name": getattr(t, "name", ""), "description": getattr(t, "description", "")}
+        for t in [*atl_tools, *emf_tools]
+    ]
+    capabilities = _infer_capabilities_from_registry(registry, tools)
+    
+    # Create components dictionary
+    components = {
+        "executions": executions,
+        "capabilities": capabilities
+    }
+    
+    # Run pattern discovery
+    patterns_result = discover_patterns(components)
+    
+    # Print results
+    print("\nDiscovered Patterns:")
+    for pattern in patterns_result["common_patterns"]:
+        print(f"\nPattern: {pattern['pattern']}")
+        print(f"Tools: {' -> '.join(pattern['tools'])}")
+        print(f"Frequency: {pattern['count']}")
+    
 
 if __name__ == "__main__":
     main()
