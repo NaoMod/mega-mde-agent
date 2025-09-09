@@ -195,7 +195,7 @@ def generate_single_tool_instructions(
     llm_max_calls: int = 5,
     prompt: str | None = None,
 ) -> List[Dict[str, Any]]:
-    model_name = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+    model_name = os.getenv("OPENAI_MODEL", "gpt-5-nano-2025-08-07")
     llm = ChatOpenAI(model=model_name, temperature=0.1, max_retries=2) if (ChatOpenAI and os.getenv("OPENAI_API_KEY")) else None
     items: List[Dict[str, Any]] = []
     if not selected_apis:
@@ -208,10 +208,29 @@ def generate_single_tool_instructions(
         for _ in range(n):
             if llm is None or llm_calls >= llm_max_calls:
                 continue
+            model_path = "./examples/input.xmi" if pattern == "apply" else ""
+            # Extract source and target types from the API name
+            if "2" in api_name:
+                source_type, target_type = api_name.split(".")[0].split("2")
+            else:
+                source_type, target_type = "source", "target"
+
             p = prompt or (
-                "Write one short user instruction for a modeling task that requires a specific API.\n"
-                f"Capability description:\n{desc}\n"
-                "Constraints:\n- Do NOT mention any tool/API names.\n- Keep it concise and task-oriented.\nReturn only the instruction text."
+                f"Write a single-action instruction for a {pattern} operation.\n\n"
+                f"Tool Context:\n"
+                f"- Operation: {pattern}\n"
+                f"- Tool: {api_name}\n"
+                f"- Purpose: {source_type} to {target_type} transformation\n\n"
+                "Rules:\n"
+                "1. Use ONE action verb of your choice (convert, transform, generate, process, translate, show, display, etc)\n"
+                "2. NO output paths or additional steps\n"
+                "3. For 'apply': Include input path './examples/input.xmi' and model types\n"
+                "4. For 'get': Focus on configuration information\n"
+                "5. Be creative with phrasing while keeping the essential information\n\n"
+                "Example (please rephrase differently):\n"
+                f"- {'Transform the source model at ./examples/input.xmi to target' if pattern == 'apply' else 'Show the transformation configuration'}\n\n"
+                f"Task: Write ONE {pattern} instruction for this capability:\n{desc}\n\n"
+                "Write your instruction:"
             )
             try:
                 msg = llm.invoke(p)
@@ -219,11 +238,16 @@ def generate_single_tool_instructions(
                 llm_calls += 1
             except Exception:
                 continue
+            # For apply pattern, ensure both path and model types are included
+            if pattern == "apply":
+                if model_path not in instruction:
+                    source_type, target_type = api_name.split(".")[0].split("2")
+                    instruction = f"Transform the {source_type} model at {model_path} to {target_type}"
+
             items.append({
-                "level": 1,
                 "pattern": pattern,
                 "instruction": instruction,
-                "relevant_apis": [{"api_name": api_name, "arguments": ""}],
+                "relevant_apis": [{"api_name": api_name, "arguments": model_path if pattern == "apply" else ""}],
             })
     return items
 

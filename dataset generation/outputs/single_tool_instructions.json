@@ -1,0 +1,102 @@
+[
+  {
+    "pattern": "apply",
+    "instruction": "- Transform the Class model at ./examples/input.xmi into a Relational model",
+    "relevant_apis": [
+      {
+        "api_name": "Class2Relational.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Display the Class2Relational configuration details for transforming a Class model into a Relational model.",
+    "relevant_apis": [
+      {
+        "api_name": "Class2Relational.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Transform PetriNet model at './examples/input.xmi' into XML model",
+    "relevant_apis": [
+      {
+        "api_name": "PetriNet2XML.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Transform PNML (input metamodel) to XML (output metamodel) for input model at ./examples/input.xmi.",
+    "relevant_apis": [
+      {
+        "api_name": "PNML2XML.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Transform the DSL model at ./examples/input.xmi into a KM3 model",
+    "relevant_apis": [
+      {
+        "api_name": "DSL2KM3.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Transform the input MySQL model at ./examples/input.xmi into KM3.",
+    "relevant_apis": [
+      {
+        "api_name": "MySQL2KM3.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "- Transform the PathExp model at ./examples/input.xmi to PetriNet",
+    "relevant_apis": [
+      {
+        "api_name": "PathExp2PetriNet.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Convert the Ant model at ./examples/input.xmi into an XML model.",
+    "relevant_apis": [
+      {
+        "api_name": "Ant2XML.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "- Transform the XML model at ./examples/input.xmi into a PetriNet model",
+    "relevant_apis": [
+      {
+        "api_name": "XML2PetriNet.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Transform PetriNet model at ./examples/input.xmi into PathExp.",
+    "relevant_apis": [
+      {
+        "api_name": "PetriNet2PathExp.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  }
+]
