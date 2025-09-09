@@ -3,7 +3,7 @@ from pathlib import Path
 WORKDIR = Path(__file__).resolve().parents[1]
 if str(WORKDIR) not in sys.path:
     sys.path.insert(0, str(WORKDIR))
-
+from pipeline import write_final_dataset
 from src.core.megamodel import MegamodelRegistry
 from scripts.run_agent import populate_registry
 from src.agents.agent import MCPAgent
@@ -114,6 +114,28 @@ def main() -> None:
         print(f"\n{i}. {name}")
         print(f"   Usage Frequency: {freq_score}")
         print(f"   Connectivity Score: {connectivity}")
+    
+    # Test 6: Generate Instructions for Top Tools
+    print("\nTesting generate_single_tool_instructions:")
+    from pipeline import generate_single_tool_instructions
+    
+    instructions = generate_single_tool_instructions(
+        selected_apis=sampled_apis,
+        per_api=1,  # one instruction per tool
+        llm_max_calls=10  # allow up to 10 calls for our 10 tools
+    )
+    
+    print("\nGenerated Instructions Dataset:")
+    for i, item in enumerate(instructions, 1):
+        print(f"\nInstruction {i}:")
+        print(f"Pattern: {item['pattern']}")
+        print(f"Instruction: {item['instruction']}")
+        print(f"API: {item['relevant_apis'][0]['api_name']}")
+        
+    # Save the dataset
+    output_path = Path(__file__).parent / "outputs" / "single_tool_instructions.json"
+    write_final_dataset(instructions, output_path)
+    print(f"\nDataset saved to: {output_path}")
 
 if __name__ == "__main__":
     main()
