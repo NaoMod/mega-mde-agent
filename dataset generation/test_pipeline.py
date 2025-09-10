@@ -12,8 +12,11 @@ from pipeline import (
     _infer_capabilities_from_registry,
     discover_patterns,
     _build_type_graph,
-    sample_apis
+    sample_apis,
+    generate_single_tool_instructions,
+    generate_multi_tool_instructions
 )
+
 
 def main() -> None:
     # 1. Get a populated registry
@@ -115,27 +118,52 @@ def main() -> None:
         print(f"   Usage Frequency: {freq_score}")
         print(f"   Connectivity Score: {connectivity}")
     
-    # Test 6: Generate Instructions for Top Tools
-    print("\nTesting generate_single_tool_instructions:")
-    from pipeline import generate_single_tool_instructions
+    # # Test 6: Generate Instructions for Top Tools
+    # print("\nTesting generate_single_tool_instructions:")
     
-    instructions = generate_single_tool_instructions(
+    # instructions = generate_single_tool_instructions(
+    #     selected_apis=sampled_apis,
+    #     per_api=1,  # one instruction per tool
+    #     llm_max_calls=10  # allow up to 10 calls for our 10 tools
+    # )
+    
+    # print("\nGenerated Instructions Dataset:")
+    # for i, item in enumerate(instructions, 1):
+    #     print(f"\nInstruction {i}:")
+    #     print(f"Pattern: {item['pattern']}")
+    #     print(f"Instruction: {item['instruction']}")
+    #     print(f"API: {item['relevant_apis'][0]['api_name']}")
+        
+    # # Save the single-tool dataset
+    # output_path = Path(__file__).parent / "outputs" / "single_tool_instructions.json"
+    # write_final_dataset(instructions, output_path)
+    # print(f"\nSingle-tool dataset saved to: {output_path}")
+
+    # # Test 7: Generate Multi-Tool Instructions
+    # print("\nTesting generate_multi_tool_instructions:")
+    
+    multi_instructions = generate_multi_tool_instructions(
         selected_apis=sampled_apis,
-        per_api=1,  # one instruction per tool
-        llm_max_calls=10  # allow up to 10 calls for our 10 tools
+        chain_len=2,  # two tools in sequence
+        per_item=1,   # one instruction per combination
+        llm_max_calls=5,  # allow up to 5 calls
+        capabilities=capabilities,  # pass capabilities for type compatibility
+        enforce_type_compat=True,   # ensure tools can be chained
+        insights=insights  # pass the insights with graph and historical patterns
     )
     
-    print("\nGenerated Instructions Dataset:")
-    for i, item in enumerate(instructions, 1):
+    print("\nGenerated Multi-Tool Instructions Dataset:")
+    for i, item in enumerate(multi_instructions, 1):
         print(f"\nInstruction {i}:")
         print(f"Pattern: {item['pattern']}")
         print(f"Instruction: {item['instruction']}")
-        print(f"API: {item['relevant_apis'][0]['api_name']}")
+        apis = item['relevant_apis']
+        print(f"APIs: {' -> '.join(api['api_name'] for api in apis)}")
         
-    # Save the dataset
-    output_path = Path(__file__).parent / "outputs" / "single_tool_instructions.json"
-    write_final_dataset(instructions, output_path)
-    print(f"\nDataset saved to: {output_path}")
+    # Save the multi-tool dataset
+    multi_output_path = Path(__file__).parent / "outputs" / "multi_tool_instructions.json"
+    write_final_dataset(multi_instructions, multi_output_path)
+    print(f"\nMulti-tool dataset saved to: {multi_output_path}")
 
 if __name__ == "__main__":
     main()

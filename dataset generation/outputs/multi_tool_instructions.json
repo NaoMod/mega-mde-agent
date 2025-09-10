@@ -1,0 +1,72 @@
+[
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform './examples/input.xmi' from PetriNet to XML and then Transform './examples/input.xmi' from XML to PetriNet",
+    "relevant_apis": [
+      {
+        "api_name": "PetriNet2XML.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "XML2PetriNet.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform './examples/input.xmi' from PNML to XML and then transform './examples/input.xmi' from XML to PetriNet",
+    "relevant_apis": [
+      {
+        "api_name": "PNML2XML.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "XML2PetriNet.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform this file './examples/input.xmi' from PathExp to PetriNet and then transform this file './examples/input.xmi' from PetriNet to PathExp",
+    "relevant_apis": [
+      {
+        "api_name": "PathExp2PetriNet.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "PetriNet2PathExp.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Convert this file ./examples/input.xmi from XML to a PetriNet model and then translate this PetriNet model from ./examples/input.xmi to a PathExp representation",
+    "relevant_apis": [
+      {
+        "api_name": "XML2PetriNet.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "PetriNet2PathExp.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform this model './examples/input.xmi' to a relational model then Get configuration",
+    "relevant_apis": [
+      {
+        "api_name": "Class2Relational.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "Class2Relational.get_tool",
+        "arguments": ""
+      }
+    ]
+  }
+]

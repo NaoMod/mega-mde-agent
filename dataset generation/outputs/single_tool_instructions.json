@@ -1,7 +1,7 @@
 [
   {
     "pattern": "apply",
-    "instruction": "- Transform the Class model at ./examples/input.xmi into a Relational model",
+    "instruction": "Transform the Class model at './examples/input.xmi' into a Relational model.",
     "relevant_apis": [
       {
         "api_name": "Class2Relational.apply",
@@ -11,7 +11,7 @@
   },
   {
     "pattern": "get",
-    "instruction": "Display the Class2Relational configuration details for transforming a Class model into a Relational model.",
+    "instruction": "Show me the configuration for the transformation from Class model to Relational model.",
     "relevant_apis": [
       {
         "api_name": "Class2Relational.get_tool",
@@ -21,7 +21,7 @@
   },
   {
     "pattern": "apply",
-    "instruction": "Transform PetriNet model at './examples/input.xmi' into XML model",
+    "instruction": "Transform the PetriNet model at ./examples/input.xmi into an XML model.",
     "relevant_apis": [
       {
         "api_name": "PetriNet2XML.apply",
@@ -31,7 +31,7 @@
   },
   {
     "pattern": "apply",
-    "instruction": "Transform PNML (input metamodel) to XML (output metamodel) for input model at ./examples/input.xmi.",
+    "instruction": "Transform the PNML model at './examples/input.xmi' into an XML model",
     "relevant_apis": [
       {
         "api_name": "PNML2XML.apply",
@@ -41,7 +41,7 @@
   },
   {
     "pattern": "apply",
-    "instruction": "Transform the DSL model at ./examples/input.xmi into a KM3 model",
+    "instruction": "Transform the DSL model at ./examples/input.xmi to a KM3 model",
     "relevant_apis": [
       {
         "api_name": "DSL2KM3.apply",
@@ -51,7 +51,7 @@
   },
   {
     "pattern": "apply",
-    "instruction": "Transform the input MySQL model at ./examples/input.xmi into KM3.",
+    "instruction": "Transform the MySQL model at ./examples/input.xmi to KM3 model",
     "relevant_apis": [
       {
         "api_name": "MySQL2KM3.apply",
@@ -61,7 +61,7 @@
   },
   {
     "pattern": "apply",
-    "instruction": "- Transform the PathExp model at ./examples/input.xmi to PetriNet",
+    "instruction": "Transform the PathExp model at ./examples/input.xmi into a PetriNet model.",
     "relevant_apis": [
       {
         "api_name": "PathExp2PetriNet.apply",
@@ -71,7 +71,7 @@
   },
   {
     "pattern": "apply",
-    "instruction": "Convert the Ant model at ./examples/input.xmi into an XML model.",
+    "instruction": "Transform the Ant model at ./examples/input.xmi to an XML model.",
     "relevant_apis": [
       {
         "api_name": "Ant2XML.apply",
@@ -81,7 +81,7 @@
   },
   {
     "pattern": "apply",
-    "instruction": "- Transform the XML model at ./examples/input.xmi into a PetriNet model",
+    "instruction": "Transform the XML model at './examples/input.xmi' into a PetriNet model.",
     "relevant_apis": [
       {
         "api_name": "XML2PetriNet.apply",
@@ -91,7 +91,7 @@
   },
   {
     "pattern": "apply",
-    "instruction": "Transform PetriNet model at ./examples/input.xmi into PathExp.",
+    "instruction": "Transform PetriNet model at ./examples/input.xmi to PathExp model",
     "relevant_apis": [
       {
         "api_name": "PetriNet2PathExp.apply",

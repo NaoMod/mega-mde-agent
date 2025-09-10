@@ -19,7 +19,12 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 from scripts.run_agent import populate_registry
 from src.core.megamodel import MegamodelRegistry
-
+import random
+# Single-tool instruction seed examples
+from single_tool_seeds import SingleToolSeeds
+    # Import seed examples
+from multi_tool_seeds import MultiToolSeeds
+    
 
 # --- 1) Start with a megamodel repository (populate registry) ---
 def _norm_transfo_name(name: str) -> str:
@@ -209,28 +214,41 @@ def generate_single_tool_instructions(
             if llm is None or llm_calls >= llm_max_calls:
                 continue
             model_path = "./examples/input.xmi" if pattern == "apply" else ""
-            # Extract source and target types from the API name
-            if "2" in api_name:
-                source_type, target_type = api_name.split(".")[0].split("2")
-            else:
-                source_type, target_type = "source", "target"
-
+            
+            # Get all seeds for both patterns
+            get_seeds = [seed for seed in SingleToolSeeds.get_seeds() if seed.pattern == "get"]
+            apply_seeds = [seed for seed in SingleToolSeeds.get_seeds() if seed.pattern == "apply"]
+            
+            # Make sure we select 3 seeds with a mix of both patterns
+            selected_seeds = []
+            if pattern == "get" and get_seeds:
+                # If current pattern is "get", select 2 get seeds and 1 apply seed
+                selected_seeds.extend(random.sample(get_seeds, min(2, len(get_seeds))))
+                if apply_seeds:
+                    selected_seeds.append(random.choice(apply_seeds))
+            elif pattern == "apply" and apply_seeds:
+                # If current pattern is "apply", select 2 apply seeds and 1 get seed
+                selected_seeds.extend(random.sample(apply_seeds, min(2, len(apply_seeds))))
+                if get_seeds:
+                    selected_seeds.append(random.choice(get_seeds))
+            
+            # Get instructions from all three seeds to use as examples
+            seed_examples = "\n".join([f"- {s.instruction}" for s in selected_seeds])
+            
             p = prompt or (
-                f"Write a single-action instruction for a {pattern} operation.\n\n"
-                f"Tool Context:\n"
-                f"- Operation: {pattern}\n"
-                f"- Tool: {api_name}\n"
-                f"- Purpose: {source_type} to {target_type} transformation\n\n"
-                "Rules:\n"
-                "1. Use ONE action verb of your choice (convert, transform, generate, process, translate, show, display, etc)\n"
-                "2. NO output paths or additional steps\n"
-                "3. For 'apply': Include input path './examples/input.xmi' and model types\n"
-                "4. For 'get': Focus on configuration information\n"
-                "5. Be creative with phrasing while keeping the essential information\n\n"
-                "Example (please rephrase differently):\n"
-                f"- {'Transform the source model at ./examples/input.xmi to target' if pattern == 'apply' else 'Show the transformation configuration'}\n\n"
-                f"Task: Write ONE {pattern} instruction for this capability:\n{desc}\n\n"
-                "Write your instruction:"
+                f"You will be provided with a tool, its description, and expected operation. Your task is to generate a single instruction for using this tool.\n\n"
+                f"Tool: {api_name}\n"
+                f"Operation: {pattern}\n"
+                f"Description: {desc}\n\n"
+                f"Rules for {pattern} instructions:\n"
+                "1. Use exactly one action verb\n"
+                "2. Do not mention tool names\n"
+                "3. Keep the instruction concise and focused\n"
+                f"4. For 'apply': Include the model types and path './examples/input.xmi'\n"
+                f"5. For 'get': Focus on retrieving configuration information\n\n"
+                "Example instructions (both 'get' and 'apply' patterns):\n"
+                f"{seed_examples}\n\n"
+                "Generate your instruction:"
             )
             try:
                 msg = llm.invoke(p)
@@ -238,11 +256,6 @@ def generate_single_tool_instructions(
                 llm_calls += 1
             except Exception:
                 continue
-            # For apply pattern, ensure both path and model types are included
-            if pattern == "apply":
-                if model_path not in instruction:
-                    source_type, target_type = api_name.split(".")[0].split("2")
-                    instruction = f"Transform the {source_type} model at {model_path} to {target_type}"
 
             items.append({
                 "pattern": pattern,
@@ -259,54 +272,184 @@ def generate_multi_tool_instructions(
     prompt: str | None = None,
     capabilities: List[Dict[str, Any]] | None = None,
     enforce_type_compat: bool = False,
+    insights: Dict[str, Any] = None
 ) -> List[Dict[str, Any]]:
-   
-    model_name = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+    """Generate instructions for using multiple tools in sequence.
+    
+    Uses connectivity from type graph to find compatible tool chains.
+    Leverages historical usage patterns from traces.
+    Samples 3 seeds for instruction examples.
+    """
+    model_name = os.getenv("OPENAI_MODEL", "gpt-5-nano-2025-08-07")
     llm = ChatOpenAI(model=model_name, temperature=0.2, max_retries=2) if (ChatOpenAI and os.getenv("OPENAI_API_KEY")) else None
     items: List[Dict[str, Any]] = []
     tools = [t for t in selected_apis]
-    if len(tools) < chain_len:
+    if len(tools) < chain_len or chain_len > 2:  # We only support pairs for now
         return items
+    
+    # Import seed examples
+    from multi_tool_seeds import MultiToolSeeds
+    
+    # Get all seeds once
+    all_seeds = MultiToolSeeds.get_seeds()
+    get_get_seeds = [s for s in all_seeds if s.pattern == "get, get"]
+    get_apply_seeds = [s for s in all_seeds if s.pattern == "get, apply"]
+    apply_get_seeds = [s for s in all_seeds if s.pattern == "apply, get"]
+    apply_apply_seeds = [s for s in all_seeds if s.pattern == "apply, apply"]
+    
+    # Prepare for scoring using the existing graph
     llm_calls = 0
-    combos = combinations(tools, chain_len)
-    # Optional type-compat enforcement for 2-tool chains
-    cap_index = {c.get("tool_name"): c for c in (capabilities or [])}
-    for combo in combos:
-        # Build API chain
-        apis = []
-        patterns = []
+    
+    # The type graph already has the connectivity information we need
+    type_graph = {}
+    common_patterns = []
+    
+    # Get the graph from insights if available
+    if insights:
+        type_graph = insights.get("type_graph", {})
+        common_patterns = insights.get("common_patterns", [])
+    
+    # Use tool names as keys for easier lookup
+    tool_name_to_tool = {t.get("name", ""): t for t in tools}
+    
+    # Score each potential combination using the existing graph information
+    combo_scores = []
+    
+    for combo in combinations(tools, chain_len):
         names = [t.get("name", "") for t in combo]
-        # Enforce type compatibility only for 2-tool chains
+        
+        # Skip if type compatibility check fails
         if enforce_type_compat and len(names) == 2:
             a, b = names
-            a_out = set(cap_index.get(a, {}).get("output_types", []) or [])
-            b_in = set(cap_index.get(b, {}).get("input_types", []) or [])
-            if a_out and b_in and not a_out.intersection(b_in):
-                continue
+            
+            # Use the existing type graph to check compatibility
+            if type_graph and "tool_io" in type_graph:
+                tool_io = type_graph.get("tool_io", {})
+                if a in tool_io and b in tool_io:
+                    a_out = tool_io[a].get("out", set())
+                    b_in = tool_io[b].get("in", set())
+                    if a_out and b_in and not a_out.intersection(b_in):
+                        continue
+        
+        # Calculate connectivity score using the follow_edges from the graph
+        connectivity_score = 0
+        if type_graph and "follow_edges" in type_graph and len(names) == 2:
+            a, b = names
+            follow_edges = type_graph.get("follow_edges", {})
+            if a in follow_edges and b in follow_edges.get(a, []):
+                connectivity_score += 5  # Tools are connected in the right order
+        
+        # Calculate historical usage score from common_patterns
+        usage_score = 0
+        if common_patterns:
+            # Get the pattern for this combo
+            patterns = [_derive_api(t.get("name", ""))[1] for t in combo]
+            pattern_key = ">".join(patterns)
+            
+            # Find the matching pattern in common_patterns
+            for pattern_info in common_patterns:
+                if pattern_info.get("pattern") == pattern_key:
+                    usage_score += pattern_info.get("count", 0)
+                    break
+        
+        # Total score
+        total_score = connectivity_score + usage_score
+        combo_scores.append((combo, total_score))
+    
+    # Sort combinations by score (highest first)
+    sorted_combos = [c for c, _ in sorted(combo_scores, key=lambda x: x[1], reverse=True)]
+    
+    # Process each valid combination in order of score
+    for combo in sorted_combos:
+        # Extract API info and patterns
+        apis = []
+        patterns = []
         for t in combo:
             api, pat = _derive_api(t.get("name", ""))
-            apis.append({"api_name": api, "arguments": ""})
+            model_path = "./examples/input.xmi" if pat == "apply" else ""
+            apis.append({"api_name": api, "arguments": model_path if pat == "apply" else ""})
             patterns.append(pat)
+        
+        pattern_key = ", ".join(patterns)
+        
+        # Generate the specified number of instructions per combination
         for _ in range(max(1, int(per_item))):
             if llm is None or llm_calls >= llm_max_calls:
                 continue
+                
+            # Select 3 seeds, prioritizing the matching pattern
+            selected_seeds = []
+            
+            # First, try to get a seed matching the exact pattern
+            pattern_seeds_map = {
+                "get, get": get_get_seeds,
+                "get, apply": get_apply_seeds,
+                "apply, get": apply_get_seeds,
+                "apply, apply": apply_apply_seeds
+            }
+            
+            if pattern_key in pattern_seeds_map and pattern_seeds_map[pattern_key]:
+                selected_seeds.append(random.choice(pattern_seeds_map[pattern_key]))
+            
+            # Add seeds from other patterns to reach 3 total
+            other_patterns = [k for k in pattern_seeds_map.keys() if k != pattern_key]
+            for other_pat in other_patterns:
+                if len(selected_seeds) < 3 and pattern_seeds_map[other_pat]:
+                    selected_seeds.append(random.choice(pattern_seeds_map[other_pat]))
+                    if len(selected_seeds) >= 3:
+                        break
+            
+            # Fill remaining slots with any available seeds
+            while len(selected_seeds) < 3 and all_seeds:
+                remaining = [s for s in all_seeds if s not in selected_seeds]
+                if not remaining:
+                    break
+                selected_seeds.append(random.choice(remaining))
+            
+            # Get tool type info for context
+            tool_types = []
+            for t in combo:
+                api_name = _derive_api(t.get("name", ""))[0]
+                if "2" in api_name:
+                    source, target = api_name.split(".")[0].split("2")
+                    tool_types.append(f"{source} to {target}")
+                else:
+                    tool_types.append("model transformation")
+            
+            # Build the prompt with all three seeds
+            seed_examples = "\n".join([f"- {s.instruction}" for s in selected_seeds])
+            
             p = prompt or (
-                "Propose one concise user instruction for a multi-step modeling workflow.\n"
-                "Requirements:\n- The task should naturally require multiple APIs in sequence.\n"
-                "- Do NOT mention any tool/API names.\n- Return only the instruction text."
+                "You will be provided with a sequence of tools and their operations. Your task is to generate a single instruction that covers using these tools in sequence.\n\n"
+                f"Tool sequence: {' → '.join([api['api_name'] for api in apis])}\n"
+                f"Operations: {' → '.join(patterns)}\n"
+                f"Transformations: {' → '.join(tool_types)}\n\n"
+                "Rules for multi-step instructions:\n"
+                "1. Use exactly one verb for each step (two verbs total)\n"
+                "2. Do not mention tool names\n"
+                "3. Keep steps in the correct order\n"
+                "4. For 'apply' operations: Include path './examples/input.xmi'\n"
+                "5. For 'get' operations: Focus on configuration retrieval\n\n"
+                "Three example instructions (various patterns):\n"
+                f"{seed_examples}\n\n"
+                "Generate your instruction:"
             )
+            
+            # Generate the instruction
             try:
                 msg = llm.invoke(p)
                 instruction = getattr(msg, "content", str(msg)).strip()
                 llm_calls += 1
             except Exception:
                 continue
+                
+
             items.append({
-                "level": 2,
-                "pattern": ">".join(patterns),
-                "instruction": instruction,
-                "relevant_apis": apis,
-            })
+                    "pattern": ">".join(patterns),
+                    "instruction": instruction,
+                    "relevant_apis": apis,
+                })
+    
     return items
 
 def validate_dataset(examples: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
