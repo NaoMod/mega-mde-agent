@@ -12,6 +12,8 @@ from src.core.am3 import ReferenceModel, TransformationModel
 from src.mcp_ext.integrator import MCPServerIntegrator
 from src.agents.agent import MCPAgent
 from src.mcp_ext.client import MCPClient
+import json
+import subprocess
 
 def populate_registry(registry):
     print("Populating MegamodelRegistry with ATL/EMF servers, tools, and transformations...")
@@ -29,19 +31,25 @@ def populate_registry(registry):
     atl_server.metadata["script_path"] = atl_server_script
     emf_server.metadata["script_path"] = emf_server_script
     
-    print(f"ATL Server registered: {atl_server.name}")
-    print(f"EMF Server registered: {emf_server.name}")
-    print(f"ATL Server tools: {atl_server.tools}")
-    print(f"EMF Server tools: {emf_server.tools}")
+    # print(f"ATL Server registered: {atl_server.name}")
+    # print(f"EMF Server registered: {emf_server.name}")
+    # print(f"ATL Server tools: {atl_server.tools}")
+    # print(f"EMF Server tools: {emf_server.tools}")
 
 
     atl_server_script = os.path.join(os.path.dirname(__file__), '..', 'mcp_servers', 'atl_server', 'atl_mcp_server.py')
     atl_client = MCPClient()
     async def get_atl_tools():
         await atl_client.connect_to_server(atl_server_script)
-        session = await atl_client.get_session()
-        response = await session.list_tools()
-        return response.tools
+        tools = []
+        try:
+            session = await atl_client.get_session()
+            response = await session.list_tools()
+            tools = response.tools
+        finally:
+            # Close streams in the same task to avoid anyio cancel-scope warnings
+            await atl_client.cleanup()
+        return tools
     atl_tools = asyncio.run(get_atl_tools())
 
 
@@ -50,9 +58,15 @@ def populate_registry(registry):
     emf_client = MCPClient()
     async def get_emf_tools():
         await emf_client.connect_to_server(emf_server_script)
-        session = await emf_client.get_session()
-        response = await session.list_tools()
-        return response.tools
+        tools = []
+        try:
+            session = await emf_client.get_session()
+            response = await session.list_tools()
+            tools = response.tools
+        finally:
+            # Close streams in the same task to avoid anyio cancel-scope warnings
+            await emf_client.cleanup()
+        return tools
     emf_tools = asyncio.run(get_emf_tools())
     
     # Register tools with the megamodel registry
@@ -75,6 +89,17 @@ def populate_registry(registry):
         return mm
 
     print("Registering metamodels and transformations...")
+
+    # Fetch samples once from ATL server
+    try:
+        samples_raw = subprocess.run([
+            'curl', '-s', '-X', 'GET', 'http://localhost:8080/transformations/samples'
+        ], capture_output=True, text=True, check=True)
+        samples_data = json.loads(samples_raw.stdout)
+        # Map name -> sampleSources
+        samples_by_name = {entry.get('name'): entry.get('sampleSources', []) for entry in (samples_data or [])}
+    except Exception:
+        samples_by_name = {}
     for transfo_data in enabled_transformations:
         transfo_name = transfo_data.get('name')
         # Input metamodels
@@ -94,10 +119,10 @@ def populate_registry(registry):
             uri=transfo_data.get('atlFile', transfo_data.get('name', 'unknown')),
             name=transfo_data.get('name', 'unknown'),
             source_metamodel=source_ref,
-            target_metamodel=target_ref
+            target_metamodel=target_ref,
+            sample_sources=samples_by_name.get(transfo_name, [])
         )
         registry.register_entity(transfo_entity)
-        print(f"Registered transformation: {transfo_entity.uri} ({transfo_entity.name}) | IN: {getattr(source_ref, 'name', None)} | OUT: {getattr(target_ref, 'name', None)}")
 
 if __name__ == "__main__":
     registry = MegamodelRegistry()

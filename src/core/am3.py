@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, List
 from enum import Enum
 
 @dataclass
@@ -53,6 +53,8 @@ class TransformationModel(Model):
     source_metamodel: Optional[ReferenceModel] = None
     target_metamodel: Optional[ReferenceModel] = None
     transformation_language: str = "ATL"
+    # Sample source model paths provided by the ATL server
+    sample_sources: List[str] = field(default_factory=list)
     
     def __post_init__(self):
         super().__post_init__()
