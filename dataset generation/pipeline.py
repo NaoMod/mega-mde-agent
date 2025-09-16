@@ -17,12 +17,11 @@ from langchain_openai import ChatOpenAI
 SRC_DIR = WORKDIR / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
-from scripts.run_agent import populate_registry
 from src.core.megamodel import MegamodelRegistry
 import random
 # Single-tool instruction seed examples
 from single_tool_seeds import SingleToolSeeds
-    # Import seed examples
+# Multi-tool instruction seed examples
 from multi_tool_seeds import MultiToolSeeds
     
 
@@ -270,7 +269,6 @@ def generate_multi_tool_instructions(
     per_item: int = 1,
     llm_max_calls: int = 5,
     prompt: str | None = None,
-    capabilities: List[Dict[str, Any]] | None = None,
     enforce_type_compat: bool = False,
     insights: Dict[str, Any] = None
 ) -> List[Dict[str, Any]]:
@@ -287,8 +285,7 @@ def generate_multi_tool_instructions(
     if len(tools) < chain_len or chain_len > 2:  # We only support pairs for now
         return items
     
-    # Import seed examples
-    from multi_tool_seeds import MultiToolSeeds
+
     
     # Get all seeds once
     all_seeds = MultiToolSeeds.get_seeds()

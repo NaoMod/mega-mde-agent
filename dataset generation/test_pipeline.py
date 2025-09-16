@@ -147,7 +147,6 @@ def main() -> None:
         chain_len=2,  # two tools in sequence
         per_item=1,   # one instruction per combination
         llm_max_calls=5,  # allow up to 5 calls
-        capabilities=capabilities,  # pass capabilities for type compatibility
         enforce_type_compat=True,   # ensure tools can be chained
         insights=insights  # pass the insights with graph and historical patterns
     )
