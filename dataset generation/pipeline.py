@@ -497,7 +497,7 @@ def generate_dataset_for_regression_testing(
         single_items = generate_single_tool_instructions(
             selected_apis=filtered_tools,
             per_api=per_api,
-            llm_max_calls=5,
+            llm_max_calls=100,  # Increased to allow for more calls
             registry=registry,
         )
         
@@ -508,16 +508,16 @@ def generate_dataset_for_regression_testing(
         multi_items = generate_multi_tool_instructions(
             chain_len=2,
             per_item=per_workflow,
-            llm_max_calls=5,
+            llm_max_calls=100,  # Increased to allow for more calls
             registry=registry,
             workflows=workflows
         )
         
         items.extend(multi_items)
 
-    # 3) Validate and cap to 10
+    # 3) Validate but don't limit to just 10 items
     items = validate_dataset(items)
-    return items[:10]
+    return items
 
 
 

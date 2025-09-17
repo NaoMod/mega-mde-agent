@@ -1,4 +1,5 @@
 import sys
+import random
 from pathlib import Path
 WORKDIR = Path(__file__).resolve().parents[1]
 if str(WORKDIR) not in sys.path:
@@ -168,28 +169,80 @@ def main() -> None:
     # Test 8: Test generate_dataset_for_regression_testing
     print("\nTesting generate_dataset_for_regression_testing:")
     
-    # Define workflows to test for multi-tool instructions
-    workflows = [
-        ["list_transformation_Class2Relational_tool", "apply_Class2Relational_transformation_tool"],
-        ["list_transformation_PetriNet2Grafcet_tool", "apply_PetriNet2Grafcet_transformation_tool"]
-    ]
-    
-    # Prepare tools for testing - simplified approach
+    # Prepare tools for testing - take 25 ATL tools
     tools_for_testing_dicts = [
         {"name": getattr(t, "name", ""), "description": getattr(t, "description", "")}
-        for t in atl_tools[:10]  # Just take the first 10 ATL tools
+        for t in atl_tools[:25]  # Take the first 25 ATL tools
     ]
+    
+    print(f"Selected {len(tools_for_testing_dicts)} ATL tools for instruction generation")
+    
+    # Generate 25 random workflows for multi-tool instructions
+    # Each workflow consists of a get tool (list_transformation_*) followed by an apply tool
+    get_tools = [t["name"] for t in tools_for_testing_dicts if t["name"].startswith("list_transformation_")]
+    apply_tools = [t["name"] for t in tools_for_testing_dicts if t["name"].startswith("apply_")]
+    
+    # Create 25 random workflows
+    random_workflows = []
+    for _ in range(25):
+        # Choose random get and apply tools
+        get_tool = random.choice(get_tools) if get_tools else None
+        apply_tool = random.choice(apply_tools) if apply_tools else None
+        
+        if get_tool and apply_tool:
+            # Create a workflow with both tools
+            workflow = [get_tool, apply_tool]
+            random_workflows.append(workflow)
+    
+    print(f"Generated {len(random_workflows)} random workflows for multi-tool instructions")
     
     # Generate dataset using actual registry
     regression_dataset = generate_dataset_for_regression_testing(
         tools=tools_for_testing_dicts,
-        workflows=workflows,
-        per_api=1.0,      # Generate single-tool instructions
-        per_workflow=1.0, # Generate multi-tool instructions
+        workflows=random_workflows,
+        per_api=2.0,      # Generate 2 instructions per tool (25 tools * 2 = 50 total single-tool instructions)
+        per_workflow=1.0, # Generate 1 instruction per workflow (25 workflows * 1 = 25 total multi-tool instructions)
         registry=registry
     )
     
     print(f"\nGenerated {len(regression_dataset)} regression test examples")
+    
+    # Count single-tool and multi-tool instructions
+    single_tool_count = sum(1 for item in regression_dataset if len(item.get('relevant_apis', [])) == 1)
+    multi_tool_count = sum(1 for item in regression_dataset if len(item.get('relevant_apis', [])) > 1)
+    
+    # Count apply and get operations for single-tool instructions
+    apply_ops = sum(1 for item in regression_dataset 
+                   if len(item.get('relevant_apis', [])) == 1 and item.get('pattern') == 'apply')
+    get_ops = sum(1 for item in regression_dataset 
+                  if len(item.get('relevant_apis', [])) == 1 and item.get('pattern') == 'get')
+    
+    print(f"Single-tool instructions: {single_tool_count} (Apply: {apply_ops}, Get: {get_ops})")
+    print(f"Multi-tool instructions: {multi_tool_count}")
+    
+    # Display a few examples of each type
+    if single_tool_count > 0:
+        print("\nSample Single-Tool Instructions (Apply):")
+        for i, item in enumerate(regression_dataset):
+            if item.get('pattern') == 'apply' and len(item.get('relevant_apis', [])) == 1:
+                print(f"\n{i+1}. {item['instruction']}")
+                if i >= 2:  # Show at most 3 examples
+                    break
+        
+        print("\nSample Single-Tool Instructions (Get):")
+        for i, item in enumerate(regression_dataset):
+            if item.get('pattern') == 'get' and len(item.get('relevant_apis', [])) == 1:
+                print(f"\n{i+1}. {item['instruction']}")
+                if i >= 2:  # Show at most 3 examples
+                    break
+    
+    if multi_tool_count > 0:
+        print("\nSample Multi-Tool Instructions:")
+        for i, item in enumerate(regression_dataset):
+            if len(item.get('relevant_apis', [])) > 1:
+                print(f"\n{i+1}. {item['instruction']}")
+                if i >= 2:  # Show at most 3 examples
+                    break
     
     # Save the regression testing dataset
     regression_output_path = Path(__file__).parent / "outputs" / "regression_testing_dataset.json"
