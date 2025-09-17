@@ -14,7 +14,8 @@ from pipeline import (
     _build_type_graph,
     sample_apis,
     generate_single_tool_instructions,
-    generate_multi_tool_instructions
+    generate_multi_tool_instructions,
+    generate_dataset_for_regression_testing
 )
 
 
@@ -27,11 +28,11 @@ def main() -> None:
     print("\nExecuting agent to generate history...")
     agent = MCPAgent(registry)  # Use same registry instance
 
-    # Ask the agent to transform Class to Relational 
-    user_goal = "transform this Class model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model"
-    result = agent.run(user_goal)  # This will create session/traces in our registry
+    # # Ask the agent to transform Class to Relational 
+    # user_goal = "transform this Class model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model"
+    # result = agent.run(user_goal)  # This will create session/traces in our registry
     
-    print("\nAgent execution completed. Now testing pipeline components...")
+    # print("\nAgent execution completed. Now testing pipeline components...")
 
     # # Test 2: Type graph building
     # print("\nTesting _build_type_graph:")
@@ -142,27 +143,58 @@ def main() -> None:
     # # Test 7: Generate Multi-Tool Instructions
     # print("\nTesting generate_multi_tool_instructions:")
     
-    multi_instructions = generate_multi_tool_instructions(
-        selected_apis=sampled_apis,
-        chain_len=2,  # two tools in sequence
-        per_item=1,   # one instruction per combination
-        llm_max_calls=5,  # allow up to 5 calls
-        enforce_type_compat=True,   # ensure tools can be chained
-        insights=insights  # pass the insights with graph and historical patterns
+    # multi_instructions = generate_multi_tool_instructions(
+    #     selected_apis=sampled_apis,
+    #     chain_len=2,  # two tools in sequence
+    #     per_item=1,   # one instruction per combination
+    #     llm_max_calls=5,  # allow up to 5 calls
+    #     enforce_type_compat=True,   # ensure tools can be chained
+    #     insights=insights  # pass the insights with graph and historical patterns
+    # )
+    
+    # print("\nGenerated Multi-Tool Instructions Dataset:")
+    # for i, item in enumerate(multi_instructions, 1):
+    #     print(f"\nInstruction {i}:")
+    #     print(f"Pattern: {item['pattern']}")
+    #     print(f"Instruction: {item['instruction']}")
+    #     apis = item['relevant_apis']
+    #     print(f"APIs: {' -> '.join(api['api_name'] for api in apis)}")
+        
+    # # Save the multi-tool dataset
+    # multi_output_path = Path(__file__).parent / "outputs" / "multi_tool_instructions.json"
+    # write_final_dataset(multi_instructions, multi_output_path)
+    # print(f"\nMulti-tool dataset saved to: {multi_output_path}")
+    
+    # Test 8: Test generate_dataset_for_regression_testing
+    print("\nTesting generate_dataset_for_regression_testing:")
+    
+    # Define workflows to test for multi-tool instructions
+    workflows = [
+        ["list_transformation_Class2Relational_tool", "apply_Class2Relational_transformation_tool"],
+        ["list_transformation_PetriNet2Grafcet_tool", "apply_PetriNet2Grafcet_transformation_tool"]
+    ]
+    
+    # Prepare tools for testing - simplified approach
+    tools_for_testing_dicts = [
+        {"name": getattr(t, "name", ""), "description": getattr(t, "description", "")}
+        for t in atl_tools[:10]  # Just take the first 10 ATL tools
+    ]
+    
+    # Generate dataset using actual registry
+    regression_dataset = generate_dataset_for_regression_testing(
+        tools=tools_for_testing_dicts,
+        workflows=workflows,
+        per_api=1.0,      # Generate single-tool instructions
+        per_workflow=1.0, # Generate multi-tool instructions
+        registry=registry
     )
     
-    print("\nGenerated Multi-Tool Instructions Dataset:")
-    for i, item in enumerate(multi_instructions, 1):
-        print(f"\nInstruction {i}:")
-        print(f"Pattern: {item['pattern']}")
-        print(f"Instruction: {item['instruction']}")
-        apis = item['relevant_apis']
-        print(f"APIs: {' -> '.join(api['api_name'] for api in apis)}")
-        
-    # Save the multi-tool dataset
-    multi_output_path = Path(__file__).parent / "outputs" / "multi_tool_instructions.json"
-    write_final_dataset(multi_instructions, multi_output_path)
-    print(f"\nMulti-tool dataset saved to: {multi_output_path}")
+    print(f"\nGenerated {len(regression_dataset)} regression test examples")
+    
+    # Save the regression testing dataset
+    regression_output_path = Path(__file__).parent / "outputs" / "regression_testing_dataset.json"
+    write_final_dataset(regression_dataset, regression_output_path)
+    print(f"\nRegression testing dataset saved to: {regression_output_path}")
 
 if __name__ == "__main__":
     main()

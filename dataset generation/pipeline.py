@@ -294,26 +294,26 @@ def generate_single_tool_instructions(
     return items
 
 def generate_multi_tool_instructions(
-    selected_apis: List[Dict[str, Any]],
+    *,
     chain_len: int = 2,
     per_item: int = 1,
     llm_max_calls: int = 5,
     prompt: str | None = None,
-    enforce_type_compat: bool = False,
-    insights: Dict[str, Any] = None,
-    registry: MegamodelRegistry | None = None
+    registry: MegamodelRegistry | None = None,
+    workflows: List[List[str]] | None = None
 ) -> List[Dict[str, Any]]:
     """Generate instructions for using multiple tools in sequence.
     
-    Uses connectivity from type graph to find compatible tool chains.
-    Leverages historical usage patterns from traces.
-    Samples 3 seeds for instruction examples.
+    Directly uses provided workflows to create tool combinations.
     """
     model_name = os.getenv("OPENAI_MODEL", "gpt-5-nano-2025-08-07")
+    print(f"\nInitializing LLM with model: {model_name}")
     llm = ChatOpenAI(model=model_name, temperature=0.2, max_retries=2) if (ChatOpenAI and os.getenv("OPENAI_API_KEY")) else None
     items: List[Dict[str, Any]] = []
-    tools = [t for t in selected_apis]
-    if len(tools) < chain_len or chain_len > 2:  # We only support pairs for now
+    
+    # Check if we have workflows
+    if not workflows or len(workflows) == 0:
+        print("No workflows provided, cannot generate multi-tool instructions")
         return items
     
     # Map transformation name -> first sample source path from registry (if available)
@@ -327,8 +327,6 @@ def generate_multi_tool_instructions(
                 if key not in sample_by_name and isinstance(samples, list) and samples:
                     sample_by_name[key] = samples[0]
     
-
-    
     # Get all seeds once
     all_seeds = MultiToolSeeds.get_seeds()
     get_get_seeds = [s for s in all_seeds if s.pattern == "get, get"]
@@ -336,184 +334,137 @@ def generate_multi_tool_instructions(
     apply_get_seeds = [s for s in all_seeds if s.pattern == "apply, get"]
     apply_apply_seeds = [s for s in all_seeds if s.pattern == "apply, apply"]
     
-    # Prepare for scoring using the existing graph
+    # Initialize
     llm_calls = 0
     
-    # The type graph already has the connectivity information we need
-    type_graph = {}
-    common_patterns = []
+    print(f"Processing {len(workflows)} workflows for multi-tool instructions")
     
-    # Get the graph from insights if available
-    if insights:
-        type_graph = insights.get("type_graph", {})
-        common_patterns = insights.get("common_patterns", [])
-    
-    # Use tool names as keys for easier lookup
-    tool_name_to_tool = {t.get("name", ""): t for t in tools}
-    
-    # Score each potential combination using the existing graph information
-    combo_scores = []
-    
-    for combo in combinations(tools, chain_len):
-        names = [t.get("name", "") for t in combo]
-        
-        # Skip if type compatibility check fails
-        if enforce_type_compat and len(names) == 2:
-            a, b = names
+    # Process each workflow directly
+    for workflow in workflows:
+        if len(workflow) < chain_len:
+            print(f"Workflow {workflow} is too short (need {chain_len} tools), skipping")
+            continue
             
-            # Use the existing type graph to check compatibility
-            if type_graph and "tool_io" in type_graph:
-                tool_io = type_graph.get("tool_io", {})
-                if a in tool_io and b in tool_io:
-                    a_out = tool_io[a].get("out", set())
-                    b_in = tool_io[b].get("in", set())
-                    if a_out and b_in and not a_out.intersection(b_in):
-                        continue
-        
-        # Calculate connectivity score using the follow_edges from the graph
-        connectivity_score = 0
-        if type_graph and "follow_edges" in type_graph and len(names) == 2:
-            a, b = names
-            follow_edges = type_graph.get("follow_edges", {})
-            if a in follow_edges and b in follow_edges.get(a, []):
-                connectivity_score += 5  # Tools are connected in the right order
-        
-        # Calculate historical usage score from common_patterns
-        usage_score = 0
-        if common_patterns:
-            # Get the pattern for this combo
-            patterns = [_derive_api(t.get("name", ""))[1] for t in combo]
-            pattern_key = ">".join(patterns)
+        # Process each segment of length chain_len in the workflow
+        for i in range(len(workflow) - chain_len + 1):
+            tool_combo = workflow[i:i+chain_len]
+            print(f"Processing workflow segment: {' -> '.join(tool_combo)}")
             
-            # Find the matching pattern in common_patterns
-            for pattern_info in common_patterns:
-                if pattern_info.get("pattern") == pattern_key:
-                    usage_score += pattern_info.get("count", 0)
-                    break
-        
-        # Total score
-        total_score = connectivity_score + usage_score
-        combo_scores.append((combo, total_score))
-    
-    # Sort combinations by score (highest first)
-    sorted_combos = [c for c, _ in sorted(combo_scores, key=lambda x: x[1], reverse=True)]
-    
-    # Process each valid combination in order of score
-    for combo in sorted_combos:
-        # Extract API info and patterns
-        apis = []
-        patterns = []
-        model_paths = []
-        
-        for t in combo:
-            api, pat = _derive_api(t.get("name", ""))
-            # Default path
-            model_path = "./examples/input.xmi" if pat == "apply" else ""
-            
-            # Try to get real path from registry if available
-            if pat == "apply":
-                base = api.split(".")[0].strip().lower()
-                if base in sample_by_name:
-                    model_path = sample_by_name[base]
-            
-            model_paths.append(model_path)
-            apis.append({"api_name": api, "arguments": model_path if pat == "apply" else ""})
-            patterns.append(pat)
-        
-        pattern_key = ", ".join(patterns)
-        
-        # Generate the specified number of instructions per combination
-        for _ in range(max(1, int(per_item))):
-            if llm is None or llm_calls >= llm_max_calls:
-                continue
-                
-            # Select 3 seeds, prioritizing the matching pattern
-            selected_seeds = []
-            
-            # First, try to get a seed matching the exact pattern
-            pattern_seeds_map = {
-                "get, get": get_get_seeds,
-                "get, apply": get_apply_seeds,
-                "apply, get": apply_get_seeds,
-                "apply, apply": apply_apply_seeds
-            }
-            
-            if pattern_key in pattern_seeds_map and pattern_seeds_map[pattern_key]:
-                selected_seeds.append(random.choice(pattern_seeds_map[pattern_key]))
-            
-            # Add seeds from other patterns to reach 3 total
-            other_patterns = [k for k in pattern_seeds_map.keys() if k != pattern_key]
-            for other_pat in other_patterns:
-                if len(selected_seeds) < 3 and pattern_seeds_map[other_pat]:
-                    selected_seeds.append(random.choice(pattern_seeds_map[other_pat]))
-                    if len(selected_seeds) >= 3:
-                        break
-            
-            # Fill remaining slots with any available seeds
-            while len(selected_seeds) < 3 and all_seeds:
-                remaining = [s for s in all_seeds if s not in selected_seeds]
-                if not remaining:
-                    break
-                selected_seeds.append(random.choice(remaining))
-            
-            # Get tool type info for context
+            # Extract API info and patterns directly from tool names
+            apis = []
+            patterns = []
+            model_paths = []
             tool_types = []
-            for t in combo:
-                api_name = _derive_api(t.get("name", ""))[0]
-                if "2" in api_name:
-                    source, target = api_name.split(".")[0].split("2")
+            
+            for tool_name in tool_combo:
+                api, pat = _derive_api(tool_name)
+                # Default path
+                model_path = "./examples/input.xmi" if pat == "apply" else ""
+                
+                # Try to get real path from registry if available
+                if pat == "apply":
+                    base = api.split(".")[0].strip().lower()
+                    if base in sample_by_name:
+                        model_path = sample_by_name[base]
+                
+                model_paths.append(model_path)
+                apis.append({"api_name": api, "arguments": model_path if pat == "apply" else ""})
+                patterns.append(pat)
+                
+                # Extract tool type info
+                if "2" in api:
+                    source, target = api.split(".")[0].split("2")
                     tool_types.append(f"{source} to {target}")
                 else:
                     tool_types.append("model transformation")
             
-            # Build the prompt with all three seeds
-            seed_examples = "\n".join([f"- {s.instruction}" for s in selected_seeds])
+            pattern_key = ", ".join(patterns)
             
-            path_instructions = []
-            for i, (pat, path) in enumerate(zip(patterns, model_paths)):
-                if pat == "apply":
-                    path_instructions.append(f"Step {i+1} ('apply'): Include path '{path}'")
-            
-            # Update the prompt to include actual paths
-            p = prompt or (
-                "You will be provided with a sequence of tools and their operations. Your task is to generate a single instruction that covers using these tools in sequence.\n\n"
-                f"Tool sequence: {' → '.join([api['api_name'] for api in apis])}\n"
-                f"Operations: {' → '.join(patterns)}\n"
-                f"Transformations: {' → '.join(tool_types)}\n\n"
-                "Rules for multi-step instructions:\n"
-                "1. Use exactly one verb for each step (two verbs total)\n"
-                "2. Do not mention tool names\n"
-                "3. Keep steps in the correct logical order\n"
-                f"4. Paths for 'apply' operations:\n   {chr(10).join(path_instructions) if path_instructions else '   No apply operations in this sequence'}\n"
-                "5. For 'get' operations: Focus on retrieving specific configuration information\n"
-                "6. Make the relationship between the two steps clear (how the output of step 1 feeds into step 2)\n"
-                "7. Be precise about the model types involved in the transformation\n"
-                "8. Use concrete language that clearly specifies what the user wants to accomplish\n\n"
-                "Three example instructions (various patterns):\n"
-                f"{seed_examples}\n\n"
-                "Generate your instruction that clearly connects the two operations in a meaningful way:"
-            )
-            
-            # Print the multi-tool prompt
-            print("\n--- Multi-tool instruction prompt ---")
-            print(p)
-            print("--- End of multi-tool prompt ---\n")
-            
-            # Generate the instruction
-            try:
-                msg = llm.invoke(p)
-                instruction = getattr(msg, "content", str(msg)).strip()
-                llm_calls += 1
-            except Exception:
-                continue
+            # Generate the specified number of instructions per combination
+            for _ in range(max(1, int(per_item))):
+                # Select 3 seeds, prioritizing the matching pattern
+                selected_seeds = []
                 
-
-            items.append({
+                # First, try to get a seed matching the exact pattern
+                pattern_seeds_map = {
+                    "get, get": get_get_seeds,
+                    "get, apply": get_apply_seeds,
+                    "apply, get": apply_get_seeds,
+                    "apply, apply": apply_apply_seeds
+                }
+                
+                if pattern_key in pattern_seeds_map and pattern_seeds_map[pattern_key]:
+                    selected_seeds.append(random.choice(pattern_seeds_map[pattern_key]))
+                
+                # Add seeds from other patterns to reach 3 total
+                other_patterns = [k for k in pattern_seeds_map.keys() if k != pattern_key]
+                for other_pat in other_patterns:
+                    if len(selected_seeds) < 3 and pattern_seeds_map[other_pat]:
+                        selected_seeds.append(random.choice(pattern_seeds_map[other_pat]))
+                        if len(selected_seeds) >= 3:
+                            break
+                
+                # Fill remaining slots with any available seeds
+                while len(selected_seeds) < 3 and all_seeds:
+                    remaining = [s for s in all_seeds if s not in selected_seeds]
+                    if not remaining:
+                        break
+                    selected_seeds.append(random.choice(remaining))
+                
+                # Build the prompt with all three seeds
+                seed_examples = "\n".join([f"- {s.instruction}" for s in selected_seeds])
+                
+                path_instructions = []
+                for j, (pat, path) in enumerate(zip(patterns, model_paths)):
+                    if pat == "apply":
+                        path_instructions.append(f"Step {j+1} ('apply'): Include path '{path}'")
+                
+                # Update the prompt to include actual paths
+                p = prompt or (
+                    "You will be provided with a sequence of tools and their operations. Your task is to generate a single instruction that covers using these tools in sequence.\n\n"
+                    f"Tool sequence: {' → '.join([api['api_name'] for api in apis])}\n"
+                    f"Operations: {' → '.join(patterns)}\n"
+                    f"Transformations: {' → '.join(tool_types)}\n\n"
+                    "Rules for multi-step instructions:\n"
+                    "1. Use exactly one verb for each step (two verbs total)\n"
+                    "2. Do not mention tool names\n"
+                    "3. Keep steps in the correct logical order\n"
+                    f"4. Paths for 'apply' operations:\n   {chr(10).join(path_instructions) if path_instructions else '   No apply operations in this sequence'}\n"
+                    "5. For 'get' operations: Focus on retrieving specific configuration information\n"
+                    "6. Make the relationship between the two steps clear (how the output of step 1 feeds into step 2)\n"
+                    "7. Be precise about the model types involved in the transformation\n"
+                    "8. Use concrete language that clearly specifies what the user wants to accomplish\n\n"
+                    "Three example instructions (various patterns):\n"
+                    f"{seed_examples}\n\n"
+                    "Generate your instruction that clearly connects the two operations in a meaningful way:"
+                )
+                
+                # Generate the instruction
+                instruction = ""
+                try:
+                    if llm and llm_calls < llm_max_calls:
+                        print("Generating instruction with LLM...")
+                        msg = llm.invoke(p)
+                        instruction = getattr(msg, "content", str(msg)).strip()
+                        llm_calls += 1
+                    else:
+                        # Fallback instruction if no LLM is available or max calls reached
+                        print("Using fallback instruction (no LLM or max calls reached)")
+                        instruction = f"Using {patterns[0]} to process a {tool_types[0]} model, then {patterns[1]} to complete the transformation to {tool_types[1]}"
+                except Exception as e:
+                    print(f"Error generating instruction: {str(e)}")
+                    # Fallback instruction
+                    instruction = f"Using {patterns[0]} to process a {tool_types[0]} model, then {patterns[1]} to complete the transformation to {tool_types[1]}"
+                
+                # Add the instruction
+                items.append({
                     "pattern": ">".join(patterns),
                     "instruction": instruction,
                     "relevant_apis": apis,
                 })
+                print(f"Added instruction: {instruction[:50]}...")
     
+    print(f"Generated {len(items)} multi-tool instructions")
     return items
 
 def validate_dataset(examples: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -542,40 +493,32 @@ def generate_dataset_for_regression_testing(
     workflows: List[List[str]] | None = None,
     per_api: int = 1,
     per_workflow: int = 1,
-    enforce_type_compat: bool = True,
-    insights: Dict[str, Any] | None = None,
-    llm_max_calls: int = 10,
     registry: MegamodelRegistry | None = None,
 ) -> List[Dict[str, Any]]:
     # Create a lookup dictionary for tools by name
     by_name = {t.get("name", ""): t for t in (tools or [])}
     
-    # Determine tools to use for multi-tool instructions
-    multi_seed_tools: List[Dict[str, Any]] = []
-    workflow_tool_names = set()
-
-
+    # Print workflows for debugging
     if workflows:
-        # Efficiently collect unique tools from workflows
-        seen_tools = set()
-        for flow in workflows:
-            for tool_name in flow:
-                workflow_tool_names.add(tool_name)
-                if tool_name in by_name and tool_name not in seen_tools:
-                    seen_tools.add(tool_name)
-                    multi_seed_tools.append(by_name[tool_name])
-
+        print(f"Provided workflows ({len(workflows)}): {workflows}")
     else:
-        multi_seed_tools = tools or []
+        print("No workflows provided")
 
     # Initialize items list for collecting instructions
     items: List[Dict[str, Any]] = []
     
-    # 1) First generate single-tool instructions to prioritize them
+    # 1) First generate single-tool instructions
     if tools:
-        
+        # Remove excluded tools
+        filtered_tools = tools.copy()
+        if "extract_input_metamodel_name" in by_name:
+            filtered_tools = [t for t in filtered_tools if t.get("name", "") != "extract_input_metamodel_name"]
+        if "list_transformation_samples_tool" in by_name:
+            print("Removing 'list_transformation_samples_tool' from single-tool generation")
+            filtered_tools = [t for t in filtered_tools if t.get("name", "") != "list_transformation_samples_tool"]
+
         single_items = generate_single_tool_instructions(
-            selected_apis=tools,
+            selected_apis=filtered_tools,
             per_api=per_api,
             llm_max_calls=5,
             registry=registry,
@@ -584,20 +527,22 @@ def generate_dataset_for_regression_testing(
         print(f"\nGenerated {len(single_items)} single-tool instructions")
         items.extend(single_items)
     
-    # 2) Then generate multi-tool instructions
-    if multi_seed_tools:
+    # 2) Then generate multi-tool instructions if workflows are provided
+    if workflows:
+        print("\nGenerating multi-tool instructions directly from workflows...")
+        
         multi_items = generate_multi_tool_instructions(
-            selected_apis=multi_seed_tools,
             chain_len=2,
             per_item=per_workflow,
             llm_max_calls=5,
-            enforce_type_compat=enforce_type_compat,
-            insights=insights,
             registry=registry,
+            workflows=workflows  # Pass workflows directly
         )
         
         print(f"\nGenerated {len(multi_items)} multi-tool instructions")
         items.extend(multi_items)
+    else:
+        print("No workflows provided, skipping multi-tool instruction generation")
 
     # 3) Validate and cap to 10
     items = validate_dataset(items)

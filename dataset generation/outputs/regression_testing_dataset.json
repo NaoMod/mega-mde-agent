@@ -1,0 +1,80 @@
+[
+  {
+    "pattern": "apply",
+    "instruction": "Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/DSLBridge/MetamodelBridge/Models/SimpleExample/DSL2EMF/SimpleExampleMM-KM3.xmi into a DSL model",
+    "relevant_apis": [
+      {
+        "api_name": "KM32DSL.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/DSLBridge/MetamodelBridge/Models/SimpleExample/DSL2EMF/SimpleExampleMM-KM3.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Show me the configuration details of the KM3-to-DSL transformation from KM3 model to DSL model.",
+    "relevant_apis": [
+      {
+        "api_name": "KM32DSL.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Transform KM3 to EMF for source model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi",
+    "relevant_apis": [
+      {
+        "api_name": "KM32EMF.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Show me the configuration settings of the transformation that transforms a KM3 model into an EMF model.",
+    "relevant_apis": [
+      {
+        "api_name": "KM32EMF.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Apply PNML to XML transformation to /Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet/Models/XML2PNML_example.xmi (source: PNML, target: XML)",
+    "relevant_apis": [
+      {
+        "api_name": "PNML2XML.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet/Models/XML2PNML_example.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get the configuration of the Class-to-Relational transformation (input: Class model; output: Relational model).\n\nApply the retrieved Class-to-Relational transformation configuration to /Users/zakariahachm/Downloads/atl_zoo/Class2Relational/Class.xmi.",
+    "relevant_apis": [
+      {
+        "api_name": "Class2Relational.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "Class2Relational.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/Class2Relational/Class.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "- get the configuration of the PetriNet to Grafcet transformation\n- apply the retrieved configuration to /Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet/Models/Grafcet2PetriNet_example.xmi for the PetriNet to Grafcet transformation",
+    "relevant_apis": [
+      {
+        "api_name": "PetriNet2Grafcet.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "PetriNet2Grafcet.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet/Models/Grafcet2PetriNet_example.xmi"
+      }
+    ]
+  }
+]
