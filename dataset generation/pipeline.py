@@ -274,11 +274,6 @@ def generate_single_tool_instructions(
                 "Generate your instruction that would make sense to a user who wants to work with these model transformations:"
             )
             
-            # Print the single-tool prompt
-            print("\n--- Single-tool instruction prompt ---")
-            print(p)
-            print("--- End of single-tool prompt ---\n")
-            
             try:
                 msg = llm.invoke(p)
                 instruction = getattr(msg, "content", str(msg)).strip()
@@ -307,13 +302,11 @@ def generate_multi_tool_instructions(
     Directly uses provided workflows to create tool combinations.
     """
     model_name = os.getenv("OPENAI_MODEL", "gpt-5-nano-2025-08-07")
-    print(f"\nInitializing LLM with model: {model_name}")
     llm = ChatOpenAI(model=model_name, temperature=0.2, max_retries=2) if (ChatOpenAI and os.getenv("OPENAI_API_KEY")) else None
     items: List[Dict[str, Any]] = []
     
     # Check if we have workflows
     if not workflows or len(workflows) == 0:
-        print("No workflows provided, cannot generate multi-tool instructions")
         return items
     
     # Map transformation name -> first sample source path from registry (if available)
@@ -337,18 +330,14 @@ def generate_multi_tool_instructions(
     # Initialize
     llm_calls = 0
     
-    print(f"Processing {len(workflows)} workflows for multi-tool instructions")
-    
     # Process each workflow directly
     for workflow in workflows:
         if len(workflow) < chain_len:
-            print(f"Workflow {workflow} is too short (need {chain_len} tools), skipping")
             continue
             
         # Process each segment of length chain_len in the workflow
         for i in range(len(workflow) - chain_len + 1):
             tool_combo = workflow[i:i+chain_len]
-            print(f"Processing workflow segment: {' -> '.join(tool_combo)}")
             
             # Extract API info and patterns directly from tool names
             apis = []
@@ -443,16 +432,13 @@ def generate_multi_tool_instructions(
                 instruction = ""
                 try:
                     if llm and llm_calls < llm_max_calls:
-                        print("Generating instruction with LLM...")
                         msg = llm.invoke(p)
                         instruction = getattr(msg, "content", str(msg)).strip()
                         llm_calls += 1
                     else:
                         # Fallback instruction if no LLM is available or max calls reached
-                        print("Using fallback instruction (no LLM or max calls reached)")
                         instruction = f"Using {patterns[0]} to process a {tool_types[0]} model, then {patterns[1]} to complete the transformation to {tool_types[1]}"
-                except Exception as e:
-                    print(f"Error generating instruction: {str(e)}")
+                except Exception:
                     # Fallback instruction
                     instruction = f"Using {patterns[0]} to process a {tool_types[0]} model, then {patterns[1]} to complete the transformation to {tool_types[1]}"
                 
@@ -462,9 +448,7 @@ def generate_multi_tool_instructions(
                     "instruction": instruction,
                     "relevant_apis": apis,
                 })
-                print(f"Added instruction: {instruction[:50]}...")
     
-    print(f"Generated {len(items)} multi-tool instructions")
     return items
 
 def validate_dataset(examples: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -498,12 +482,6 @@ def generate_dataset_for_regression_testing(
     # Create a lookup dictionary for tools by name
     by_name = {t.get("name", ""): t for t in (tools or [])}
     
-    # Print workflows for debugging
-    if workflows:
-        print(f"Provided workflows ({len(workflows)}): {workflows}")
-    else:
-        print("No workflows provided")
-
     # Initialize items list for collecting instructions
     items: List[Dict[str, Any]] = []
     
@@ -514,7 +492,6 @@ def generate_dataset_for_regression_testing(
         if "extract_input_metamodel_name" in by_name:
             filtered_tools = [t for t in filtered_tools if t.get("name", "") != "extract_input_metamodel_name"]
         if "list_transformation_samples_tool" in by_name:
-            print("Removing 'list_transformation_samples_tool' from single-tool generation")
             filtered_tools = [t for t in filtered_tools if t.get("name", "") != "list_transformation_samples_tool"]
 
         single_items = generate_single_tool_instructions(
@@ -524,25 +501,19 @@ def generate_dataset_for_regression_testing(
             registry=registry,
         )
         
-        print(f"\nGenerated {len(single_items)} single-tool instructions")
         items.extend(single_items)
     
     # 2) Then generate multi-tool instructions if workflows are provided
     if workflows:
-        print("\nGenerating multi-tool instructions directly from workflows...")
-        
         multi_items = generate_multi_tool_instructions(
             chain_len=2,
             per_item=per_workflow,
             llm_max_calls=5,
             registry=registry,
-            workflows=workflows  # Pass workflows directly
+            workflows=workflows
         )
         
-        print(f"\nGenerated {len(multi_items)} multi-tool instructions")
         items.extend(multi_items)
-    else:
-        print("No workflows provided, skipping multi-tool instruction generation")
 
     # 3) Validate and cap to 10
     items = validate_dataset(items)
