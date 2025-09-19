@@ -266,7 +266,6 @@ def generate_single_tool_instructions(
                 "2. Do not mention tool names\n"
                 "3. Keep the instruction concise and focused\n"
                 f"4. For 'apply': Include the specific model types and the exact path '{model_path}'\n"
-                f"5. For 'get': Focus on retrieving specific configuration information\n"
                 "6. Make instructions practical and concrete, not vague\n"
                 "7. Include details about the source and target model types when relevant\n\n"
                 "Example instructions (both 'get' and 'apply' patterns):\n"

@@ -1,5 +1,95 @@
 [
   {
+    "pattern": "get",
+    "instruction": "Show details of the transformation from KM3 model to DSL model.",
+    "relevant_apis": [
+      {
+        "api_name": "KM32DSL.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Show details of the KM3-to-EMF transformation from KM3 models to EMF models.",
+    "relevant_apis": [
+      {
+        "api_name": "KM32EMF.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "List the details of the transformation that converts a PNML model to an XML model.",
+    "relevant_apis": [
+      {
+        "api_name": "PNML2XML.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Provide details about the transformation from Mantis model to XML model",
+    "relevant_apis": [
+      {
+        "api_name": "Mantis2XML.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Describe the transformation from XML model to Ant model.",
+    "relevant_apis": [
+      {
+        "api_name": "XML2Ant.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Show me the details of the transformation from SimpleClass to SimpleRDBMS.",
+    "relevant_apis": [
+      {
+        "api_name": "SimpleClass2SimpleRDBMS.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Retrieve the transformation details for converting an XML model to an XSLT model.",
+    "relevant_apis": [
+      {
+        "api_name": "XML2XSLT.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Show the details of the transformation from Families model to Persons model.",
+    "relevant_apis": [
+      {
+        "api_name": "Families2Persons.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Retrieve the details of the transformation from MySQL model to KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "MySQL2KM3.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
     "pattern": "apply",
     "instruction": "Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/DSLBridge/MetamodelBridge/Models/SimpleExample/DSL2EMF/SimpleExampleMM-KM3.xmi into a DSL model",
     "relevant_apis": [

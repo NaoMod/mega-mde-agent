@@ -206,7 +206,7 @@ def main() -> None:
     )
     
     print(f"\nGenerated {len(regression_dataset)} regression test examples")
-    
+    # 
     # Count single-tool and multi-tool instructions
     single_tool_count = sum(1 for item in regression_dataset if len(item.get('relevant_apis', [])) == 1)
     multi_tool_count = sum(1 for item in regression_dataset if len(item.get('relevant_apis', [])) > 1)
@@ -248,6 +248,39 @@ def main() -> None:
     regression_output_path = Path(__file__).parent / "outputs" / "regression_testing_dataset.json"
     write_final_dataset(regression_dataset, regression_output_path)
     print(f"\nRegression testing dataset saved to: {regression_output_path}")
+    
+    
+    # # Test 9: Generate only "get" single-tool instructions
+    # print("\nTesting generation of 'get' single-tool instructions only:")
+    
+    # # Filter only the "get" type tools (list_transformation_* tools)
+    # get_tools_only = [t for t in tools_for_testing_dicts if t["name"].startswith("list_transformation_")]
+    # get_tools_sample = get_tools_only[:10]  # Take just 10 tools for this test
+    
+    # print(f"Selected {len(get_tools_sample)} 'get' tools for instruction generation")
+    
+    # # Generate dataset with only "get" tools
+    # get_only_dataset = generate_single_tool_instructions(
+    #     selected_apis=get_tools_sample,
+    #     per_api=1.0,     # Generate 1 instruction per tool
+    #     llm_max_calls=10,  # Allow up to 10 calls (one per tool)
+    #     registry=registry,
+    # )
+    
+    # print(f"\nGenerated {len(get_only_dataset)} 'get' tool instructions")
+    
+    # # Display examples of the generated instructions
+    # print("\nSample 'Get' Tool Instructions:")
+    # for i, item in enumerate(get_only_dataset):
+    #     print(f"\n{i+1}. {item['instruction']}")
+    #     print(f"   API: {item['relevant_apis'][0]['api_name']}")
+    #     if i >= 2:  # Show at most 3 examples
+    #         break
+    
+    # # Save the get-only dataset
+    # get_only_output_path = Path(__file__).parent / "outputs" / "get_only_instructions.json"
+    # write_final_dataset(get_only_dataset, get_only_output_path)
+    # print(f"\n'Get' tool instructions dataset saved to: {get_only_output_path}")
 
 if __name__ == "__main__":
     main()
