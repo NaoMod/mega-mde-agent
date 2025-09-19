@@ -25,6 +25,12 @@ class SingleToolSeeds:
                 level=1,
                 pattern="get"
             ),
+            Seed(
+                instruction="List me the details of the PNML2XML transformation",
+                level=1,
+                pattern="get"
+            ),
+
             # Level 2 - Source and target models mentioned
             Seed(
                 instruction="Transform the KM3 model ./atl_zoo/KM32EMF/Sample-KM3.xmi into a DSL model",
@@ -44,7 +50,7 @@ class SingleToolSeeds:
                 pattern="apply"
             ),
             Seed(
-                instruction= "Show me the transformation that transforms this file /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to Relational model", 
+                instruction= "List me the details of the transformation that transforms this file /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to Relational model",
                 level=3,
                 pattern="get"
             ),
