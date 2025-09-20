@@ -118,6 +118,13 @@ if __name__ == "__main__":
         # Initialize storage for execution results
         all_execution_results = []
         
+        # Define excluded transformations (MySQL2KM3 and KM32EMF)
+        excluded_transformations = ["MySQL2KM3", "KM32EMF"]
+        excluded_tools = []
+        for transfo in excluded_transformations:
+            excluded_tools.append(f"apply_{transfo}")
+            excluded_tools.append(f"list_transformation_{transfo}")
+        
         # 1. Set up registry and agent
         registry = MegamodelRegistry()
         await populate_registry(registry)
