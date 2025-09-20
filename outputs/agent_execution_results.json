@@ -1,0 +1,163 @@
+[
+  {
+    "instruction": "Show details of the transformation from KM3 model to DSL model.",
+    "pattern": "get",
+    "expected_apis": [
+      "KM32DSL.get_tool"
+    ],
+    "plan_steps": [
+      {
+        "tool_name": "list_transformation_KM32DSL_tool",
+        "server_name": "atl_server",
+        "parameters": {}
+      }
+    ],
+    "execution_results": [
+      {
+        "tool_name": "list_transformation_KM32DSL_tool",
+        "success": true,
+        "error": "",
+        "result": {
+          "meta": null,
+          "content": "[TextContent(type='text', text='Transformation \\'KM32DSL\\':\\n{\"name\":\"KM32DSL\",\"atlFile\":\"./MetamodelBridge/Transfo/KM32DSL.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/DSLBridge\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./Metamodels/KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./Metamodels/DSL.ecore\"}],\"sample_models\":[{\"source\":[\"./MetamodelBridge/Models/SimpleExample/DSL2EMF/SimpleExampleMM-KM3.xmi\"],\"target\":[\"./MetamodelBridge/Models/SimpleExample/DSL2EMF/target2.xmi\"]}]}', annotations=None, meta=None)]",
+          "structuredContent": "{'result': 'Transformation \\'KM32DSL\\':\\n{\"name\":\"KM32DSL\",\"atlFile\":\"./MetamodelBridge/Transfo/KM32DSL.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/DSLBridge\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./Metamodels/KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./Metamodels/DSL.ecore\"}],\"sample_models\":[{\"source\":[\"./MetamodelBridge/Models/SimpleExample/DSL2EMF/SimpleExampleMM-KM3.xmi\"],\"target\":[\"./MetamodelBridge/Models/SimpleExample/DSL2EMF/target2.xmi\"]}]}'}",
+          "isError": false
+        }
+      }
+    ]
+  },
+  {
+    "instruction": "Show details of the KM3-to-EMF transformation from KM3 models to EMF models.",
+    "pattern": "get",
+    "expected_apis": [
+      "KM32EMF.get_tool"
+    ],
+    "plan_steps": [
+      {
+        "tool_name": "list_transformation_KM32EMF_tool",
+        "server_name": "atl_server",
+        "parameters": {}
+      },
+      {
+        "tool_name": "list_transformation_KM32Metrics_tool",
+        "server_name": "atl_server",
+        "parameters": {}
+      },
+      {
+        "tool_name": "list_transformation_KM32Problem_tool",
+        "server_name": "atl_server",
+        "parameters": {}
+      },
+      {
+        "tool_name": "list_transformation_PrimaryKey_with_context_tool",
+        "server_name": "atl_server",
+        "parameters": {}
+      },
+      {
+        "tool_name": "list_transformation_RedundantInheritance_with_context_tool",
+        "server_name": "atl_server",
+        "parameters": {}
+      },
+      {
+        "tool_name": "list_transformation_DSL2KM3_tool",
+        "server_name": "atl_server",
+        "parameters": {}
+      }
+    ],
+    "execution_results": [
+      {
+        "tool_name": "list_transformation_KM32EMF_tool",
+        "success": true,
+        "error": "",
+        "result": {
+          "meta": null,
+          "content": "[TextContent(type='text', text='Transformation \\'KM32EMF\\':\\n{\"name\":\"KM32EMF\",\"atlFile\":\"./KM32EMF.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/KM32EMF\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./EMF.ecore\"}],\"sample_models\":[{\"source\":[\"./Sample-KM3.xmi\"],\"target\":[\"\"]}]}', annotations=None, meta=None)]",
+          "structuredContent": "{'result': 'Transformation \\'KM32EMF\\':\\n{\"name\":\"KM32EMF\",\"atlFile\":\"./KM32EMF.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/KM32EMF\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./EMF.ecore\"}],\"sample_models\":[{\"source\":[\"./Sample-KM3.xmi\"],\"target\":[\"\"]}]}'}",
+          "isError": false
+        }
+      },
+      {
+        "tool_name": "list_transformation_KM32Metrics_tool",
+        "success": true,
+        "error": "",
+        "result": {
+          "meta": null,
+          "content": "[TextContent(type='text', text='Transformation \\'KM32Metrics\\':\\n{\"name\":\"KM32Metrics\",\"atlFile\":\"./Transfos/KM32Metrics.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/KM32Metrics\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./Metamodels/KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./Metamodels/Metrics.ecore\"}],\"sample_models\":[{\"source\":[\"./Models/KM3-KM3.xmi\"],\"target\":[\"./Models/KM3-Metrics.xmi\"]}]}', annotations=None, meta=None)]",
+          "structuredContent": "{'result': 'Transformation \\'KM32Metrics\\':\\n{\"name\":\"KM32Metrics\",\"atlFile\":\"./Transfos/KM32Metrics.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/KM32Metrics\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./Metamodels/KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./Metamodels/Metrics.ecore\"}],\"sample_models\":[{\"source\":[\"./Models/KM3-KM3.xmi\"],\"target\":[\"./Models/KM3-Metrics.xmi\"]}]}'}",
+          "isError": false
+        }
+      },
+      {
+        "tool_name": "list_transformation_KM32Problem_tool",
+        "success": true,
+        "error": "",
+        "result": {
+          "meta": null,
+          "content": "[TextContent(type='text', text='Transformation \\'KM32Problem\\':\\n{\"name\":\"KM32Problem\",\"atlFile\":\"./Transfos/KM32Problem.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/KM32Problem\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./Metamodels/KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./Metamodels/Problem.ecore\"}],\"sample_models\":[{\"source\":[\"./Models/test-KM3.xmi\"],\"target\":[\"./Models/problem.xmi\"]}]}', annotations=None, meta=None)]",
+          "structuredContent": "{'result': 'Transformation \\'KM32Problem\\':\\n{\"name\":\"KM32Problem\",\"atlFile\":\"./Transfos/KM32Problem.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/KM32Problem\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./Metamodels/KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./Metamodels/Problem.ecore\"}],\"sample_models\":[{\"source\":[\"./Models/test-KM3.xmi\"],\"target\":[\"./Models/problem.xmi\"]}]}'}",
+          "isError": false
+        }
+      },
+      {
+        "tool_name": "list_transformation_PrimaryKey_with_context_tool",
+        "success": true,
+        "error": "",
+        "result": {
+          "meta": null,
+          "content": "[TextContent(type='text', text='Transformation \\'PrimaryKey_with_context\\':\\n{\"name\":\"PrimaryKey_with_context\",\"atlFile\":\"./with_context/PrimaryKey.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/IntroducePrimaryKey\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./KM3.ecore\"}],\"sample_models\":[{\"source\":[\"./with_context/build_example.xml\"],\"target\":[\"./target.xmi\"]}]}', annotations=None, meta=None)]",
+          "structuredContent": "{'result': 'Transformation \\'PrimaryKey_with_context\\':\\n{\"name\":\"PrimaryKey_with_context\",\"atlFile\":\"./with_context/PrimaryKey.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/IntroducePrimaryKey\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./KM3.ecore\"}],\"sample_models\":[{\"source\":[\"./with_context/build_example.xml\"],\"target\":[\"./target.xmi\"]}]}'}",
+          "isError": false
+        }
+      },
+      {
+        "tool_name": "list_transformation_RedundantInheritance_with_context_tool",
+        "success": true,
+        "error": "",
+        "result": {
+          "meta": null,
+          "content": "[TextContent(type='text', text='Transformation \\'RedundantInheritance_with_context\\':\\n{\"name\":\"RedundantInheritance_with_context\",\"atlFile\":\"./with_context/RedundantInheritance.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/EliminateRedundantInheritance\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./KM3target.ecore\"}],\"sample_models\":[{\"source\":[\"./with_context/InputModels/example-KM3.xmi\"],\"target\":[\"./with_context/OutputModels/example-KM3target.xmi\"]}]}', annotations=None, meta=None)]",
+          "structuredContent": "{'result': 'Transformation \\'RedundantInheritance_with_context\\':\\n{\"name\":\"RedundantInheritance_with_context\",\"atlFile\":\"./with_context/RedundantInheritance.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/EliminateRedundantInheritance\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./KM3.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./KM3target.ecore\"}],\"sample_models\":[{\"source\":[\"./with_context/InputModels/example-KM3.xmi\"],\"target\":[\"./with_context/OutputModels/example-KM3target.xmi\"]}]}'}",
+          "isError": false
+        }
+      },
+      {
+        "tool_name": "list_transformation_DSL2KM3_tool",
+        "success": true,
+        "error": "",
+        "result": {
+          "meta": null,
+          "content": "[TextContent(type='text', text='Transformation \\'DSL2KM3\\':\\n{\"name\":\"DSL2KM3\",\"atlFile\":\"./MetamodelBridge/Transfo/DSL2KM3.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/DSLBridge\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./Metamodels/DSL.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./Metamodels/KM3.ecore\"}],\"sample_models\":[{\"source\":[\"./MetamodelBridge/Models/SimpleExample/DSL2EMF/SimpleExampleMM-DSL.xmi\"],\"target\":[\"./MetamodelBridge/Models/SimpleExample/DSL2EMF/target.xmi\"]}]}', annotations=None, meta=None)]",
+          "structuredContent": "{'result': 'Transformation \\'DSL2KM3\\':\\n{\"name\":\"DSL2KM3\",\"atlFile\":\"./MetamodelBridge/Transfo/DSL2KM3.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/DSLBridge\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./Metamodels/DSL.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./Metamodels/KM3.ecore\"}],\"sample_models\":[{\"source\":[\"./MetamodelBridge/Models/SimpleExample/DSL2EMF/SimpleExampleMM-DSL.xmi\"],\"target\":[\"./MetamodelBridge/Models/SimpleExample/DSL2EMF/target.xmi\"]}]}'}",
+          "isError": false
+        }
+      }
+    ]
+  },
+  {
+    "instruction": "List the details of the transformation that converts a PNML model to an XML model.",
+    "pattern": "get",
+    "expected_apis": [
+      "PNML2XML.get_tool"
+    ],
+    "plan_steps": [
+      {
+        "tool_name": "list_transformation_PNML2XML_tool",
+        "server_name": "atl_server",
+        "parameters": {}
+      }
+    ],
+    "execution_results": [
+      {
+        "tool_name": "list_transformation_PNML2XML_tool",
+        "success": true,
+        "error": "",
+        "result": {
+          "meta": null,
+          "content": "[TextContent(type='text', text='Transformation \\'PNML2XML\\':\\n{\"name\":\"PNML2XML\",\"atlFile\":\"./Transformations/PNML2XML.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./Metamodels/PNML.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./Metamodels/XML.ecore\"}],\"sample_models\":[{\"source\":[\"./Models/XML2PNML_example.xmi\"],\"target\":[\"./Models/target5.xmi\"]}]}', annotations=None, meta=None)]",
+          "structuredContent": "{'result': 'Transformation \\'PNML2XML\\':\\n{\"name\":\"PNML2XML\",\"atlFile\":\"./Transformations/PNML2XML.atl\",\"libraries\":[],\"folderPath\":\"/Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet\",\"compiler\":\"EMFVM\",\"description\":\"\",\"enabled\":true,\"input_metamodels\":[{\"name\":\"IN\",\"path\":\"./Metamodels/PNML.ecore\"}],\"output_metamodels\":[{\"name\":\"OUT\",\"path\":\"./Metamodels/XML.ecore\"}],\"sample_models\":[{\"source\":[\"./Models/XML2PNML_example.xmi\"],\"target\":[\"./Models/target5.xmi\"]}]}'}",
+          "isError": false
+        }
+      }
+    ]
+  }
+]
