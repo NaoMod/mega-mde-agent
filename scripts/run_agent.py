@@ -4,6 +4,7 @@ import asyncio
 import json
 import subprocess
 from pathlib import Path
+import datetime
 # Add project root to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -120,14 +121,49 @@ if __name__ == "__main__":
         
         # Define excluded transformations (MySQL2KM3 and KM32EMF)
         excluded_transformations = ["MySQL2KM3", "KM32EMF"]
-        excluded_tools = []
-        for transfo in excluded_transformations:
-            excluded_tools.append(f"apply_{transfo}")
-            excluded_tools.append(f"list_transformation_{transfo}")
         
         # 1. Set up registry and agent
         registry = MegamodelRegistry()
         await populate_registry(registry)
+        
+        # Remove the excluded transformation tools from the registry
+        for server_name, tools in registry.tools_by_server.items():
+            filtered_tools = []
+            for tool in tools:
+                # Check if tool is related to excluded transformations
+                exclude_tool = False
+                for excluded_transfo in excluded_transformations:
+                    if (tool.name.startswith(f"apply_{excluded_transfo}") or 
+                        tool.name.startswith(f"list_transformation_{excluded_transfo}")):
+                        exclude_tool = True
+                        print(f"Excluding tool: {tool.name}")
+                        break
+                
+                if not exclude_tool:
+                    filtered_tools.append(tool)
+            
+            # Replace the tools list with the filtered one
+            registry.tools_by_server[server_name] = filtered_tools
+        
+        # Also filter out the transformation models
+        filtered_entities = {}
+        for uri, entity in registry.entities.items():
+            if hasattr(entity, "name"):
+                exclude_entity = False
+                for excluded_transfo in excluded_transformations:
+                    if entity.name == excluded_transfo:
+                        exclude_entity = True
+                        print(f"Excluding transformation model: {entity.name}")
+                        break
+                
+                if not exclude_entity:
+                    filtered_entities[uri] = entity
+            else:
+                filtered_entities[uri] = entity
+                
+        registry.entities = filtered_entities
+        
+        # Now create the agent with the filtered registry
         agent = MCPAgent(registry)
         
         
@@ -282,12 +318,17 @@ if __name__ == "__main__":
             # Save execution results to a JSON file
             if all_execution_results:
                 try:
-                    output_path = Path(__file__).parent.parent / "outputs" / "agent_execution_results.json"
+                    # Create a timestamped filename to avoid overwriting existing results
+                    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                    output_filename = f"agent_execution_results_{timestamp}.json"
+                    output_path = Path(__file__).parent.parent / "outputs" / output_filename
+                    
                     # Ensure the output directory exists
                     output_path.parent.mkdir(exist_ok=True)
                     
                     with open(output_path, 'w') as f:
                         json.dump(all_execution_results, f, indent=2)
+                    print(f"\nExecution results saved to: {output_path}")
                 except Exception:
                     import traceback
                     traceback.print_exc()
