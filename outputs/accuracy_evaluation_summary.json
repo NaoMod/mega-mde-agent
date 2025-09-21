@@ -1,0 +1,12 @@
+{
+  "baseline": {
+    "file": "agent_baseline_execution_results.json",
+    "accuracy": 0.9625,
+    "total_instructions": 80
+  },
+  "new": {
+    "file": "agent_execution_results_20250921_181958.json",
+    "accuracy": 0.8,
+    "total_instructions": 80
+  }
+}

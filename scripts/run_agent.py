@@ -119,51 +119,9 @@ if __name__ == "__main__":
         # Initialize storage for execution results
         all_execution_results = []
         
-        # Define excluded transformations (MySQL2KM3 and KM32EMF)
-        excluded_transformations = ["MySQL2KM3", "KM32EMF"]
-        
         # 1. Set up registry and agent
         registry = MegamodelRegistry()
         await populate_registry(registry)
-        
-        # Remove the excluded transformation tools from the registry
-        for server_name, tools in registry.tools_by_server.items():
-            filtered_tools = []
-            for tool in tools:
-                # Check if tool is related to excluded transformations
-                exclude_tool = False
-                for excluded_transfo in excluded_transformations:
-                    if (tool.name.startswith(f"apply_{excluded_transfo}") or 
-                        tool.name.startswith(f"list_transformation_{excluded_transfo}")):
-                        exclude_tool = True
-                        print(f"Excluding tool: {tool.name}")
-                        break
-                
-                if not exclude_tool:
-                    filtered_tools.append(tool)
-            
-            # Replace the tools list with the filtered one
-            registry.tools_by_server[server_name] = filtered_tools
-        
-        # Also filter out the transformation models
-        filtered_entities = {}
-        for uri, entity in registry.entities.items():
-            if hasattr(entity, "name"):
-                exclude_entity = False
-                for excluded_transfo in excluded_transformations:
-                    if entity.name == excluded_transfo:
-                        exclude_entity = True
-                        print(f"Excluding transformation model: {entity.name}")
-                        break
-                
-                if not exclude_entity:
-                    filtered_entities[uri] = entity
-            else:
-                filtered_entities[uri] = entity
-                
-        registry.entities = filtered_entities
-        
-        # Now create the agent with the filtered registry
         agent = MCPAgent(registry)
         
         
