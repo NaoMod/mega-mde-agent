@@ -108,48 +108,96 @@ def evaluate_file(file_path):
     return average_accuracy, detailed_results
 
 def main():
-    """Main function to evaluate both result files."""
+    """Main function to evaluate all result files."""
     
     # Define the paths to the result files
     outputs_dir = Path(__file__).parent
     baseline_file = outputs_dir / "agent_baseline_execution_results.json"
     new_file = outputs_dir / "agent_execution_results_20250921_181958.json"
+    without_pe_file = outputs_dir / "agent_execution_results_withoutPE_techniques.json"
+    without_2tools_file = outputs_dir / "agent_execution_results_without_2tools.json"
     
-
+    print("=== Agent Execution Results Accuracy Evaluation ===\n")
+    
+    results_summary = {}
+    
     # Evaluate baseline results
     if baseline_file.exists():
+        print(f"Evaluating: {baseline_file.name}")
         baseline_accuracy, baseline_details = evaluate_file(baseline_file)
-
+        print(f"Baseline Accuracy: {baseline_accuracy:.3f} ({baseline_accuracy*100:.1f}%)")
+        print(f"Total Instructions: {len(baseline_details)}")
+        print()
+        results_summary["baseline"] = {
+            "file": baseline_file.name,
+            "accuracy": baseline_accuracy,
+            "total_instructions": len(baseline_details)
+        }
     else:
+        print(f"Baseline file not found: {baseline_file}")
         baseline_accuracy, baseline_details = 0.0, []
     
     # Evaluate new results
     if new_file.exists():
+        print(f"Evaluating: {new_file.name}")
         new_accuracy, new_details = evaluate_file(new_file)
+        print(f"New Results Accuracy: {new_accuracy:.3f} ({new_accuracy*100:.1f}%)")
+        print(f"Total Instructions: {len(new_details)}")
+        print()
+        results_summary["new"] = {
+            "file": new_file.name,
+            "accuracy": new_accuracy,
+            "total_instructions": len(new_details)
+        }
     else:
+        print(f"New file not found: {new_file}")
         new_accuracy, new_details = 0.0, []
     
+    # Evaluate without PE techniques results
+    if without_pe_file.exists():
+        print(f"Evaluating: {without_pe_file.name}")
+        without_pe_accuracy, without_pe_details = evaluate_file(without_pe_file)
+        print(f"Without PE Techniques Accuracy: {without_pe_accuracy:.3f} ({without_pe_accuracy*100:.1f}%)")
+        print(f"Total Instructions: {len(without_pe_details)}")
+        print()
+        results_summary["without_pe_techniques"] = {
+            "file": without_pe_file.name,
+            "accuracy": without_pe_accuracy,
+            "total_instructions": len(without_pe_details)
+        }
+    else:
+        print(f"Without PE file not found: {without_pe_file}")
+        without_pe_accuracy, without_pe_details = 0.0, []
+    
+    # Evaluate without 2 tools results
+    if without_2tools_file.exists():
+        print(f"Evaluating: {without_2tools_file.name}")
+        without_2tools_accuracy, without_2tools_details = evaluate_file(without_2tools_file)
+        print(f"Without 2 Tools Accuracy: {without_2tools_accuracy:.3f} ({without_2tools_accuracy*100:.1f}%)")
+        print(f"Total Instructions: {len(without_2tools_details)}")
+        print()
+        results_summary["without_2tools"] = {
+            "file": without_2tools_file.name,
+            "accuracy": without_2tools_accuracy,
+            "total_instructions": len(without_2tools_details)
+        }
+    else:
+        print(f"Without 2 tools file not found: {without_2tools_file}")
+        without_2tools_accuracy, without_2tools_details = 0.0, []
+    
     # Compare results
-    if baseline_details and new_details:
-        improvement = new_accuracy - baseline_accuracy
-
-    # Show detailed results for both baseline and new
+    if len(results_summary) > 1:
+        print("=== Accuracy Comparison ===")
+        accuracies = [(name, data["accuracy"]) for name, data in results_summary.items()]
+        accuracies.sort(key=lambda x: x[1], reverse=True)
+        
+        for i, (name, accuracy) in enumerate(accuracies):
+            rank = i + 1
+            print(f"{rank}. {name.replace('_', ' ').title()}: {accuracy:.3f} ({accuracy*100:.1f}%)")
+        print()
         
     # Save detailed results to a file
-    if new_details or baseline_details:
-        results_summary = {
-            "baseline": {
-                "file": baseline_file.name if baseline_file.exists() else None,
-                "accuracy": baseline_accuracy,
-                "total_instructions": len(baseline_details)
-            },
-            "new": {
-                "file": new_file.name if new_file.exists() else None,
-                "accuracy": new_accuracy,
-                "total_instructions": len(new_details)
-            }
-        }
-        
+    if results_summary:
         summary_file = outputs_dir / "accuracy_evaluation_summary.json"
         with open(summary_file, 'w') as f:
             json.dump(results_summary, f, indent=2)

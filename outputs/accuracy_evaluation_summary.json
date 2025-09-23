@@ -4,8 +4,13 @@
     "accuracy": 0.9625,
     "total_instructions": 80
   },
-  "new": {
-    "file": "agent_execution_results_20250921_181958.json",
+  "without_pe_techniques": {
+    "file": "agent_execution_results_withoutPE_techniques.json",
+    "accuracy": 0.94375,
+    "total_instructions": 80
+  },
+  "without_2tools": {
+    "file": "agent_execution_results_without_2tools.json",
     "accuracy": 0.8,
     "total_instructions": 80
   }
