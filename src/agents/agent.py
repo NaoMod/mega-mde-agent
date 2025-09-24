@@ -138,10 +138,10 @@ class MCPAgent:
             f"Relevant models: {model_names}\n"
             f"Available server names: {available_servers}\n"
             "Generate a workflow plan as a JSON list of steps. Each step must be a JSON object with keys: tool_name, server_name, parameters, description.\n"
-        #     "Rules: (1) Use list_transformation_*_tool for info-only queries (parameters can be {}).\n"
-        #     "(2) If you choose an apply_*_transformation_tool, you MUST include parameters.file_path with the absolute path to the input .xmi file (the executor attaches it as multipart field IN). Without file_path, the call fails.\n"
-        #     "(3) Use only the file path that appears in the user goal; do not invent paths.\n"
-        #     "Output ONLY the JSON list, no extra text. Example: [{\"tool_name\": ..., \"server_name\": ..., \"parameters\": {...}, \"description\": ...}]"
+            "Rules: (1) Use list_transformation_*_tool for info-only queries (parameters can be {}).\n"
+            "(2) If you choose an apply_*_transformation_tool, you MUST include parameters.file_path with the absolute path to the input .xmi file (the executor attaches it as multipart field IN). Without file_path, the call fails.\n"
+            "(3) Use only the file path that appears in the user goal; do not invent paths.\n"
+            "Output ONLY the JSON list, no extra text. Example: [{\"tool_name\": ..., \"server_name\": ..., \"parameters\": {...}, \"description\": ...}]"
         # )
   )
         print("\n--- LLM Prompt ---")
