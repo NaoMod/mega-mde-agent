@@ -53,3 +53,63 @@ The MegamodelRegistry forms the central repository of our approach. It extends t
 **Agent artefacts**: The registry stores agent-specific components including agent goals, workflow plans, and plan steps. Agent goals define high-level objectives that drive the modeling process, while workflow plans decompose these goals into executable sequences of actions. Each plan step specifies the tools to invoke and the input artifacts required. The registry maintains the relationship between goals and plans to support plan reuse and adaptation across different modeling scenarios.
 
 **Execution traces artefacts**: This component captures the runtime behavior of agent-driven modeling processes. Execution traces record the sequence of tool invocations, parameter values, and transformation outcomes for each modeling session. Trace steps document individual operations including timing information, success status, and error messages. Agent sessions group related traces and maintain session-specific context information. This execution history enables process analysis, debugging, and workflow optimization.
+
+### 3. Use Case: Agent-Based Regression Testing
+
+To demonstrate the practical applicability of our megamodel-based approach, we present a use case from an industrial MDE environment where a software development company employs agents for automated regression testing of their model transformation workflows.
+
+---
+
+### 3.1 Scenario Context
+
+The company maintains a complex MDE toolchain that processes various modeling artifacts through multiple transformation steps. As their modeling workflows evolve, they need to ensure that changes to transformations, metamodels, or tooling do not break existing functionality.  
+
+Traditional manual regression testing is time-consuming and error-prone, especially when dealing with hundreds of model variants and transformation combinations.
+
+The company decided to implement **agent-driven regression testing** that can automatically validate their transformation workflows. Their goal is to detect regressions early in the development cycle while maintaining test coverage across their MDE ecosystem.
+
+---
+
+### 3.2 Three-Phase Implementation
+
+The megamodel enables this regression testing scenario through our **three-phase approach**:
+
+#### Phase 1 - Test Dataset Generation
+The company uses the **MegamodelRegistry** to automatically generate regression test scenarios based on their registered MCP servers and workflow patterns.  
+
+The dataset generation process analyzes this information to create comprehensive test scenarios that cover:
+- Different combinations of input model types and transformation sequences  
+- Single and multi tools instructions
+- The corresponding API calls for each instruction.
+
+The correcteness of the ground truth value is verified through a human validation process.
+![Regression testing dataset generation](images/Overview_generic_dataset.drawio.png)
+
+#### Phase 2 - Automated Execution and Trace Collection
+The **MCPAgent** executes the generated test scenarios against the current version of their MDE tools.  
+Each test execution produces detailed traces that capture:
+- Tool selection decisions made by the agent for each scenario   
+- Success/failure outcomes with detailed error information when applicable  
+- Transformation results  
+
+These traces are automatically stored in the **MegamodelRegistry**, creating a record of the current system behavior that can be compared against other execution versions.
+
+#### Phase 3 - Regression Analysis
+The company analyzes the collected execution traces to identify potential regressions by comparing current results against historical baselines stored in the megamodel.  
+
+The analysis includes:
+- Performance regression detection through timing comparisons  
+- Functional regression identification by comparing transformation outputs  
+- Tool selection consistency analysis to detect unexpected agent behavior changes  
+- Error pattern analysis to identify new failure modes  
+
+This analysis enables the company to quickly identify when changes to their MDE infrastructure introduce regressions, allowing them to address issues before they impact production workflows.
+
+
+## 5. Conclusion
+
+This project presents a megamodel-based approach for supporting LLM agents in Model-Driven Engineering workflows. Our extended AM3 megamodel serves as a repository that enables agents to understand available tools, plan transformation workflows, and learn from execution history.
+
+The approach demonstrates that systematic information management enables autonomous agents to operate effectively in complex MDE environments. The integration of Model Context Protocol provides standardized interfaces that support tool interoperability and agent adaptability.
+
+We plan to evaluate the system on larger industrial case studies to validate scalability and practical applicability.
