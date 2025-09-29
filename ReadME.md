@@ -83,6 +83,8 @@ The dataset generation process analyzes this information to create comprehensive
 - The corresponding API calls for each instruction.
 
 The correcteness of the ground truth value is verified through a human validation process.
+
+The figure must be explained 
 ![Regression testing dataset generation](images/Overview_generic_dataset.drawio.png)
 
 #### Phase 2 - Automated Execution and Trace Collection
