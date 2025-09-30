@@ -29,8 +29,6 @@ This analysis enables iterative agent improvements based on real execution data.
 
 Model-Driven Engineering workflows require coordination between heterogeneous tools and transformations. Traditional approaches rely on manual orchestration by domain experts who understand both the modeling languages and tool capabilities. The rise of Large Language Models presents opportunities to automate these workflows through agents.
 
-Model-Driven Engineering workflows require coordination between heterogeneous tools and transformations. Traditional approaches rely on manual orchestration by domain experts who understand both the modeling languages and tool capabilities. The rise of Large Language Models presents opportunities to automate these workflows through agents.
-
 Current MDE environments lack systematic approaches for exposing model information to autonomous agents. A megamodel is a repository that captures relationships between models, metamodels, and transformations within an MDE ecosystem. Existing megamodels document static relationships between models and metamodels but do not capture dynamic execution traces from tool interactions. This limitation prevents agents from accessing comprehensive information about modeling workflows and execution history.
 
 
