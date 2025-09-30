@@ -2,6 +2,8 @@ import json
 import csv
 import os
 
+# TODO: Planning vs Execution Gap: How often does the agent plan correctly but fail in execution?
+
 def load_execution_results(file_path):
     """Load execution results and organize by instruction index."""
     with open(file_path, 'r') as f:
