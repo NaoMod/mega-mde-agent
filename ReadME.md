@@ -2,8 +2,6 @@
 
 ## Abstract
 
-![Generic Dataset Overview](images/Overview_generic_dataset.drawio%20(1).png)
-
 ### Context
 
 Agentification of MDE tasks is evolving as practitioners seek to automate modeling workflows.
@@ -38,6 +36,8 @@ This paper presents a megamodel-based approach that serves as a repository for a
 Figure 1 illustrates the core components of our megamodel-based approach. The architecture consists of four main layers that support agent-driven MDE workflows.
 
 ### 2.1 MegamodelRegistry
+
+![Generic Dataset Overview](images/Overview_generic_dataset.drawio%20(1).png)
 
 The MegamodelRegistry forms the central repository. It includes agent execution traces and tool interaction data. The registry maintains four key components:
 
