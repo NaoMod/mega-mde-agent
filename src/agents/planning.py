@@ -147,9 +147,3 @@ class WorkflowPlan:
         
         return False
     
-    def get_execution_progress(self) -> float:
-        """Get progress (0.0 to 1.0)"""
-        if not self.steps:
-            return 0.0
-        completed = len(self.get_completed_steps())
-        return completed / len(self.steps)

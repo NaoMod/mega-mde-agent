@@ -4,13 +4,13 @@ Workflow Executor - Simple workflow execution
 import os
 import re
 import asyncio
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, Optional
 import time
 
 from src.core.megamodel import MegamodelRegistry
 from src.mcp_ext.client import MCPClient
 from src.agents.execution import MCPInvocation
-from src.agents.planning import WorkflowPlan, PlanStep, AgentGoal
+from src.agents.planning import WorkflowPlan, PlanStep
 
 # TODO: perform an Object grounding. Check the feasability to cover other LLM planning criteria
 class WorkflowExecutor:
@@ -167,23 +167,3 @@ class WorkflowExecutor:
             except Exception as e:
                 print(f"Error cleaning up MCP client for {server_name}: {str(e)}")
         self.mcp_clients = {}
-    
-    def create_simple_workflow(self) -> WorkflowPlan:
-        """Create a simple generic workflow"""
-        goal = AgentGoal(
-            description="Generic model transformation workflow",
-            success_criteria={"completed": True}
-        )
-        
-        plan = WorkflowPlan(goal=goal)
-        
-        # Call the ATL server endpoint to get enabled transformations (not a tool name)
-        step1 = PlanStep(
-            tool_name="/transformations/enabled",
-            server_name="atl_server",
-            parameters={"method": "GET"},
-            description="Get enabled ATL transformations"
-        )
-        plan.add_step(step1)
-        
-        return plan

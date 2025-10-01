@@ -32,14 +32,6 @@ class MCPTool:
     parameters: Dict[str, Any] = field(default_factory=dict)
     server_name: str = ""
     
-    def get_parameter_info(self) -> Dict[str, Any]:
-        """Get information about tool parameters"""
-        return {
-            "name": self.name,
-            "description": self.description,
-            "parameters": self.parameters,
-            "server": self.server_name
-        }
 
 @dataclass
 class MCPResource:
@@ -98,39 +90,11 @@ class MCPServer:
             self.status = ServerStatus.ERROR
             return False
     
-    def add_tool(self, tool: MCPTool) -> None:
-        """Add a tool to this server"""
-        tool.server_name = self.name
-        self.tools.append(tool)
-    
-    def get_tool(self, tool_name: str) -> Optional[MCPTool]:
-        """Get a tool by name"""
-        for tool in self.tools:
-            if tool.name == tool_name:
-                return tool
-        return None
-    
-    def list_tool_names(self) -> List[str]:
-        """Get list of all tool names"""
-        return [tool.name for tool in self.tools]
-    
+
+
     def add_capability(self, capability: MCPCapability) -> None:
         """Add a capability to this server"""
         self.capabilities.append(capability)
-    
-    def supports_input_type(self, input_type: str) -> bool:
-        """Check if server supports a specific input type"""
-        for capability in self.capabilities:
-            if input_type in capability.input_types:
-                return True
-        return False
-    
-    def supports_output_type(self, output_type: str) -> bool:
-        """Check if server supports a specific output type"""
-        for capability in self.capabilities:
-            if output_type in capability.output_types:
-                return True
-        return False
     
     def get_server_info(self) -> Dict[str, Any]:
         """Get comprehensive server information"""

@@ -51,10 +51,6 @@ class LiveTrace:
     session_id: str
     current_step: Optional[str] = None
     status: str = "idle"
-    
-    def update_step(self, step: str):
-        """Update current step"""
-        self.current_step = step
 
 @dataclass
 class AgentSession:
@@ -89,11 +85,3 @@ class AgentSession:
         self.execution_traces.append(trace)
         return trace
     
-    def get_session_duration(self) -> float:
-        """Get session duration in seconds"""
-        end = self.end_time if self.end_time else datetime.now()
-        return (end - self.start_time).total_seconds()
-    
-    def add_crud_operation(self, crud_op: ModelCRUD):
-        """Add CRUD operation"""
-        self.crud_operations.append(crud_op)

@@ -132,49 +132,8 @@ class MegamodelRegistry:
         """Get workflow plan by ID"""
         return self.workflow_plans.get(plan_id)
     
-    #  Compatibility & Reasoning 
-    
-    def check_transformation_compatibility(self, transformation_uri: str, 
-                                         source_model_uri: str) -> Dict[str, Any]:
-        """Check if a transformation can be applied to a source model"""
-        transformation = self.get_entity(transformation_uri)
-        source_model = self.get_entity(source_model_uri)
-        
-        if not isinstance(transformation, TransformationModel):
-            return {"compatible": False, "reason": "Not a transformation model"}
-        
-        if not isinstance(source_model, (TerminalModel, ReferenceModel)):
-            return {"compatible": False, "reason": "Invalid source model type"}
-        
-        # Check metamodel compatibility
-        if hasattr(source_model, 'conformsTo') and source_model.conformsTo:
-            source_metamodel = source_model.conformsTo
-            if transformation.source_metamodel and \
-               transformation.source_metamodel.uri == source_metamodel.uri:
-                return {
-                    "compatible": True, 
-                    "source_metamodel": source_metamodel.uri,
-                    "target_metamodel": transformation.target_metamodel.uri if transformation.target_metamodel else None
-                }
-        
-        return {"compatible": False, "reason": "Metamodel mismatch"}
-    
-    def find_transformation_chain(self, source_metamodel_uri: str, 
-                                 target_metamodel_uri: str) -> List[TransformationModel]:
-        """Find a chain of transformations between two metamodels"""
-        transformations = self.find_entities_by_type(TransformationModel)
-        
-        # Simple direct transformation lookup
-        for transformation in transformations:
-            if (transformation.source_metamodel and 
-                transformation.source_metamodel.uri == source_metamodel_uri and
-                transformation.target_metamodel and 
-                transformation.target_metamodel.uri == target_metamodel_uri):
-                return [transformation]
-        
-        return []
-    
-    # Query & Analysis
+
+
     
     def query_models(self, metamodel_uri: str = None, 
                     model_type: str = None) -> List[Model]:
@@ -218,22 +177,3 @@ class MegamodelRegistry:
             "active_mcp_servers": len(self.mcp_servers)
         }
     
-    #  Serialization 
-    
-    def export_state(self) -> Dict[str, Any]:
-        """Export the current state of the megamodel"""
-        return {
-            "timestamp": datetime.now().isoformat(),
-            "entities_count": len(self.entities),
-            "relationships_count": len(self.relationships),
-            "servers_count": len(self.mcp_servers),
-            "sessions_count": len(self.sessions),
-            "plans_count": len(self.workflow_plans),
-            "statistics": self.get_execution_statistics()
-        }
-    
-    def save_to_file(self, filepath: str) -> None:
-        """Save megamodel state to file"""
-        state = self.export_state()
-        with open(filepath, 'w') as f:
-            json.dump(state, f, indent=2)
