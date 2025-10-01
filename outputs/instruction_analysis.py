@@ -70,6 +70,7 @@ def main():
         writer.writerow(['Instruction_ID', 'Instruction', 'Baseline_Status', 'Without_2tools_Status', 'Without_PE_Status', 'Failed_Version', 'Missing_Tools'])
         
         mixed_results_count = 0
+        transformations_with_issues = {}
         
         for i in range(num_instructions):
             instruction_text = baseline_data[i].get('instruction', f'Instruction {i+1}')
@@ -109,6 +110,25 @@ def main():
                     " | ".join(failed_versions),
                     " | ".join(set(missing_tools))
                 ])
+                
+                # Extract transformations with issues
+                for tool in missing_tools:
+                    if "transformation" in tool:
+                        if "list_transformation_" in tool:
+                            transfo_name = tool.replace("list_transformation_", "").replace("_tool", "")
+                            transformations_with_issues[transfo_name] = transformations_with_issues.get(transfo_name, 0) + 1
+                        elif "apply_" in tool and "_transformation_tool" in tool:
+                            transfo_name = tool.replace("apply_", "").replace("_transformation_tool", "")
+                            transformations_with_issues[transfo_name] = transformations_with_issues.get(transfo_name, 0) + 1
+        
+        # Filter and sort transformations that appear more than 3 times
+        frequent_issues = {k: v for k, v in transformations_with_issues.items() if v > 3}
+        sorted_frequent = sorted(frequent_issues.items(), key=lambda x: x[1], reverse=True)
+        
+        # Add transformations with issues as last row in CSV
+        if sorted_frequent:
+            transformations_summary = " | ".join([f"{transfo}({count})" for transfo, count in sorted_frequent])
+            writer.writerow(['SUMMARY', 'Transformations with issues (>3 times)', '', '', '', '', transformations_summary])
                 
 if __name__ == "__main__":
     main()
