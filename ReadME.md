@@ -4,24 +4,25 @@
 
 ### Context
 
-Agentification of MDE tasks is evolving as practitioners seek to automate modeling workflows.
-These environments contain diverse tools and artifacts that require coordination.
-However, agents need complete information about artifact relationships, tool traces, and execution contexts to understand available resources and plan workflows effectively.
+Agentification of model management tasks is emerging as practitioners seek to automate modeling workflows.
+These worflows involve diverse tools that require coordination in order to manipulate diverse artifacts.
+However, agents need complete information about modeling environments and execution contexts to understand available resources and plan workflows effectively.
 
 ### Challenge
-To enable effective agent behaviour, MDE environments need systematic repositories to expose this information.
-Existing megamodels capture static relationships but do not track dynamic executions and tool interactions.
+
+While megamodels can capture comprehensive information about modeling environments, existing megamodels capture static relationships but do not track dynamic executions and tool interactions.
 
 ### Solution
-We built a megamodel-based repository containing modeling, tooling, agent, and execution trace artifacts.
-The MegamodelRegistry maintains entities such as MCP servers, sessions, and workflow plans in a unified structure.
+We built a megamodel-based repository containing modeling artifacts, tools, agents, and execution traces.
+The MegamodelRegistry tracks entities such as MCP servers, sessions, and workflow plans in a unified structure.
 
 ### Results
-To demonstrate the applicability of the proposed approach, we consider a company that has developed MDE-based agents and wants to perform regression testing on them. We apply our repository in the context of three different applications that support their testing process.
+We demonstrate the usefulness of the proposed approach by illustrating an application it enables. We consider a company that has developed MDE-based agents and wants to perform performance optimization on them. We apply our repository in the context of three different applications that support their optimization process.
 First, we generate datasets based on MCP servers registered in the megamodel and the tools and workflows the company wants to test.
 Second, we collect historical traces from executions.
 Third, we generate analysis reports by querying and navigating the repository.
-This analysis enables iterative improvements based on real execution data.
+This analysis enables performance optimization through workflow efficiency improvements.
+
 
 ## 1. Introduction
 
