@@ -4,6 +4,11 @@
     "accuracy": 0.9625,
     "total_instructions": 80
   },
+  "no_rag": {
+    "file": "agent_execution_results_no_rag_20251002_154942.json",
+    "accuracy": 0.33125,
+    "total_instructions": 80
+  },
   "without_pe_techniques": {
     "file": "agent_execution_results_withoutPE_techniques.json",
     "accuracy": 0.94375,

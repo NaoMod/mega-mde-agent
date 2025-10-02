@@ -116,6 +116,7 @@ def main():
     new_file = outputs_dir / "agent_execution_results_20250921_181958.json"
     without_pe_file = outputs_dir / "agent_execution_results_withoutPE_techniques.json"
     without_2tools_file = outputs_dir / "agent_execution_results_without_2tools.json"
+    no_rag_file = outputs_dir / "agent_execution_results_no_rag_20251002_154942.json"
     
     print("=== Agent Execution Results Accuracy Evaluation ===\n")
     
@@ -136,6 +137,22 @@ def main():
     else:
         print(f"Baseline file not found: {baseline_file}")
         baseline_accuracy, baseline_details = 0.0, []
+    
+    # Evaluate RAG-disabled results
+    if no_rag_file.exists():
+        print(f"Evaluating: {no_rag_file.name}")
+        no_rag_accuracy, no_rag_details = evaluate_file(no_rag_file)
+        print(f"No RAG (Keyword-only) Accuracy: {no_rag_accuracy:.3f} ({no_rag_accuracy*100:.1f}%)")
+        print(f"Total Instructions: {len(no_rag_details)}")
+        print()
+        results_summary["no_rag"] = {
+            "file": no_rag_file.name,
+            "accuracy": no_rag_accuracy,
+            "total_instructions": len(no_rag_details)
+        }
+    else:
+        print(f"No RAG file not found: {no_rag_file}")
+        no_rag_accuracy, no_rag_details = 0.0, []
     
     # Evaluate new results
     if new_file.exists():

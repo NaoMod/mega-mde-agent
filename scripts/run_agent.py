@@ -264,21 +264,13 @@ if __name__ == "__main__":
                     traceback.print_exc()
                     
                 print("--- End Execution ---")
-                
-            # 6. Cleanup - do this directly without using the restored function
-            for server_name, client in agent.executor.mcp_clients.items():
-                try:
-                    if hasattr(client, 'exit_stack'):
-                        await client.exit_stack.aclose()
-                except Exception:
-                    pass
             
-            # Save execution results to a JSON file
+            # Save execution results to a JSON file BEFORE cleanup
             if all_execution_results:
                 try:
                     # Create a timestamped filename to avoid overwriting existing results
                     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-                    output_filename = f"agent_execution_results_{timestamp}.json"
+                    output_filename = f"agent_execution_results_no_rag_{timestamp}.json"
                     output_path = Path(__file__).parent.parent / "outputs" / output_filename
                     
                     # Ensure the output directory exists
@@ -287,9 +279,18 @@ if __name__ == "__main__":
                     with open(output_path, 'w') as f:
                         json.dump(all_execution_results, f, indent=2)
                     print(f"\nExecution results saved to: {output_path}")
-                except Exception:
+                except Exception as e:
+                    print(f"Error saving results: {e}")
                     import traceback
                     traceback.print_exc()
+                
+            # 6. Cleanup - do this directly without using the restored function
+            for server_name, client in agent.executor.mcp_clients.items():
+                try:
+                    if hasattr(client, 'exit_stack'):
+                        await client.exit_stack.aclose()
+                except Exception:
+                    pass
             
         except Exception:
             import traceback
