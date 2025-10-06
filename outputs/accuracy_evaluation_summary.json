@@ -9,8 +9,8 @@
     "accuracy": 0.33125,
     "total_instructions": 80
   },
-  "minimal_prompt_v0": {
-    "file": "agent_execution_results_no_rag_20251006_160146.json",
+  "v1": {
+    "file": "agent_execution_results_no_rag_20251006_164956.json",
     "accuracy": 0.0,
     "total_instructions": 80
   },

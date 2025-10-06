@@ -134,8 +134,11 @@ class MCPAgent:
         model_names = [getattr(model, "name", str(model)) for model in relevant_models[:10]]
         available_servers = list(self.registry.tools_by_server.keys())
         
-        # Version 0: Baseline Minimal Prompt
-        prompt = f"Generate a JSON list of steps for: {user_goal}"
+        # Version 1: Add JSON Structure
+        prompt = (
+            f"Your goal is: {user_goal}\n"
+            "Generate a workflow plan as a JSON list of steps. Each step must be a JSON object with keys: tool_name, server_name, parameters, description."
+        )
         print("\n--- LLM Prompt ---")
         print(prompt)
         print("--- End LLM Prompt ---\n")

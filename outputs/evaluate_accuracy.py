@@ -118,6 +118,7 @@ def main():
     without_2tools_file = outputs_dir / "agent_execution_results_without_2tools.json"
     no_rag_file = outputs_dir / "agent_execution_results_no_rag_20251002_154942.json"
     minimal_prompt_v0_file = outputs_dir / "minimal_prompt_v0_file.json"
+    json_structure_v1_file = outputs_dir / "prompt_v1.json"
     
     print("=== Agent Execution Results Accuracy Evaluation ===\n")
     
@@ -155,21 +156,37 @@ def main():
         print(f"No RAG file not found: {no_rag_file}")
         no_rag_accuracy, no_rag_details = 0.0, []
     
-    # Evaluate minimal prompt V0 results
+    # Evaluate V0 results
     if minimal_prompt_v0_file.exists():
         print(f"Evaluating: {minimal_prompt_v0_file.name}")
         minimal_v0_accuracy, minimal_v0_details = evaluate_file(minimal_prompt_v0_file)
-        print(f"Minimal Prompt V0 Accuracy: {minimal_v0_accuracy:.3f} ({minimal_v0_accuracy*100:.1f}%)")
+        print(f"V0 Accuracy: {minimal_v0_accuracy:.3f} ({minimal_v0_accuracy*100:.1f}%)")
         print(f"Total Instructions: {len(minimal_v0_details)}")
         print()
-        results_summary["minimal_prompt_v0"] = {
+        results_summary["v0"] = {
             "file": minimal_prompt_v0_file.name,
             "accuracy": minimal_v0_accuracy,
             "total_instructions": len(minimal_v0_details)
         }
     else:
-        print(f"Minimal prompt V0 file not found: {minimal_prompt_v0_file}")
+        print(f"V0 file not found: {minimal_prompt_v0_file}")
         minimal_v0_accuracy, minimal_v0_details = 0.0, []
+    
+    # Evaluate V1 results
+    if json_structure_v1_file.exists():
+        print(f"Evaluating: {json_structure_v1_file.name}")
+        json_v1_accuracy, json_v1_details = evaluate_file(json_structure_v1_file)
+        print(f"V1 Accuracy: {json_v1_accuracy:.3f} ({json_v1_accuracy*100:.1f}%)")
+        print(f"Total Instructions: {len(json_v1_details)}")
+        print()
+        results_summary["v1"] = {
+            "file": json_structure_v1_file.name,
+            "accuracy": json_v1_accuracy,
+            "total_instructions": len(json_v1_details)
+        }
+    else:
+        print(f"V1 file not found: {json_structure_v1_file}")
+        json_v1_accuracy, json_v1_details = 0.0, []
     
     # Evaluate new results
     if new_file.exists():
