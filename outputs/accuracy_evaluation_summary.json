@@ -9,6 +9,11 @@
     "accuracy": 0.33125,
     "total_instructions": 80
   },
+  "minimal_prompt_v0": {
+    "file": "agent_execution_results_no_rag_20251006_160146.json",
+    "accuracy": 0.0,
+    "total_instructions": 80
+  },
   "without_pe_techniques": {
     "file": "agent_execution_results_withoutPE_techniques.json",
     "accuracy": 0.94375,

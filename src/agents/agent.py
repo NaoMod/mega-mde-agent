@@ -134,18 +134,8 @@ class MCPAgent:
         model_names = [getattr(model, "name", str(model)) for model in relevant_models[:10]]
         available_servers = list(self.registry.tools_by_server.keys())
         
-        prompt = (
-            f"You are an MDE agent. Your goal is: {user_goal}\n"
-            f"Relevant tools: {tool_names}\n"
-            f"Relevant models: {model_names}\n"
-            f"Available server names: {available_servers}\n"
-            "Generate a workflow plan as a JSON list of steps. Each step must be a JSON object with keys: tool_name, server_name, parameters, description.\n"
-            "Rules: (1) Use list_transformation_*_tool for info-only queries (parameters can be {}).\n"
-            "(2) If you choose an apply_*_transformation_tool, you MUST include parameters.file_path with the absolute path to the input .xmi file (the executor attaches it as multipart field IN). Without file_path, the call fails.\n"
-            "(3) Use only the file path that appears in the user goal; do not invent paths.\n"
-            "Output ONLY the JSON list, no extra text. Example: [{\"tool_name\": ..., \"server_name\": ..., \"parameters\": {...}, \"description\": ...}]"
-        # )
-  )
+        # Version 0: Baseline Minimal Prompt
+        prompt = f"Generate a JSON list of steps for: {user_goal}"
         print("\n--- LLM Prompt ---")
         print(prompt)
         print("--- End LLM Prompt ---\n")
