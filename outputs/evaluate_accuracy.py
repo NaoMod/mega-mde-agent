@@ -107,134 +107,46 @@ def evaluate_file(file_path):
     average_accuracy = total_score / len(data) if data else 0.0
     return average_accuracy, detailed_results
 
+def evaluate_and_report(file_path, version_name, results_summary):
+    """Generic function to evaluate a version and add to results summary."""
+    if file_path.exists():
+        print(f"Evaluating: {file_path.name}")
+        accuracy, details = evaluate_file(file_path)
+        print(f"{version_name} Accuracy: {accuracy:.3f} ({accuracy*100:.1f}%)")
+        print(f"Total Instructions: {len(details)}")
+        print()
+        results_summary[version_name.lower().replace(" ", "_")] = {
+            "file": file_path.name,
+            "accuracy": accuracy,
+            "total_instructions": len(details)
+        }
+        return accuracy, details
+    else:
+        print(f"{version_name} file not found: {file_path}")
+        return 0.0, []
+
 def main():
     """Main function to evaluate all result files."""
     
     # Define the paths to the result files
     outputs_dir = Path(__file__).parent
-    baseline_file = outputs_dir / "agent_baseline_execution_results.json"
-    new_file = outputs_dir / "agent_execution_results_20250921_181958.json"
-    without_pe_file = outputs_dir / "agent_execution_results_withoutPE_techniques.json"
-    without_2tools_file = outputs_dir / "agent_execution_results_without_2tools.json"
-    no_rag_file = outputs_dir / "agent_execution_results_no_rag_20251002_154942.json"
-    minimal_prompt_v0_file = outputs_dir / "minimal_prompt_v0_file.json"
-    json_structure_v1_file = outputs_dir / "prompt_v1.json"
+    
+    # File mappings: (file_path, display_name)
+    files_to_evaluate = [
+        (outputs_dir / "agent_baseline_execution_results.json", "Baseline"),
+        (outputs_dir / "minimal_prompt_v0_file.json", "V0"),
+        (outputs_dir / "prompt_v1.json", "V1"),
+        (outputs_dir / "prompt_V2.json", "V2"),
+        (outputs_dir / "agent_execution_results_no_rag_20251002_154942.json", "Without RAG"),
+    ]
     
     print("=== Agent Execution Results Accuracy Evaluation ===\n")
     
     results_summary = {}
     
-    # Evaluate baseline results
-    if baseline_file.exists():
-        print(f"Evaluating: {baseline_file.name}")
-        baseline_accuracy, baseline_details = evaluate_file(baseline_file)
-        print(f"Baseline Accuracy: {baseline_accuracy:.3f} ({baseline_accuracy*100:.1f}%)")
-        print(f"Total Instructions: {len(baseline_details)}")
-        print()
-        results_summary["baseline"] = {
-            "file": baseline_file.name,
-            "accuracy": baseline_accuracy,
-            "total_instructions": len(baseline_details)
-        }
-    else:
-        print(f"Baseline file not found: {baseline_file}")
-        baseline_accuracy, baseline_details = 0.0, []
-    
-    # Evaluate RAG-disabled results
-    if no_rag_file.exists():
-        print(f"Evaluating: {no_rag_file.name}")
-        no_rag_accuracy, no_rag_details = evaluate_file(no_rag_file)
-        print(f"No RAG (Keyword-only) Accuracy: {no_rag_accuracy:.3f} ({no_rag_accuracy*100:.1f}%)")
-        print(f"Total Instructions: {len(no_rag_details)}")
-        print()
-        results_summary["no_rag"] = {
-            "file": no_rag_file.name,
-            "accuracy": no_rag_accuracy,
-            "total_instructions": len(no_rag_details)
-        }
-    else:
-        print(f"No RAG file not found: {no_rag_file}")
-        no_rag_accuracy, no_rag_details = 0.0, []
-    
-    # Evaluate V0 results
-    if minimal_prompt_v0_file.exists():
-        print(f"Evaluating: {minimal_prompt_v0_file.name}")
-        minimal_v0_accuracy, minimal_v0_details = evaluate_file(minimal_prompt_v0_file)
-        print(f"V0 Accuracy: {minimal_v0_accuracy:.3f} ({minimal_v0_accuracy*100:.1f}%)")
-        print(f"Total Instructions: {len(minimal_v0_details)}")
-        print()
-        results_summary["v0"] = {
-            "file": minimal_prompt_v0_file.name,
-            "accuracy": minimal_v0_accuracy,
-            "total_instructions": len(minimal_v0_details)
-        }
-    else:
-        print(f"V0 file not found: {minimal_prompt_v0_file}")
-        minimal_v0_accuracy, minimal_v0_details = 0.0, []
-    
-    # Evaluate V1 results
-    if json_structure_v1_file.exists():
-        print(f"Evaluating: {json_structure_v1_file.name}")
-        json_v1_accuracy, json_v1_details = evaluate_file(json_structure_v1_file)
-        print(f"V1 Accuracy: {json_v1_accuracy:.3f} ({json_v1_accuracy*100:.1f}%)")
-        print(f"Total Instructions: {len(json_v1_details)}")
-        print()
-        results_summary["v1"] = {
-            "file": json_structure_v1_file.name,
-            "accuracy": json_v1_accuracy,
-            "total_instructions": len(json_v1_details)
-        }
-    else:
-        print(f"V1 file not found: {json_structure_v1_file}")
-        json_v1_accuracy, json_v1_details = 0.0, []
-    
-    # Evaluate new results
-    if new_file.exists():
-        print(f"Evaluating: {new_file.name}")
-        new_accuracy, new_details = evaluate_file(new_file)
-        print(f"New Results Accuracy: {new_accuracy:.3f} ({new_accuracy*100:.1f}%)")
-        print(f"Total Instructions: {len(new_details)}")
-        print()
-        results_summary["new"] = {
-            "file": new_file.name,
-            "accuracy": new_accuracy,
-            "total_instructions": len(new_details)
-        }
-    else:
-        print(f"New file not found: {new_file}")
-        new_accuracy, new_details = 0.0, []
-    
-    # Evaluate without PE techniques results
-    if without_pe_file.exists():
-        print(f"Evaluating: {without_pe_file.name}")
-        without_pe_accuracy, without_pe_details = evaluate_file(without_pe_file)
-        print(f"Without PE Techniques Accuracy: {without_pe_accuracy:.3f} ({without_pe_accuracy*100:.1f}%)")
-        print(f"Total Instructions: {len(without_pe_details)}")
-        print()
-        results_summary["without_pe_techniques"] = {
-            "file": without_pe_file.name,
-            "accuracy": without_pe_accuracy,
-            "total_instructions": len(without_pe_details)
-        }
-    else:
-        print(f"Without PE file not found: {without_pe_file}")
-        without_pe_accuracy, without_pe_details = 0.0, []
-    
-    # Evaluate without 2 tools results
-    if without_2tools_file.exists():
-        print(f"Evaluating: {without_2tools_file.name}")
-        without_2tools_accuracy, without_2tools_details = evaluate_file(without_2tools_file)
-        print(f"Without 2 Tools Accuracy: {without_2tools_accuracy:.3f} ({without_2tools_accuracy*100:.1f}%)")
-        print(f"Total Instructions: {len(without_2tools_details)}")
-        print()
-        results_summary["without_2tools"] = {
-            "file": without_2tools_file.name,
-            "accuracy": without_2tools_accuracy,
-            "total_instructions": len(without_2tools_details)
-        }
-    else:
-        print(f"Without 2 tools file not found: {without_2tools_file}")
-        without_2tools_accuracy, without_2tools_details = 0.0, []
+    # Evaluate all versions using the generic function
+    for file_path, version_name in files_to_evaluate:
+        evaluate_and_report(file_path, version_name, results_summary)
     
     # Compare results
     if len(results_summary) > 1:

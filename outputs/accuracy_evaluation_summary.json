@@ -4,24 +4,24 @@
     "accuracy": 0.9625,
     "total_instructions": 80
   },
-  "no_rag": {
-    "file": "agent_execution_results_no_rag_20251002_154942.json",
-    "accuracy": 0.33125,
-    "total_instructions": 80
-  },
-  "v1": {
-    "file": "agent_execution_results_no_rag_20251006_164956.json",
+  "v0": {
+    "file": "minimal_prompt_v0_file.json",
     "accuracy": 0.0,
     "total_instructions": 80
   },
-  "without_pe_techniques": {
-    "file": "agent_execution_results_withoutPE_techniques.json",
-    "accuracy": 0.94375,
+  "v1": {
+    "file": "prompt_v1.json",
+    "accuracy": 0.0,
     "total_instructions": 80
   },
-  "without_2tools": {
-    "file": "agent_execution_results_without_2tools.json",
-    "accuracy": 0.8,
+  "v2": {
+    "file": "prompt_V2.json",
+    "accuracy": 0.95625,
+    "total_instructions": 80
+  },
+  "without_rag": {
+    "file": "agent_execution_results_no_rag_20251002_154942.json",
+    "accuracy": 0.33125,
     "total_instructions": 80
   }
 }

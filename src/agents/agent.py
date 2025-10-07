@@ -80,24 +80,24 @@ class MCPAgent:
         relevant_tools = []
         relevant_models = []
         
-        # COMMENTED OUT RAG FOR TESTING
-        # try:
-        #     if self.tool_index is not None:
-        #         docs = self.tool_index.similarity_search(query, k=k_tools)
-        #         for d in docs:
-        #             name = d.metadata.get("name")
-        #             if name in tools_by_name:
-        #                 relevant_tools.append(tools_by_name[name])
-        #     if self.model_index is not None:
-        #         mdocs = self.model_index.similarity_search(query, k=k_models)
-        #         for d in mdocs:
-        #             name = d.metadata.get("name")
-        #             if name in models_by_name:
-        #                 relevant_models.append(models_by_name[name])
-        # except Exception as e:
-        #     print(f"RAG retrieval failed, falling back to keyword matching: {e}")
+        # Version 2: RE-ENABLE RAG FOR TOOL CONTEXT
+        try:
+            if self.tool_index is not None:
+                docs = self.tool_index.similarity_search(query, k=k_tools)
+                for d in docs:
+                    name = d.metadata.get("name")
+                    if name in tools_by_name:
+                        relevant_tools.append(tools_by_name[name])
+            if self.model_index is not None:
+                mdocs = self.model_index.similarity_search(query, k=k_models)
+                for d in mdocs:
+                    name = d.metadata.get("name")
+                    if name in models_by_name:
+                        relevant_models.append(models_by_name[name])
+        except Exception as e:
+            print(f"RAG retrieval failed, falling back to keyword matching: {e}")
 
-        # Force fallback to keyword method (RAG disabled)
+        # Fallback to keyword method if RAG didn't find anything
         if not relevant_tools:
             keywords = [w.lower() for w in query.split()]
             def clean_token(tok: str) -> str:
@@ -134,9 +134,10 @@ class MCPAgent:
         model_names = [getattr(model, "name", str(model)) for model in relevant_models[:10]]
         available_servers = list(self.registry.tools_by_server.keys())
         
-        # Version 1: Add JSON Structure
+        # Version 2: Add RAG Tools Context (MAJOR BREAKTHROUGH)
         prompt = (
             f"Your goal is: {user_goal}\n"
+            f"Relevant tools: {tool_names}\n"
             "Generate a workflow plan as a JSON list of steps. Each step must be a JSON object with keys: tool_name, server_name, parameters, description."
         )
         print("\n--- LLM Prompt ---")
