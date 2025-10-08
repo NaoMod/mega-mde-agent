@@ -25,11 +25,7 @@ class SingleToolSeeds:
                 level=1,
                 pattern="get"
             ),
-            # Seed(
-            #     instruction="List me the details of the PNML2XML transformation",
-            #     level=1,
-            #     pattern="get"
-            # ),
+            
 
             # Level 2 - Source and target models mentioned
             Seed(
@@ -70,6 +66,6 @@ class SingleToolSeeds:
                 instruction="Give me information about transformations that produce XML output from an Ant model",
                 level=2,
                 pattern="get"
-            ),
+            )
         ]
         
