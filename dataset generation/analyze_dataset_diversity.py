@@ -56,12 +56,13 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = SCRIPT_DIR / "outputs"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-def load_seed_instructions(seed_file_path: str) -> List[str]:
+def load_seed_instructions(seed_file_path: str, dataset_type="single") -> List[str]:
     """
     Extracts instruction text from a Python file containing seed definitions.
     
     Args:
         seed_file_path: Path to the Python file with seed instructions
+        dataset_type: Type of dataset ('single' or 'multi')
         
     Returns:
         List of instruction text strings
@@ -234,75 +235,7 @@ def compute_affinity(embeddings1: np.ndarray, embeddings2: np.ndarray) -> float:
     
     return np.dot(mean_embedding1, mean_embedding2)
 
-def visualize_embeddings(embeddings1: np.ndarray, embeddings2: np.ndarray, labels: Tuple[str, str]):
-    """
-    Visualize embeddings using UMAP for dimension reduction.
-    
-    Args:
-        embeddings1: Embeddings of first dataset
-        embeddings2: Embeddings of second dataset
-        labels: Labels for the two datasets
-    """
-    # Combine embeddings for joint reduction
-    combined_embeddings = np.vstack([embeddings1, embeddings2])
-    
-    # Create labels for plotting
-    combined_labels = [labels[0]] * len(embeddings1) + [labels[1]] * len(embeddings2)
-    
-    # Create a DataFrame for easier plotting
-    df = pd.DataFrame({
-        'dataset': combined_labels
-    })
-    
-    # Set up the figure with just UMAP visualization
-    fig, ax = plt.subplots(figsize=(10, 8))
-    
-    # UMAP for dimension reduction
-    try:
-        # Configure UMAP for better visualization
-        reducer = umap.UMAP(
-            random_state=42,
-            min_dist=0.1,  
-            n_neighbors=15,  # Balance between local and global structure
-            metric='cosine'  # Better for text embeddings
-        )
-        umap_result = reducer.fit_transform(combined_embeddings)
-        df['umap_x'] = umap_result[:, 0]
-        df['umap_y'] = umap_result[:, 1]
-        
-        # Plot UMAP results with enhanced styling
-        scatter = sns.scatterplot(
-            data=df, 
-            x='umap_x', 
-            y='umap_y', 
-            hue='dataset',
-            palette=['blue', 'red'],  
-            alpha=0.8,  # Slightly more opaque
-            s=70,  # Larger points
-            edgecolor='white',  # White edges for better visibility
-            linewidth=0.5,
-            ax=ax
-        )
-        
-        # Add title and customize legend
-        ax.set_title('Semantic Distribution of Datasets (UMAP)', fontsize=16)
-        ax.set_xlabel('UMAP Dimension 1', fontsize=12)
-        ax.set_ylabel('UMAP Dimension 2', fontsize=12)
-        
-        # Remove axes to focus on the relationships
-        ax.set_xticks([])
-        ax.set_yticks([])
-        
-        # Move legend to a better position
-        plt.legend(title='Dataset', loc='upper right', frameon=True)
-        
-    except Exception as e:
-        ax.text(0.5, 0.5, f"UMAP visualization failed:\n{str(e)}", 
-                ha='center', va='center', transform=ax.transAxes)
-    
-    plt.tight_layout()
-    plt.savefig(OUTPUT_DIR / "embedding_visualization.png", dpi=300)
-    plt.close()
+
 
 def normalize_metrics(metrics_dict: Dict[str, Dict[str, float]]) -> Dict[str, Dict[str, float]]:
     """
@@ -341,19 +274,26 @@ def normalize_metrics(metrics_dict: Dict[str, Dict[str, float]]) -> Dict[str, Di
     
     return normalized
 
-def main():
+def main(dataset_type="single"):
     """
     Main function to run the dataset diversity analysis
+    
+    Args:
+        dataset_type: Type of dataset to analyze ('single' or 'multi')
     """
     # Create output directory if it doesn't exist
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
-    # Define file paths
-    seed_file_path = SCRIPT_DIR / "single_tool_seeds.py"
-    generated_file_path = SCRIPT_DIR / "outputs" / "simple_100_dataset.json"
+    # Define file paths based on dataset type
+    if dataset_type == "multi":
+        seed_file_path = SCRIPT_DIR / "multi_tool_seeds.py"
+        generated_file_path = SCRIPT_DIR / "outputs" / "multi_prompt_test.json"
+    else:  # default to single
+        seed_file_path = SCRIPT_DIR / "single_tool_seeds.py"
+        generated_file_path = SCRIPT_DIR / "outputs" / "simple_100_dataset.json"
     
     # Load datasets
-    seed_instructions = load_seed_instructions(seed_file_path)
+    seed_instructions = load_seed_instructions(seed_file_path, dataset_type)
     generated_instructions = load_generated_instructions(generated_file_path)
     
     # Get embeddings
@@ -408,16 +348,9 @@ def main():
     # Convert to DataFrame for easier display and export
     df_results = pd.DataFrame(results)
     
-    # Save results
-    csv_path = OUTPUT_DIR / "dataset_comparison.csv"
+    # Save results with dataset-specific filename
+    csv_path = OUTPUT_DIR / f"{dataset_type}_tool_comparison.csv"
     df_results.to_csv(csv_path, index=False)
-    
-    # Visualize embeddings
-    visualize_embeddings(
-        seed_embeddings, 
-        generated_embeddings,
-        labels=("Seed Dataset", "Generated Dataset")
-    )
     
     # Analyze diversity - use raw metrics instead of normalized ones
     seed_diversity = np.mean([
@@ -454,25 +387,6 @@ def main():
     return analysis_results
 
 if __name__ == "__main__":
-    analysis_results = main()
-    
-    # Save results to JSON with proper serialization
-    import json
-    
-    def serialize_for_json(obj):
-        """Helper function to serialize numpy and pandas objects for JSON"""
-        if isinstance(obj, np.ndarray):
-            return obj.tolist()
-        elif isinstance(obj, np.float64) or isinstance(obj, np.float32):
-            return float(obj)
-        elif isinstance(obj, pd.DataFrame):
-            return obj.to_dict(orient='records')
-        elif isinstance(obj, dict):
-            return {k: serialize_for_json(v) for k, v in obj.items()}
-        else:
-            return obj
-            
-    serializable_results = serialize_for_json(analysis_results)
-    
-    with open(OUTPUT_DIR / "analysis_results.json", "w") as f:
-        json.dump(serializable_results, f, indent=2)
+    # Run analysis for both single and multi-tool datasets
+    single_tool_results = main("single")
+    multi_tool_results = main("multi")
