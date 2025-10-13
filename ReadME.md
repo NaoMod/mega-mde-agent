@@ -1,3 +1,18 @@
+UPDATED VERSION (HUGO):
+# A Megamodel-based Approach to Support Ecosystems of LLM Agents for Model-Based Engineering
+
+## Abstract
+// Context
+The Model-Based Engineering (MBE) of large and complex software-intensive systems require to perform many engineering tasks over time. These tasks imply to create, modify, and reason on different modeling artifacts (metamodels, models, etc.) manipulated with various modeling tools (for model transformation, model views, etc.). In this context, the involved engineers could clearly benefit from intelligent agents that could support them in performing more efficiently their MBE tasks.
+// Challenge
+Recently, new initiatives appeared with the objective to agentify individual MBE tasks (e.g. model transformation) by relying notably on Large Languages Models (LLMs). However, automatically (at least partially) designing and executing complete modeling workflows in a smart way remains challenging. This is more particularly the case if we now consider combining together multiple MBE agents carrying out part of the targeted engineering tasks. Indeed, such LLM-based agents need to have access to the information related to all the available resources in order to be able to react appropriately.
+// Solution
+As a first step in this direction, we propose an approach that aims to provide the global knowledge on and to such a MBE agents ecosystem. Based on a dedicated megamodel we designed and the related tooling support, we can capture, represent, and reuse in an unified way all the required metadata. This concerns all the involved modeling artifacts, the corresponding tools and their associated LLM-based agents, as well as traces or logs of their practical executions in different contexts. Thus, in addition to modeling entities, the proposed megamodel registry also allows to track other useful elements such as MBE servers (e.g. using MCP), sessions or workflow plans.
+// Results
+We illustrate the applicability of the proposed approach and underlying tooled megamodel by applying them in the context of three complementary use cases. First, we consider the automated generation of datasets for MBE tools and workflows that a given company wants to test. Second, we collect the corresponding execution traces and navigate them to identify potential issues with the tested tools/workflows. Third, we reuse all the available information to generate a more detailed performance report targeting the improvement of workflow efficiency.
+
+*****************
+
 # LLM Agents for Model-Driven Engineering: A Megamodel-Based Approach
 
 ## Abstract
