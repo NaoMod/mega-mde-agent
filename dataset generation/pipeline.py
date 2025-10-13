@@ -236,24 +236,18 @@ def generate_single_tool_instructions(
                 if base in sample_by_name:
                     model_path = sample_by_name[base]
             
-            # Get all seeds for both patterns
-            get_seeds = [seed for seed in SingleToolSeeds.get_seeds() if seed.pattern == "get"]
-            apply_seeds = [seed for seed in SingleToolSeeds.get_seeds() if seed.pattern == "apply"]
+            # Get seeds by pattern and select 3 from different levels
+            all_seeds = SingleToolSeeds.get_seeds()
+            pattern_seeds = [s for s in all_seeds if s.pattern == pattern]
             
-            # Make sure we select 3 seeds with a mix of both patterns
             selected_seeds = []
-            if pattern == "get" and get_seeds:
-                # If current pattern is "get", select 2 get seeds and 1 apply seed
-                selected_seeds.extend(random.sample(get_seeds, min(2, len(get_seeds))))
-                if apply_seeds:
-                    selected_seeds.append(random.choice(apply_seeds))
-            elif pattern == "apply" and apply_seeds:
-                # If current pattern is "apply", select 2 apply seeds and 1 get seed
-                selected_seeds.extend(random.sample(apply_seeds, min(2, len(apply_seeds))))
-                if get_seeds:
-                    selected_seeds.append(random.choice(get_seeds))
+            # Select random seeds from available pattern seeds
+            if pattern_seeds:
+                # Select up to 3 random seeds
+                num_to_select = min(3, len(pattern_seeds))
+                selected_seeds = random.sample(pattern_seeds, num_to_select)
             
-            # Get instructions from all three seeds to use as examples
+            # Get instructions from selected seeds to use as examples
             seed_examples = "\n".join([f"- {s.instruction}" for s in selected_seeds])
             
             p = prompt or (
@@ -265,10 +259,10 @@ def generate_single_tool_instructions(
                 "1. Use exactly one action verb\n"
                 "2. Do not mention tool names\n"
                 "3. Keep the instruction concise and focused\n"
-                f"4. For 'apply': Include the specific model types and the exact path '{model_path}'\n"
-                "6. Make instructions practical and concrete, not vague\n"
-                "7. Include details about the source and target model types when relevant\n\n"
-                "Example instructions (both 'get' and 'apply' patterns):\n"
+                f"4. For 'apply': Include the specific target type and the exact path '{model_path}'\n"
+                "5. Make instructions practical and concrete, not vague\n"
+                "6. Include details about the source and target model types when relevant\n\n"
+                "Example instructions:\n"
                 f"{seed_examples}\n\n"
                 "Generate your instruction that would make sense to a user who wants to work with these model transformations:"
             )
@@ -368,12 +362,9 @@ def generate_multi_tool_instructions(
             
             pattern_key = ", ".join(patterns)
             
-            # Generate the specified number of instructions per combination
+            # Generate instructions per combination
             for _ in range(max(1, int(per_item))):
-                # Select 3 seeds, prioritizing the matching pattern
-                selected_seeds = []
-                
-                # First, try to get a seed matching the exact pattern
+                # Pattern mapping
                 pattern_seeds_map = {
                     "get, get": get_get_seeds,
                     "get, apply": get_apply_seeds,
@@ -381,23 +372,25 @@ def generate_multi_tool_instructions(
                     "apply, apply": apply_apply_seeds
                 }
                 
-                if pattern_key in pattern_seeds_map and pattern_seeds_map[pattern_key]:
-                    selected_seeds.append(random.choice(pattern_seeds_map[pattern_key]))
+                # Select 3 seeds from matching pattern
+                selected_seeds = []
+                pattern_seeds = pattern_seeds_map.get(pattern_key, [])
                 
-                # Add seeds from other patterns to reach 3 total
-                other_patterns = [k for k in pattern_seeds_map.keys() if k != pattern_key]
-                for other_pat in other_patterns:
-                    if len(selected_seeds) < 3 and pattern_seeds_map[other_pat]:
-                        selected_seeds.append(random.choice(pattern_seeds_map[other_pat]))
+                # Select random seeds from available pattern seeds
+                if pattern_seeds:
+                    num_to_select = min(3, len(pattern_seeds))
+                    selected_seeds = random.sample(pattern_seeds, num_to_select)
+                
+                # Fill remaining slots if we don't have 3
+                while len(selected_seeds) < 3:
+                    other_patterns = [k for k in pattern_seeds_map.keys() if k != pattern_key]
+                    for other_pat in other_patterns:
                         if len(selected_seeds) >= 3:
                             break
-                
-                # Fill remaining slots with any available seeds
-                while len(selected_seeds) < 3 and all_seeds:
-                    remaining = [s for s in all_seeds if s not in selected_seeds]
-                    if not remaining:
-                        break
-                    selected_seeds.append(random.choice(remaining))
+                        other_seeds = pattern_seeds_map[other_pat]
+                        if other_seeds:
+                            selected_seeds.append(random.choice(other_seeds))
+                    break
                 
                 # Build the prompt with all three seeds
                 seed_examples = "\n".join([f"- {s.instruction}" for s in selected_seeds])
@@ -419,9 +412,7 @@ def generate_multi_tool_instructions(
                     "3. Keep steps in the correct logical order\n"
                     f"4. Paths for 'apply' operations:\n   {chr(10).join(path_instructions) if path_instructions else '   No apply operations in this sequence'}\n"
                     "5. For 'get' operations: Focus on retrieving specific configuration information\n"
-                    "6. Make the relationship between the two steps clear (how the output of step 1 feeds into step 2)\n"
-                    "7. Be precise about the model types involved in the transformation\n"
-                    "8. Use concrete language that clearly specifies what the user wants to accomplish\n\n"
+                    "6.For every 'apply' step explicitly state the TARGET model type produced (source model mention optional)\n"
                     "Three example instructions (various patterns):\n"
                     f"{seed_examples}\n\n"
                     "Generate your instruction that clearly connects the two operations in a meaningful way:"
@@ -467,6 +458,8 @@ def write_final_dataset(examples: List[Dict[str, Any]], path: Path) -> None:
 
 def create_output_examples(examples: List[Dict[str, Any]], path: Path) -> None:
     path.write_text(json.dumps(examples, indent=2))
+
+
 
 
 
@@ -517,6 +510,3 @@ def generate_dataset_for_regression_testing(
     # 3) Validate but don't limit to just 10 items
     items = validate_dataset(items)
     return items
-
-
-

@@ -13,3 +13,10 @@ langchain-mcp-adapters
 langchain-openai
 python-dotenv
 docarray
+# Added for dataset analysis
+nltk
+scikit-learn
+scipy
+seaborn
+umap-learn
+openai

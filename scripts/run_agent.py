@@ -3,8 +3,15 @@ import os
 import asyncio
 import json
 import subprocess
+import argparse
 from pathlib import Path
 import datetime
+import importlib.util
+from typing import Optional, List, Any
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv(Path(__file__).parent / '.env')
 # Add project root to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -16,7 +23,6 @@ from mcp_servers.atl_server.atl_mcp_server import fetch_transformations
 from src.core.megamodel import MegamodelRegistry
 from src.core.am3 import ReferenceModel, TransformationModel
 from src.mcp_ext.integrator import MCPServerIntegrator
-from src.agents.agent import MCPAgent
 from src.mcp_ext.client import MCPClient
 from src.agents.execution import MCPInvocation
 
@@ -113,188 +119,283 @@ async def populate_registry(registry):
         )
         registry.register_entity(transfo_entity)
 
+
+def load_agent_class_from_file(file_path: Path):
+    """Dynamically load MCPAgent class from a given Python file path.
+    Returns the MCPAgent class or None if not found.
+    """
+    spec = importlib.util.spec_from_file_location("agent_module", str(file_path))
+    if spec is None or spec.loader is None:
+        return None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)  # type: ignore[attr-defined]
+    return getattr(module, "MCPAgent", None)
+
+
+def load_dataset(file_name: str) -> List[dict]:
+    """Load a dataset file from dataset generation/outputs without limiting to 100 items."""
+    base_outputs = Path(__file__).parent.parent / "dataset generation" / "outputs"
+    fpath = base_outputs / file_name
+    try:
+        with open(fpath, 'r') as f:
+            data = json.load(f)
+            if isinstance(data, list):
+                print(f"Loaded {len(data)} items from {fpath}")
+                return data
+            else:
+                print(f"Warning: dataset at {fpath} is not a list; returning empty list")
+                return []
+    except Exception as e:
+        print(f"Error loading dataset file {fpath}: {e}")
+        return []
+
+# NOTE: Removed checkpoint/partial saving helpers for a minimal, deterministic run
+
 if __name__ == "__main__":
+    # Create an argument parser but don't require phase since we're running both
+    parser = argparse.ArgumentParser(description="Run agent2 evaluation with combined datasets")
+    parser.add_argument("--phase", choices=["single", "multi"], required=False,
+                        help="[Deprecated] Which phase to run (ignored, will run both)")
+    args = parser.parse_args()
+    
+    # Check LangSmith environment variables
+    if os.environ.get("LANGSMITH_TRACING") == "true":
+        print("LangSmith tracing enabled.")
+        print(f"LangSmith project: {os.environ.get('LANGSMITH_PROJECT', 'default')}")
+        if not os.environ.get("LANGSMITH_API_KEY"):
+            print("WARNING: LANGSMITH_API_KEY not set. Tracing may not work.")
+    else:
+        print("LangSmith tracing not enabled.")
+
     # Create a single event loop for the entire script
     async def main():
-        # Initialize storage for execution results
-        all_execution_results = []
-        
-        # 1. Set up registry and agent
+        # 1. Set up registry and populate tools/transformations
         registry = MegamodelRegistry()
         await populate_registry(registry)
-        agent = MCPAgent(registry)
         
-        
-        # 3. Connect to ATL server - must be inside the same async function
+        # 2. Get ATL server script path for connections
         atl_server = registry.get_mcp_server("atl_server")
         if not atl_server or not atl_server.metadata.get("script_path"):
             print("ERROR: ATL server not properly configured. Check script path in registry.")
             return
             
         script_path = atl_server.metadata.get("script_path")
-        try:
-            # Create and connect client
-            client = MCPClient()
-            await client.connect_to_server(script_path)
+        
+        # 3. Discover agent version files (agent2 only)
+        agents_dir = Path(__file__).parent.parent / "evaluation" / "agent_versions"
+        agent_files = [p for p in [agents_dir / "agent2.py"] if p.is_file()]
+        if not agent_files:
+            print(f"No agent version files found in {agents_dir}")
+            return
             
+        print(f"Only evaluating: {[p.stem for p in agent_files]}")
+        
+        # 4. Evaluate agent2 for both phases at once
+        for agent_path in agent_files:
+            agent_name = agent_path.stem  # e.g., agent1, agent2, ...
+            print(f"\n==== Evaluating {agent_name} (phase: {args.phase}) ====")
+            MCPAgentCls = load_agent_class_from_file(agent_path)
+            if MCPAgentCls is None:
+                print(f"Skipping {agent_name}: MCPAgent class not found")
+                continue
             
-            # Store the client in the executor
-            agent.executor.mcp_clients["atl_server"] = client           
-            
-            # 4. Load the dataset
-            dataset_path = Path(__file__).parent.parent / "dataset generation" / "outputs" / "regression_testing_dataset.json"
+            # Prepare per-agent results
+            all_execution_results: List[dict] = []
+            agent = None
             try:
-                with open(dataset_path, 'r') as f:
-                    dataset = json.load(f)
-                    print(f"Loaded dataset with {len(dataset)} instructions")
-            except Exception as e:
-                print(f"Error loading dataset: {e}")
-                dataset = []
+                # Instantiate agent and connect client to ATL server
+                agent = MCPAgentCls(registry)
+                client = MCPClient()
+                await client.connect_to_server(script_path)
+                # Store the client in the executor
+                agent.executor.mcp_clients["atl_server"] = client
+
+                # Load both datasets
+                simple_dataset = load_dataset("simple_100_dataset.json")
+                multi_dataset = load_dataset("multi_100_dataset.json")
                 
-            # 5. Run the instructions
-            for i, item in enumerate(dataset):  # Run all instructions
-                instruction = item.get("instruction", "")
-                pattern = item.get("pattern", "")
-                apis = item.get("relevant_apis", [])
-                api_names = [api.get("api_name", "") for api in apis]
+                # Combine datasets
+                combined_dataset = simple_dataset + multi_dataset
                 
-                print(f"\n[{i+1}/{len(dataset)}] Running instruction: {instruction}")
-                print(f"  Expected APIs: {api_names}")
-                
-                # Generate the plan
-                plan = agent.plan_workflow(instruction)
-                
-                # Force ATL server for transformation tools
-                for step in plan.steps:
-                    name = getattr(step, 'tool_name', '') or ''
-                    if name.startswith(('apply_', 'list_transformation_')):
-                        step.server_name = 'atl_server'
-                
-                # Execute the plan
-                try:
-                    # We'll execute each step manually for better control
-                    plan.start_execution()
-                    session = agent.executor.registry.create_session()
-                    session.start()
-                    trace = session.create_new_trace()
+                if not combined_dataset:
+                    print("No entries found in any dataset, nothing to run.")
+                    continue
                     
-                    results = []
-                    for step in plan.steps:
-                        # Update step readiness
-                        step.status = "ready"
-                        
-                        # Execute the step
-                        result = await agent.executor.execute_step_async(step)
-                        results.append(result)
-                        
-                        # Add to trace
-                        invocation = MCPInvocation(
-                            tool_name=step.tool_name,
-                            server_name=step.server_name,
-                            arguments=step.parameters,
-                            result=result.get("result", {}),
-                            success=result["success"]
-                        )
-                        trace.add_invocation(invocation)
-                        
-                        # Print result
-                        success = result.get('success', False)
-                        
-                    plan.status = "completed"
-                    session.end()
+                print(f"\n-- Combined dataset: Running {len(combined_dataset)} instructions from both simple and multi datasets --")
+                for i, item in enumerate(combined_dataset):
+                    instruction = item.get("instruction", "")
+                    pattern = item.get("pattern", "")
+                    apis = item.get("relevant_apis", [])
+                    api_names = [api.get("api_name", "") for api in apis]
                     
-                    # Create a serializable result for this instruction
-                    execution_result = {
-                        "instruction": instruction,
-                        "pattern": pattern,
-                        "expected_apis": api_names,
-                        "plan_steps": [
-                            {
-                                "tool_name": step.tool_name,
-                                "server_name": step.server_name,
-                                "parameters": step.parameters
-                            } for step in plan.steps
-                        ],
-                        "execution_results": []
-                    }
+                    print(f"\n[{i+1}/{len(combined_dataset)}] Running instruction: {instruction}")
+                    print(f"  Expected APIs: {api_names}")
                     
-                    # Process the execution results
-                    for step, result in zip(plan.steps, results):
-                        success = result.get('success', False)
-                        result_data = result.get('result', {})
+                    # Generate the plan without timeout
+                    try:
+                        # Call plan generation directly without timeout
+                        plan = await asyncio.to_thread(agent.plan_workflow, instruction)
                         
-                        # Create a serializable version of the result
-                        serialized_result = {
-                            "tool_name": step.tool_name,
-                            "success": success,
-                            "error": result.get('error', '') if not success else ''
+                        # Force ATL server for transformation tools
+                        for step in plan.steps:
+                            name = getattr(step, 'tool_name', '') or ''
+                            if name.startswith(('apply_', 'list_transformation_')):
+                                step.server_name = 'atl_server'
+                        # proceed to execute the generated plan for this instruction
+                    except (asyncio.TimeoutError, Exception) as e:
+                        print(f"\n\nWARNING: Planning timed out or failed for instruction {i+1}: {e}")
+                        # Create an empty plan to skip execution but record the failure
+                        from src.agents.workflow import WorkflowPlan
+                        plan = WorkflowPlan(instruction)
+                        plan.status = "planning_failed"
+                    
+                    # Execute the plan with timeout
+                    try:
+                        plan.start_execution()
+                        session = agent.executor.registry.create_session()
+                        session.start()
+                        trace = session.create_new_trace()
+                        
+                        results = []
+                        # Execute steps without timeout
+                        for step in plan.steps:
+                            step.status = "ready"
+                            result = await agent.executor.execute_step_async(step)
+                            results.append(result)
+                            invocation = MCPInvocation(
+                                tool_name=step.tool_name,
+                                server_name=step.server_name,
+                                arguments=step.parameters,
+                                result=result.get("result", {}),
+                                success=result.get("success", False)
+                            )
+                            trace.add_invocation(invocation)
+                        
+                        # Mark plan as completed after execution
+                        plan.status = "completed"
+                        session.end()
+                        
+                        # Create a serializable result for this instruction
+                        execution_result = {
+                            "instruction": instruction,
+                            "pattern": pattern,
+                            "expected_apis": api_names,
+                            "plan_steps": [
+                                {
+                                    "tool_name": step.tool_name,
+                                    "server_name": step.server_name,
+                                    "parameters": step.parameters
+                                } for step in plan.steps
+                            ],
+                            "execution_results": [],
+                            "status": plan.status  # Include execution status (completed or timeout)
                         }
                         
-                        # Handle result data based on type
-                        if success:
-                            if hasattr(result_data, 'to_dict'):
-                                serialized_result["result"] = result_data.to_dict()
-                            elif hasattr(result_data, '__dict__'):
-                                try:
-                                    result_dict = result_data.__dict__
-                                    if 'text' in result_dict:
-                                        serialized_result["result"] = {"text": result_dict['text']}
-                                    else:
-                                        # Make a serializable dict
-                                        clean_dict = {}
-                                        for k, v in result_dict.items():
-                                            if isinstance(v, (str, int, float, bool, type(None))):
-                                                clean_dict[k] = v
-                                            else:
-                                                clean_dict[k] = str(v)
-                                        serialized_result["result"] = clean_dict
-                                except Exception:
-                                    serialized_result["result"] = str(result_data)
-                            else:
-                                serialized_result["result"] = str(result_data)
+                        # Process the execution results
+                        timeout_occurred = plan.status == "timeout"
                         
-                        execution_result["execution_results"].append(serialized_result)
+                        # For normal results
+                        for i, (step, result) in enumerate(zip(plan.steps, results)):
+                            # Skip timeout error result which was added artificially
+                            if timeout_occurred and i == len(plan.steps):
+                                continue
+                                
+                            success = result.get('success', False)
+                            result_data = result.get('result', {})
+                            serialized_result = {
+                                "tool_name": step.tool_name,
+                                "success": success,
+                                "error": result.get('error', '') if not success else ''
+                            }
+                            if success:
+                                if hasattr(result_data, 'to_dict'):
+                                    serialized_result["result"] = result_data.to_dict()
+                                elif hasattr(result_data, '__dict__'):
+                                    try:
+                                        result_dict = result_data.__dict__
+                                        if 'text' in result_dict:
+                                            serialized_result["result"] = {"text": result_dict['text']}
+                                        else:
+                                            clean_dict = {}
+                                            for k, v in result_dict.items():
+                                                if isinstance(v, (str, int, float, bool, type(None))):
+                                                    clean_dict[k] = v
+                                                else:
+                                                    clean_dict[k] = str(v)
+                                            serialized_result["result"] = clean_dict
+                                    except Exception:
+                                        serialized_result["result"] = str(result_data)
+                                else:
+                                    serialized_result["result"] = str(result_data)
+                            execution_result["execution_results"].append(serialized_result)
+                        
+                        # Add timeout error if it occurred
+                        if timeout_occurred and len(results) > len(plan.steps):
+                            timeout_result = results[-1]  # Last result is the timeout error
+                            execution_result["execution_results"].append({
+                                "tool_name": "execution_timeout",
+                                "success": False,
+                                "error": timeout_result.get('error', 'Execution timed out')
+                            })
+                        
+                        all_execution_results.append(execution_result)
+                    except KeyboardInterrupt:
+                        # Propagate to outer handler; no partial saves
+                        raise
+                    except Exception as e:
+                        print(f"Error during plan execution: {e}")
+                        import traceback
+                        traceback.print_exc()
                     
-                    # Add to all results
-                    all_execution_results.append(execution_result)
-                    
-                except Exception as e:
-                    print(f"Error during plan execution: {e}")
-                    import traceback
-                    traceback.print_exc()
-                    
-                print("--- End Execution ---")
-            
-            # Save execution results to a JSON file BEFORE cleanup
-            if all_execution_results:
-                try:
-                    # Create a timestamped filename to avoid overwriting existing results
-                    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-                    output_filename = f"agent_execution_results_no_rag_{timestamp}.json"
-                    output_path = Path(__file__).parent.parent / "outputs" / output_filename
-                    
-                    # Ensure the output directory exists
-                    output_path.parent.mkdir(exist_ok=True)
-                    
-                    with open(output_path, 'w') as f:
-                        json.dump(all_execution_results, f, indent=2)
-                    print(f"\nExecution results saved to: {output_path}")
-                except Exception as e:
-                    print(f"Error saving results: {e}")
-                    import traceback
-                    traceback.print_exc()
+                    print("--- End Execution ---")
                 
-            # 6. Cleanup - do this directly without using the restored function
-            for server_name, client in agent.executor.mcp_clients.items():
+                # Save all results
+                if all_execution_results:
+                    outputs_dir = Path(__file__).parent.parent / "outputs"
+                    outputs_dir.mkdir(exist_ok=True)
+                    try:
+                        # Save combined results directly
+                        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                        output_filename = f"agent_execution_results_{agent_name}_{timestamp}.json"
+                        output_path = outputs_dir / output_filename
+                        with open(output_path, 'w') as f:
+                            # Convert any sets to lists before serializing
+                            json_str = json.dumps(all_execution_results, indent=2, default=lambda o: list(o) if isinstance(o, set) else str(o))
+                            f.write(json_str)
+                        print(f"\nExecution results for {agent_name} saved to: {output_path}")
+                    except Exception as e:
+                        print(f"Error saving results for {agent_name}: {e}")
+                        import traceback
+                        traceback.print_exc()
+            except BaseException as e:
+                # Catch setup/connect or other fatal errors for this agent and continue
+                print(f"Error setting up or running {agent_name}: {e}")
+                import traceback
+                traceback.print_exc()
+            finally:
+                # Cleanup per-agent clients
                 try:
-                    if hasattr(client, 'exit_stack'):
-                        await client.exit_stack.aclose()
-                except Exception:
+                    for server_name, cli in getattr(agent, 'executor', object()).mcp_clients.items():
+                        try:
+                            if hasattr(cli, 'exit_stack'):
+                                try:
+                                    await cli.exit_stack.aclose()
+                                except BaseException:
+                                    # Swallow cancellation/errors on shutdown to avoid aborting the whole run
+                                    pass
+                        except BaseException:
+                            pass
+                except BaseException:
                     pass
-            
-        except Exception:
-            import traceback
-            traceback.print_exc()
+                # Small delay to allow subprocess cleanup before next agent
+                try:
+                    await asyncio.sleep(0.2)
+                except BaseException:
+                    # Ignore cancellations occurring at this checkpoint
+                    pass
     
-    # Run the async main function
-    asyncio.run(main())
+    # Run the async main function with graceful handling of Ctrl+C
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("\nProgram terminated by user.")
