@@ -14,8 +14,8 @@ from src.core.megamodel import MegamodelRegistry
 from scripts.run_agent import populate_registry
 from pipeline import generate_dataset_for_regression_testing, _derive_api
 
-TARGET = 500
-OUTPUT_FILE = Path(__file__).parent / "outputs" / "multi_500_dataset.json"
+TARGET = 400  # Reduced for testing prompt changes
+OUTPUT_FILE = Path(__file__).parent / "outputs" / "multi_prompt_test.json"
 
 all_instructions: List[dict] = []
 generated_count = 0

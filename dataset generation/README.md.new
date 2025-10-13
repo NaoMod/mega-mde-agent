@@ -13,12 +13,8 @@ The dataset generation produces two types of instruction datasets:
 - Instructions requiring one tool operation (get or apply)
 - Generation process:
   1. Loads available tools from the ATL MCP server
-  2. Creates 5 instructions per tool, balanced between "get" and "apply" operations:
-     - Tools are classified into "get" and "apply" categories
-     - Equal representation of tool types ensures pattern balance
-  3. Uses LLM to generate diverse natural language instructions:
-     - Variety in phrasing through different seed instructions
-     - Multiple formatting styles (natural language, numbered steps, bullet points)
+  2. Creates 5 instructions per tool, balanced between "get" and "apply" operations
+  3. Uses LLM to generate diverse natural language instructions
   4. Ensures uniqueness by deduplicating based on instruction text
   5. Default target: 500 instructions
 
@@ -31,20 +27,16 @@ The dataset generation produces two types of instruction datasets:
      - get→apply (check config, then transform)
      - apply→get (transform, then check config)
      - apply→apply (two transformations in sequence)
-  2. Ensures pattern diversity through stratified sampling:
-     - Equal distribution of each pattern (120 workflows per pattern)
-     - Random shuffling of workflows for generation variety
-     - Deduplication of instructions to maximize uniqueness
+  2. Ensures pattern diversity through stratified sampling
   3. Default target: 400 instructions
 
 ### Dataset Analysis (`analyze_dataset.py`)
 
 - Evaluates dataset diversity metrics, including:
-  - Distinct-n scores (lexical diversity): Measures unique n-gram proportions
-  - Vocabulary size and lexical density: Quantifies lexical variety
-  - Average pairwise distances and dispersion: Captures semantic diversity
-  - Cross-similarity with seed instructions: Ensures faithfulness to original seed concepts
-  - Pattern distribution analysis: Confirms balanced representation of operation types
+  - Distinct-n scores (lexical diversity)
+  - Vocabulary size and lexical density
+  - Average pairwise distances and dispersion
+  - Cross-similarity with seed instructions
 
 ## Original Workflow Steps
 
