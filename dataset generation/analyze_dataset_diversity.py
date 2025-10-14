@@ -3,7 +3,7 @@
 Dataset Diversity Comparison Script
 
 This script compares a small original dataset of seeds with a larger generated dataset
-using diversity metrics from the paper "Diversity-oriented Data Augmentation with Large Language Models".
+using diversity metrics from the paper "Diversity-oriented Data Augmentation with Large Language Models" and the metrics used in the dataset augmentation's studies.
 
 It calculates:
 - Distance (average pairwise Euclidean distance)
@@ -23,15 +23,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.spatial.distance import pdist, squareform
-from sklearn.preprocessing import MinMaxScaler
+from scipy.spatial.distance import pdist
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.decomposition import PCA
-import umap
-from collections import Counter
 import re
 from openai import OpenAI
-from typing import List, Dict, Tuple, Any, Union
+from typing import List, Dict
 from pathlib import Path
 
 # Set up OpenAI client
@@ -351,40 +347,7 @@ def main(dataset_type="single"):
     # Save results with dataset-specific filename
     csv_path = OUTPUT_DIR / f"{dataset_type}_tool_comparison.csv"
     df_results.to_csv(csv_path, index=False)
-    
-    # Analyze diversity - use raw metrics instead of normalized ones
-    seed_diversity = np.mean([
-        metrics["Seed Dataset"]["Distance"] / max(metrics["Seed Dataset"]["Distance"], metrics["Generated Dataset"]["Distance"]),
-        metrics["Seed Dataset"]["Dispersion"] / max(metrics["Seed Dataset"]["Dispersion"], metrics["Generated Dataset"]["Dispersion"]),
-        metrics["Seed Dataset"]["Isocontour Radius"] / max(metrics["Seed Dataset"]["Isocontour Radius"], metrics["Generated Dataset"]["Isocontour Radius"])
-    ])
-    
-    gen_diversity = np.mean([
-        metrics["Generated Dataset"]["Distance"] / max(metrics["Seed Dataset"]["Distance"], metrics["Generated Dataset"]["Distance"]),
-        metrics["Generated Dataset"]["Dispersion"] / max(metrics["Seed Dataset"]["Dispersion"], metrics["Generated Dataset"]["Dispersion"]),
-        metrics["Generated Dataset"]["Isocontour Radius"] / max(metrics["Seed Dataset"]["Isocontour Radius"], metrics["Generated Dataset"]["Isocontour Radius"])
-    ])
-    
-    # Calculate metrics
-    diversity_ratio = gen_diversity / max(0.0001, seed_diversity)  # Prevent division by zero
-    affinity_pct = affinity * 100
-    
-    # Create a dictionary with analysis results that can be used by other components
-    analysis_results = {
-        "diversity_ratio": diversity_ratio,
-        "affinity_score": affinity,
-        "affinity_percentage": affinity_pct,
-        "metrics": metrics,
-        "normalized_metrics": normalized_metrics,
-        "results_dataframe": df_results,
-        "is_diverse": gen_diversity > seed_diversity,
-        "is_representative": affinity > 0.7,
-        "overall_quality": "high" if gen_diversity >= seed_diversity and affinity > 0.7 else 
-                          "medium" if (gen_diversity >= seed_diversity or affinity > 0.7) else 
-                          "low"
-    }
-    
-    return analysis_results
+    print(f"Results saved to {csv_path}")
 
 if __name__ == "__main__":
     # Run analysis for both single and multi-tool datasets
