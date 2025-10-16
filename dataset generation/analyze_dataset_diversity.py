@@ -282,11 +282,11 @@ def main(dataset_type="single"):
     
     # Define file paths based on dataset type
     if dataset_type == "multi":
-        seed_file_path = SCRIPT_DIR / "multi_tool_seeds.py"
-        generated_file_path = SCRIPT_DIR / "outputs" / "multi_prompt_test.json"
+        seed_file_path = SCRIPT_DIR / "seeds" / "multi_tool_seeds.py"
+        generated_file_path = SCRIPT_DIR / "outputs" / "multi_500_dataset.json"
     else:  # default to single
-        seed_file_path = SCRIPT_DIR / "single_tool_seeds.py"
-        generated_file_path = SCRIPT_DIR / "outputs" / "simple_100_dataset.json"
+        seed_file_path = SCRIPT_DIR / "seeds" / "single_tool_seeds.py"
+        generated_file_path = SCRIPT_DIR / "outputs" / "simple_500_dataset.json"
     
     # Load datasets
     seed_instructions = load_seed_instructions(seed_file_path, dataset_type)
