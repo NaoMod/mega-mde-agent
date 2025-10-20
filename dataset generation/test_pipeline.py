@@ -6,7 +6,7 @@ if str(WORKDIR) not in sys.path:
     sys.path.insert(0, str(WORKDIR))
 from pipeline import write_final_dataset
 from src.core.megamodel import MegamodelRegistry
-from scripts.run_agent import populate_registry
+from scripts.run_agent_versions import populate_registry
 from src.agents.agent import MCPAgent
 from pipeline import (
     _serialize_historical_executions,

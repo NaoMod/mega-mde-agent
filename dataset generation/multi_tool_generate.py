@@ -11,7 +11,7 @@ sys.path.insert(0, str(WORKDIR))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from src.core.megamodel import MegamodelRegistry
-from scripts.run_agent import populate_registry
+from scripts.run_agent_versions import populate_registry
 from pipeline import generate_dataset_for_regression_testing, _derive_api
 
 TARGET = 400  # Reduced for testing prompt changes
