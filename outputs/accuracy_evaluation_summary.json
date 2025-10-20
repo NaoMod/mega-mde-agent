@@ -1,8 +1,8 @@
 {
   "baseline": {
-    "file": "agent_baseline_execution_results.json",
-    "accuracy": 0.9625,
-    "total_instructions": 80
+    "file": "agent_execution_results_MCPAgent_baseline_20251020_134540.json",
+    "accuracy": 0.9075,
+    "total_instructions": 200
   },
   "reduced_tools": {
     "file": "agent_execution_results_MCPAgent_reduced_tools_20251020_122115.json",

@@ -52,9 +52,10 @@ def main():
     current_dir = '/Users/zakariahachm/Downloads/llm-agents-mde/outputs'
     
 
-    # Load only baseline and reduced are ons
+    # Load both baseline and reduced tools results
     reduced_tools_data = load_execution_results(os.path.join(current_dir, 'agent_execution_results_MCPAgent_reduced_tools_20251020_122115.json'))
-    num_instructions = len(reduced_tools_data)
+    baseline_data = load_execution_results(os.path.join(current_dir, 'agent_execution_results_MCPAgent_baseline_20251020_134540.json'))
+    num_instructions = min(len(reduced_tools_data), len(baseline_data))
 
 
     print(f"Analyzing {num_instructions} instructions across 2 versions")
@@ -107,9 +108,12 @@ def main():
         unique_missing_tools = set()
         for i in range(num_instructions):
             reduced_tools_item = reduced_tools_data[i]
+            baseline_item = baseline_data[i]
             instruction_text = reduced_tools_item.get('instruction', f'Instruction {i+1}')
-            score = score_instruction(reduced_tools_item)
-            if score < 1.0:
+            score_reduced = score_instruction(reduced_tools_item)
+            score_baseline = score_instruction(baseline_item)
+            # Only include instructions that fail in reduced tools but succeed in baseline
+            if score_reduced < 1.0 and score_baseline == 1.0:
                 expected_apis = reduced_tools_item.get("expected_apis", [])
                 expected_tools = [map_api_to_tool_name(api) for api in expected_apis]
                 execution_results = reduced_tools_item.get("execution_results", [])
@@ -120,7 +124,7 @@ def main():
                     i + 1,
                     instruction_text[:100] + "..." if len(instruction_text) > 100 else instruction_text,
                     " | ".join(set(missing_tools)),
-                    f"{score:.2f}"
+                    f"{score_reduced:.2f}"
                 ])
 
                 # Collect unique missing tools

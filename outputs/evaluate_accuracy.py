@@ -133,7 +133,7 @@ def main():
     
     # File mappings: (file_path, display_name)
     files_to_evaluate = [
-        (outputs_dir / "agent_baseline_execution_results.json", "Baseline"),
+        (outputs_dir / "agent_execution_results_MCPAgent_baseline_20251020_134540.json", "Baseline"),
         (outputs_dir / "minimal_prompt_v0_file.json", "V0"),
         (outputs_dir / "prompt_v1.json", "V1"),
         (outputs_dir / "prompt_V2.json", "V2"),

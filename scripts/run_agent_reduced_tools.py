@@ -27,14 +27,14 @@ from src.agents.agent import MCPAgent
 
 # Define 10 tools to remove (you can modify this list)
 TOOLS_TO_REMOVE = [
-    "list_transformation_KM32EMF_tool",*
-    "apply_KM32EMF_transformation_tool",*
-    "list_transformation_MySQL2KM3_tool",*
-    "apply_MySQL2KM3_transformation_tool",
-    "list_transformation_Families2Persons_tool",*
-    "apply_Families2Persons_transformation_tool",*
+    "list_transformation_KM32EMF_tool",
+    "apply_KM32EMF_transformation_tool",
+    "list_transformation_MySQL2KM3_tool",
+    "apply_MySQL2KM3_transformation_tool",*
+    "list_transformation_Families2Persons_tool",
+    "apply_Families2Persons_transformation_tool",
     "list_transformation_XML2Ant_tool",*
-    "apply_XML2Ant_transformation_tool",*
+    "apply_XML2Ant_transformation_tool",
     "list_transformation_Make2Ant_tool",
     "apply_Make2Ant_transformation_tool"
 ]
