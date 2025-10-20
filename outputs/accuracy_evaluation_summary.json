@@ -1,0 +1,12 @@
+{
+  "baseline": {
+    "file": "agent_baseline_execution_results.json",
+    "accuracy": 0.9625,
+    "total_instructions": 80
+  },
+  "reduced_tools": {
+    "file": "agent_execution_results_MCPAgent_reduced_tools_20251020_122115.json",
+    "accuracy": 0.77,
+    "total_instructions": 200
+  }
+}
