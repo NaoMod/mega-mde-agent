@@ -1,9 +1,7 @@
 from typing import Dict, List, Optional, Any
-import json
 import uuid
-from datetime import datetime
 from src.agents.execution import AgentSession
-from src.core.am3 import Entity, Relationship, Model, ReferenceModel, TransformationModel, TerminalModel
+from src.core.am3 import Entity, Relationship, Model
 from src.agents.planning import WorkflowPlan
 
 class MegamodelRegistry:

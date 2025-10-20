@@ -7,9 +7,9 @@ import argparse
 from pathlib import Path
 import datetime
 import importlib.util
-from typing import Optional, List, Any
+from typing import List
 from dotenv import load_dotenv
-
+from src.agents.workflow import WorkflowPlan
 # Load environment variables from .env file
 load_dotenv(Path(__file__).parent / '.env')
 # Add project root to path
@@ -133,7 +133,6 @@ def load_agent_class_from_file(file_path: Path):
 
 
 def load_dataset(file_name: str) -> List[dict]:
-    """Load a dataset file from dataset generation/outputs without limiting to 100 items."""
     base_outputs = Path(__file__).parent.parent / "dataset generation" / "outputs"
     fpath = base_outputs / file_name
     try:
@@ -149,7 +148,6 @@ def load_dataset(file_name: str) -> List[dict]:
         print(f"Error loading dataset file {fpath}: {e}")
         return []
 
-# NOTE: Removed checkpoint/partial saving helpers for a minimal, deterministic run
 
 if __name__ == "__main__":
     # Create an argument parser but don't require phase since we're running both
@@ -181,7 +179,6 @@ if __name__ == "__main__":
             
         script_path = atl_server.metadata.get("script_path")
         
-        # 3. Discover agent version files (agent2 only)
         agents_dir = Path(__file__).parent.parent / "evaluation" / "agent_versions"
         agent_files = [p for p in [agents_dir / "agent2.py"] if p.is_file()]
         if not agent_files:
@@ -228,9 +225,7 @@ if __name__ == "__main__":
                     apis = item.get("relevant_apis", [])
                     api_names = [api.get("api_name", "") for api in apis]
                     
-                    print(f"\n[{i+1}/{len(combined_dataset)}] Running instruction: {instruction}")
-                    print(f"  Expected APIs: {api_names}")
-                    
+                    print(f"\n[{i+1}/{len(combined_dataset)}] Running instruction: {instruction}")        
                     # Generate the plan without timeout
                     try:
                         # Call plan generation directly without timeout
@@ -244,8 +239,6 @@ if __name__ == "__main__":
                         # proceed to execute the generated plan for this instruction
                     except (asyncio.TimeoutError, Exception) as e:
                         print(f"\n\nWARNING: Planning timed out or failed for instruction {i+1}: {e}")
-                        # Create an empty plan to skip execution but record the failure
-                        from src.agents.workflow import WorkflowPlan
                         plan = WorkflowPlan(instruction)
                         plan.status = "planning_failed"
                     
@@ -294,7 +287,7 @@ if __name__ == "__main__":
                         # Process the execution results
                         timeout_occurred = plan.status == "timeout"
                         
-                        # For normal results
+                        # Converts result objects to JSON-serializable format
                         for i, (step, result) in enumerate(zip(plan.steps, results)):
                             # Skip timeout error result which was added artificially
                             if timeout_occurred and i == len(plan.steps):
@@ -368,7 +361,7 @@ if __name__ == "__main__":
                         import traceback
                         traceback.print_exc()
             except BaseException as e:
-                # Catch setup/connect or other fatal errors for this agent and continue
+               #BaseException catches everything including KeyboardInterrupt, SystemExit, etc.
                 print(f"Error setting up or running {agent_name}: {e}")
                 import traceback
                 traceback.print_exc()
