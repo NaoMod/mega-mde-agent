@@ -1,28 +1,94 @@
-Instruction_ID,Instruction,Baseline_Status,Without_2tools_Status,Without_PE_Status,Failed_Version,Missing_Tools
-2,Show details of the KM3-to-EMF transformation from KM3 models to EMF models.,SUCCESS,FAILED,SUCCESS,Without_2tools,list_transformation_KM32EMF_tool
-9,Retrieve the details of the transformation from MySQL model to KM3 model.,SUCCESS,FAILED,SUCCESS,Without_2tools,list_transformation_MySQL2KM3_tool
-14,Convert KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to EMF model,SUCCESS,FAILED,SUCCESS,Without_2tools,apply_KM32EMF_transformation_tool
-15,Transform the KM3 model at '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' into an EM...,SUCCESS,FAILED,SUCCESS,Without_2tools,apply_KM32EMF_transformation_tool
-16,Show me the configuration settings for the KM3-to-EMF transformation from KM3 model to EMF model.,SUCCESS,FAILED,SUCCESS,Without_2tools,list_transformation_KM32EMF_tool
-17,Show me the configuration settings of the transformation that transforms a KM3 model into an EMF mod...,SUCCESS,FAILED,SUCCESS,Without_2tools,list_transformation_KM32EMF_tool
-42,Apply MySQL to KM3 model on /Users/zakariahachm/Downloads/atl_zoo/MySQL2KM3/Models/euro2004-MySQL.xm...,SUCCESS,FAILED,SUCCESS,Without_2tools,apply_MySQL2KM3_transformation_tool
-43,Apply transformation from MySQL model to KM3 model with /Users/zakariahachm/Downloads/atl_zoo/MySQL2...,SUCCESS,FAILED,SUCCESS,Without_2tools,apply_MySQL2KM3_transformation_tool
-44,Show me the configuration details of the transformation that converts a MySQL model into a KM3 model...,SUCCESS,FAILED,SUCCESS,Without_2tools,list_transformation_MySQL2KM3_tool
-45,Show me the configuration settings of the transformation that transforms a MySQL model into a KM3 mo...,SUCCESS,FAILED,SUCCESS,Without_2tools,list_transformation_MySQL2KM3_tool
-56,"1) Get the KM3-to-EMF configuration.
-2) Apply the Mantis-to-XML transformation to /Users/zakariahach...",SUCCESS,FAILED,SUCCESS,Without_2tools,apply_Mantis2XML_transformation_tool | list_transformation_KM32EMF_tool
-58,"Get the configuration settings of the XML-to-Ant model transformation, then apply the XML-to-XSLT tr...",SUCCESS,SUCCESS,FAILED,Without_PE,apply_XML2XSLT_transformation_tool | list_transformation_XML2Ant_tool
-61,"Get the Families-to-Persons transformation configuration between Families and Persons models.
-Apply ...",SUCCESS,SUCCESS,FAILED,Without_PE,list_transformation_Families2Persons_tool | apply_XML2Ant_transformation_tool
-62,"1) get the configuration of the transformation from Families model to Persons model
-2) apply the con...",SUCCESS,FAILED,FAILED,Without_2tools | Without_PE,list_transformation_Families2Persons_tool | apply_XML2XSLT_transformation_tool
-65,"Step 1: Get configuration for the MySQL-to-KM3 mapping, including input MySQL model type and output ...",SUCCESS,FAILED,SUCCESS,Without_2tools,list_transformation_MySQL2KM3_tool | apply_SimpleClass2SimpleRDBMS_transformation_tool
-70,"Get the configuration of the KM3-to-OWL transformation for the KM3-to-EMF workflow, and then apply t...",SUCCESS,FAILED,SUCCESS,Without_2tools,apply_KM32EMF_transformation_tool | list_transformation_KM32OWL_tool
-71,"Show the configuration of the MySQL-to-KM3 transformation between a MySQL model and a KM3 model.
-App...",SUCCESS,FAILED,SUCCESS,Without_2tools,apply_MySQL2KM3_transformation_tool | list_transformation_MySQL2KM3_tool
-74,"Get the KM3-to-OWL transformation configuration (KM3 model to OWL model).
+Instruction_ID,Instruction,Missing_Tools,Score
+6,Transform the XML model /Users/zakariahachm/Downloads/atl_zoo/Ant2Maven/example/build1.xmi into the ...,apply_XML2Ant_transformation_tool,0.00
+21,Show the details of the transformation from KM3 model to EMF model.,list_transformation_KM32EMF_tool,0.00
+59,Transform KM3 model /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi into an EMF model,apply_KM32EMF_transformation_tool,0.00
+61,Display the KM32EMF transformation details for KM3 to EMF.,list_transformation_KM32EMF_tool,0.00
+69,Transform this model /Users/zakariahachm/Downloads/atl_zoo/Make2Ant/example/makeFileMake.xmi into An...,apply_Make2Ant_transformation_tool,0.00
+70,Apply KM3 to KM3target at /Users/zakariahachm/Downloads/atl_zoo/MakePartialRoleTotal/MakingPartialRo...,apply_Partial2totalRoleB_transformation_tool,0.00
+71,Apply KM3 model to KM3 model on /Users/zakariahachm/Downloads/atl_zoo/IntroducePrimaryKey/with_conte...,apply_PrimaryKey_with_context_transformation_tool,0.00
+88,Retrieve details of the KM3-to-EMF transformation.,list_transformation_KM32EMF_tool,0.00
+92,Display the details of the transformation from Make to Ant.,list_transformation_Make2Ant_tool,0.00
+101,Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an EMF mo...,apply_KM32EMF_transformation_tool,0.50
+102,Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an EMF mo...,apply_KM32EMF_transformation_tool,0.50
+105,Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an EMF mo...,apply_KM32EMF_transformation_tool,0.50
+106,Transform the model at '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' to an EMF mode...,apply_KM32EMF_transformation_tool,0.50
+107,Apply the KM3 model at '/Users/zakariahachm/Downloads/atl_zoo/DSLBridge/MetamodelBridge/Models/Simpl...,list_transformation_KM32EMF_tool,0.50
+109,Get the configuration settings of the KM3 to EMF transformation; Apply the Families to Persons trans...,apply_Families2Persons_transformation_tool | list_transformation_KM32EMF_tool,0.00
+110,"1. Retrieve the configuration of the PNML to XML transformation
+2. Apply to /Users/zakariahachm/Down...",list_transformation_PNML2XML_tool | apply_PNML2XML_transformation_tool,0.00
+111,Transform the KM3 model at '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' to an EMF ...,apply_KM32EMF_transformation_tool,0.50
+114,"get configuration of the KM3 to EMF transformation
+apply /Users/zakariahachm/Downloads/atl_zoo/RSS2A...",list_transformation_KM32EMF_tool,0.50
+117,Transform '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' to EMF and then Retrieve th...,apply_KM32EMF_transformation_tool | list_transformation_XML2KML_tool,0.00
+118,Apply the KM3 to EMF transformation on /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi ...,list_transformation_Maven2Ant_tool | apply_KM32EMF_transformation_tool,0.00
+119,"get configuration settings of the KM3 to DSL transformation
+apply the XML to PetriNet transformation...",list_transformation_KM32DSL_tool,0.50
+122,Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an EMF mo...,apply_KM32EMF_transformation_tool,0.50
+123,"- Retrieve the configuration settings for the transformation from KM3 to EMF.
+- Retrieve the configu...",list_transformation_KM32EMF_tool,0.50
+126,Show me the configuration settings of the first transformation and then show me the configuration se...,list_transformation_KM32EMF_tool,0.50
+128,"Show me the configuration settings of the transformation that converts KM3 to EMF, then show me the ...",list_transformation_KM32EMF_tool,0.50
+129,- apply the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an EMF mode...,apply_KM32EMF_transformation_tool | list_transformation_METAH2ACME_tool,0.00
+130,Retrieve the configuration for the transformation from KM3 to EMF. Inspect the configuration for the...,list_transformation_KM32EMF_tool,0.50
+131,"Get the configuration settings of the transformation that converts KM3 to DSL, and then Get the conf...",list_transformation_Ant2XML_tool,0.50
+132,"Get the configuration of the KM3-to-EMF transformation.
 
-Apply the XML-to-XSLT tra...",FAILED,SUCCESS,FAILED,Baseline | Without_PE,apply_XML2XSLT_transformation_tool | list_transformation_KM32OWL_tool
-80,"get the configuration of the transformation MySQL2KM3.
-apply the transformation Families2Persons to ...",SUCCESS,FAILED,SUCCESS,Without_2tools,apply_Families2Persons_transformation_tool | list_transformation_MySQL2KM3_tool
-SUMMARY,Transformations with issues (>3 times),,,,,MySQL2KM3(9) | KM32EMF(7) | XML2XSLT(5) | Families2Persons(4)
+Apply the KM3-to-Metrics transformation to ...",list_transformation_KM32EMF_tool,0.50
+136,Convert the PNML model at path /Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet/Models/XML2PNM...,apply_PNML2XML_transformation_tool,0.50
+137,"Retrieve the configuration settings of the KM3 to DSL transformation.
+Apply '/Users/zakariahachm/Dow...",apply_XML2Make_transformation_tool,0.50
+138,Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi into an EMF ...,apply_KM32EMF_transformation_tool,0.50
+140,"- Get the configuration of the KM3-to-DSL transformation
+- Apply the configuration to the file /User...",apply_PrimaryKey_with_context_transformation_tool,0.50
+143,Transform the KM3 model at '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' to an EMF ...,apply_KM32EMF_transformation_tool,0.50
+144,Transform the KM3 model at '/Users/zakariahachm/Downloads/atl_zoo/DSLBridge/MetamodelBridge/Models/S...,list_transformation_Ant2XML_tool,0.50
+145,"- Show me the configuration settings of the KM3-to-EMF transformation.
+- Transform this file at path...",list_transformation_KM32EMF_tool,0.50
+146,"Show me the configuration settings of the transformation that converts KM3 to EMF.
+Show me the confi...",list_transformation_KM32EMF_tool | list_transformation_Make2Ant_tool,0.00
+147,Transform /Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet/Models/XML2PNML_example.xmi to XML ...,apply_PNML2XML_transformation_tool,0.50
+148,"1. Get configuration details for the KM3-to-DSL and XML-to-Ant transformations.
+2. Apply to /Users/z...",apply_XML2Ant_transformation_tool,0.50
+149,"- apply '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' Target: EMF
+- get the configu...",apply_KM32EMF_transformation_tool | list_transformation_PetriNet2PathExp_tool,0.00
+150,"- Retrieve the configuration of the KM3-to-DSL transformation.
+- Retrieve the configuration of the F...",list_transformation_Families2Persons_tool,0.50
+151,- Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an EMF ...,apply_KM32EMF_transformation_tool | list_transformation_Make2Ant_tool,0.00
+153,Transform the PNML file at /Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet/Models/XML2PNML_ex...,apply_PNML2XML_transformation_tool,0.50
+156,Convert the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to the EMF mod...,apply_KM32EMF_transformation_tool,0.50
+158,"Get the configuration of the KM3 to EMF transformation, then get the configuration of the XML to MyS...",list_transformation_KM32EMF_tool,0.50
+159,1) Apply /Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet/Models/XML2PNML_example.xmi to an XM...,list_transformation_KM32OWL_tool | apply_PNML2XML_transformation_tool,0.00
+160,Transform the KM3 model at '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' to an EMF ...,apply_KM32EMF_transformation_tool,0.50
+162,Apply the KM3 model at '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' to EMF model a...,apply_KM32EMF_transformation_tool,0.50
+163,"Retrieve the configuration settings of the transformation from KM3 to EMF, then retrieve the configu...",list_transformation_KM32EMF_tool,0.50
+164,Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/ DSLBridge/MetamodelBridge/Models/S...,list_transformation_PetriNet2PathExp_tool,0.50
+165,"1. Show me the configuration of the DSL-to-KM3 transformation.
+2. Apply '/Users/zakariahachm/Downloa...",list_transformation_KM32EMF_tool,0.50
+166,Show the configuration of the transformation that converts KM3 to EMF. Then inspect the configuratio...,list_transformation_KM32EMF_tool,0.50
+168,Apply the KM3 model located at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an EM...,apply_KM32EMF_transformation_tool,0.50
+170,"Get the configuration of the transformation KM3 to EMF.
+Apply the PetriNet to PathExp transformation...",list_transformation_KM32EMF_tool,0.50
+171,1) Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/DSLBridge/MetamodelBridge/Models...,list_transformation_RedundantInheritance_with_context_tool,0.50
+172,Transform the KM3 model at path /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi into an...,apply_KM32EMF_transformation_tool,0.50
+173,"Retrieve the configuration of the KM3-to-EMF transformation, and then retrieve the configuration of ...",list_transformation_KM32EMF_tool,0.50
+174,"Get the configuration settings of the first transformation that converts KM3 to EMF, then get the co...",list_transformation_KM32EMF_tool,0.00
+175,Transform the model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi into an EMF mode...,apply_KM32EMF_transformation_tool,0.50
+177,Retrieve the configuration settings of the KM3 to EMF transformation and retrieve the configuration ...,list_transformation_KM32EMF_tool,0.50
+178,"Get the configuration of the KM3-to-EMF transformation.
+Apply the PathExp-to-PetriNet transformation...",list_transformation_KM32EMF_tool,0.50
+179,Apply the KM3 to EMF transformation to '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi...,apply_KM32EMF_transformation_tool | list_transformation_MySQL2KM3_tool,0.00
+182,"Retrieve the configuration of the KM3-to-EMF transformation
+Retrieve the configuration of the PNML-t...",list_transformation_KM32EMF_tool,0.50
+183,Transform the KM3 model at path /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an E...,apply_KM32EMF_transformation_tool,0.50
+185,Apply the PNML-to-XML transformation to the file at '/Users/zakariahachm/Downloads/atl_zoo/Grafcet2P...,list_transformation_KM32DSL_tool,0.50
+189,Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an EMF mo...,apply_KM32EMF_transformation_tool,0.50
+190,Transform the PNML model at '/Users/zakariahachm/Downloads/atl_zoo/Grafcet2PetriNet/Models/XML2PNML_...,list_transformation_XML2Ant_tool,0.50
+191,"Get the configuration of the KM3-to-EMF transformation.
+Apply the XML-to-RSS transformation to '/Use...",list_transformation_KM32EMF_tool,0.50
+193,Transform the KM3 model at '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' to an EMF ...,apply_KM32EMF_transformation_tool,0.50
+194,"Get the configuration settings of the transformation that converts PNML to XML.
+Get the configuratio...",list_transformation_Families2Persons_tool,0.50
+198,"Show me the configuration settings of the KM3-to-DSL transformation, and then show me the configurat...",list_transformation_KM32EMF_tool,0.50
+200,- Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/DSLBridge/MetamodelBridge/Models/...,apply_XML2Ant_transformation_tool,0.50
+SUMMARY,Transformations with issues (>3 times),KM32EMF(50) | PNML2XML(6) | XML2Ant(4) | Make2Ant(4),
+ALL_MISSING_TOOLS,Unique missing tools across all failures,apply_Families2Persons_transformation_tool | apply_KM32EMF_transformation_tool | apply_Make2Ant_transformation_tool | apply_PNML2XML_transformation_tool | apply_Partial2totalRoleB_transformation_tool | apply_PrimaryKey_with_context_transformation_tool | apply_XML2Ant_transformation_tool | apply_XML2Make_transformation_tool | list_transformation_Ant2XML_tool | list_transformation_Families2Persons_tool | list_transformation_KM32DSL_tool | list_transformation_KM32EMF_tool | list_transformation_KM32OWL_tool | list_transformation_METAH2ACME_tool | list_transformation_Make2Ant_tool | list_transformation_Maven2Ant_tool | list_transformation_MySQL2KM3_tool | list_transformation_PNML2XML_tool | list_transformation_PetriNet2PathExp_tool | list_transformation_RedundantInheritance_with_context_tool | list_transformation_XML2Ant_tool | list_transformation_XML2KML_tool,
