@@ -306,7 +306,54 @@ This approach provides development teams with:
 
 By maintaining chronological evaluation records, developers gain visibility into how specific architectural decisions affect agent behavior across diverse instruction types, enabling informed iteration and preventing regression.
 
-Idea: iteratively take a subset of the dataset, filter a ceratin number of tools and see each time if the evaluation captures the missing tools in the tool set.
+
+
+# Missing tools ablation test 
+
+
+
+## Experimental Design
+
+We removed 10 transformation tools from the agent's MCP server registry to test whether the dataset detects capability gaps. The removed tools cover 5 transformation workflows, each consisting of a list and apply operation for specific model transformations: KM32EMF, MySQL2KM3, Families2Persons, XML2Ant, and Make2Ant.
+
+```python
+TOOLS_TO_REMOVE = [
+    "list_transformation_KM32EMF_tool",
+    "apply_KM32EMF_transformation_tool",
+    "list_transformation_MySQL2KM3_tool",
+    "apply_MySQL2KM3_transformation_tool",
+    "list_transformation_Families2Persons_tool",
+    "apply_Families2Persons_transformation_tool",
+    "list_transformation_XML2Ant_tool",
+    "apply_XML2Ant_transformation_tool",
+    "list_transformation_Make2Ant_tool",
+    "apply_Make2Ant_transformation_tool"
+]
+```
+
+
+
+The agent was evaluated on 200 randomly selected instructions from the validated dataset. This sample size provides sufficient coverage across single-tool and multi-tool instruction types while maintaining computational efficiency.
+
+## Purpose
+
+This test verifies three aspects of the evaluation framework. First, it confirms whether the evaluation correctly identifies failures when required tools are missing. Second, it assesses whether the instructions adequately sample tool dependencies across the transformation space. Third, it reveals how the agent handles missing capabilities and whether it fails gracefully or attempts incorrect workarounds.
+
+## Results
+
+
+The ablation test successfully detected over **80%** of instructions that required the removed tools, and **100%** of transformation-related instructions were correctly identified, this demonstrates the dataset coverage. Agent accuracy dropped from **91.0%** at baseline to **77%** when evaluated on the subset with tools removed. This performance degradation confirms that the dataset robustly exercises each tool's functionality and that the evaluation framework effectively captures tool-dependent task failures.
+
+This ablation study demonstrates a second use case for the validated dataset beyond measuring agent accuracy. The dataset enables robustness analysis by identifying critical tool dependencies and testing agent behavior under degraded conditions. Development teams can use this approach to map tool dependency relationships, prioritize tool development based on impact, test agent behavior under partial tool availability, and validate tool discovery mechanisms.
+
+### Coverage Chart
+
+The following chart summarizes the coverage of removed tools and transformations during the ablation (tool removal) experiments and provides a visual overview of which tools and transformations are most affected:
+
+![Coverage Chart](outputs/coverage_chart.png)
+
+
+
 
 ## References:
 
