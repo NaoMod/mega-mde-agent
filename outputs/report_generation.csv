@@ -27,7 +27,7 @@ Apply the KM3-to-Metrics transformation to ...",list_transformation_KM32EMF_tool
 138,Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi into an EMF ...,apply_KM32EMF_transformation_tool,0.50
 143,Transform the KM3 model at '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' to an EMF ...,apply_KM32EMF_transformation_tool,0.50
 146,"Show me the configuration settings of the transformation that converts KM3 to EMF.
-Show me the confi...",list_transformation_Make2Ant_tool | list_transformation_KM32EMF_tool,0.00
+Show me the confi...",list_transformation_KM32EMF_tool | list_transformation_Make2Ant_tool,0.00
 148,"1. Get configuration details for the KM3-to-DSL and XML-to-Ant transformations.
 2. Apply to /Users/z...",apply_XML2Ant_transformation_tool,0.50
 156,Convert the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to the EMF mod...,apply_KM32EMF_transformation_tool,0.50

@@ -1,3 +1,16 @@
+# Define 10 tools to remove (you can modify this list)
+TOOLS_TO_REMOVE = [
+    "list_transformation_KM32EMF_tool",
+    "apply_KM32EMF_transformation_tool",
+    "list_transformation_MySQL2KM3_tool",
+    "apply_MySQL2KM3_transformation_tool",
+    "list_transformation_Families2Persons_tool",
+    "apply_Families2Persons_transformation_tool",
+    "list_transformation_XML2Ant_tool",
+    "apply_XML2Ant_transformation_tool",
+    "list_transformation_Make2Ant_tool",
+    "apply_Make2Ant_transformation_tool"
+]
 import json
 import csv
 import os
@@ -155,3 +168,115 @@ def main():
                 
 if __name__ == "__main__":
     main()
+
+    # --- Minimal coverage calculation and chart ---
+    import matplotlib.pyplot as plt
+    # Parse ALL_MISSING_TOOLS from CSV
+    csv_file = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'report_generation.csv')
+    all_missing_tools = set()
+    with open(csv_file, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row['Instruction_ID'] == 'ALL_MISSING_TOOLS':
+                all_missing_tools = set([t.strip() for t in row['Missing_Tools'].split(' | ') if t.strip()])
+
+    # Tool coverage
+    total_tools = len(TOOLS_TO_REMOVE)
+    detected_tools = sum(1 for t in TOOLS_TO_REMOVE if t in all_missing_tools)
+    tool_coverage = detected_tools / total_tools if total_tools else 0
+
+    # Transformation coverage
+    transformation_tools = set()
+    transformation_to_tools = {}
+    for tool in TOOLS_TO_REMOVE:
+        if "transformation" in tool:
+            tname = None
+            if tool.startswith("list_transformation_"):
+                tname = tool.replace("list_transformation_", "").replace("_tool", "")
+            elif tool.startswith("apply_") and tool.endswith("_transformation_tool"):
+                tname = tool.replace("apply_", "").replace("_transformation_tool", "")
+            if tname:
+                transformation_tools.add(tname)
+                transformation_to_tools.setdefault(tname, []).append(tool)
+    total_transformations = len(transformation_tools)
+    detected_transformations = 0
+    missing_transformations = []
+    for tname in transformation_tools:
+        if any(tool in all_missing_tools for tool in transformation_to_tools[tname]):
+            detected_transformations += 1
+        else:
+            missing_transformations.append(tname)
+    transformation_coverage = detected_transformations / total_transformations if total_transformations else 0
+
+    print(f"\nTool coverage: {detected_tools}/{total_tools} ({tool_coverage*100:.1f}%)")
+    print(f"Transformation coverage: {detected_transformations}/{total_transformations} ({transformation_coverage*100:.1f}%)")
+    if missing_transformations:
+        print(f"Missing transformations: {', '.join(missing_transformations)}")
+
+    # Generate bar chart
+    labels = ['Removed Tools', 'Transformations']
+    values = [tool_coverage * 100, transformation_coverage * 100]
+    plt.figure(figsize=(6, 4))
+    bars = plt.bar(labels, values, color=['#4F81BD', '#C0504D'])
+    plt.ylim(0, 100)
+    plt.ylabel('Coverage (%)')
+    plt.title('Coverage of Removed Tools and Transformations')
+    for bar, val in zip(bars, values):
+        plt.text(bar.get_x() + bar.get_width()/2, val + 2, f'{val:.1f}%', ha='center', va='bottom', fontsize=11)
+    plt.tight_layout()
+    chart_path = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'coverage_chart.png')
+    plt.savefig(chart_path)
+    print(f"\nCoverage chart saved to: {chart_path}")
+
+    # Minimal: Parse TOOLS_TO_REMOVE directly from file
+    tools_file = os.path.join(os.path.dirname(__file__), '../scripts/run_agent_reduced_tools.py')
+    TOOLS_TO_REMOVE = []
+    with open(tools_file, 'r') as f:
+        in_tools = False
+        for line in f:
+            if 'TOOLS_TO_REMOVE' in line and '=' in line:
+                in_tools = True
+                continue
+            if in_tools:
+                if ']' in line:
+                    break
+                line = line.strip().strip(',').strip('"').strip("'")
+                if line and not line.startswith('#'):
+                    TOOLS_TO_REMOVE.append(line)
+
+    # Parse ALL_MISSING_TOOLS from CSV
+    csv_file = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'report_generation.csv')
+    all_missing_tools = set()
+    with open(csv_file, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row['Instruction_ID'] == 'ALL_MISSING_TOOLS':
+                all_missing_tools = set([t.strip() for t in row['Missing_Tools'].split(' | ') if t.strip()])
+
+    # Tool coverage
+    total_tools = len(TOOLS_TO_REMOVE)
+    detected_tools = sum(1 for t in TOOLS_TO_REMOVE if t in all_missing_tools)
+    tool_coverage = detected_tools / total_tools if total_tools else 0
+
+    # Transformation coverage
+    transformation_tools = set()
+    transformation_to_tools = {}
+    for tool in TOOLS_TO_REMOVE:
+        if "transformation" in tool:
+            tname = None
+            if tool.startswith("list_transformation_"):
+                tname = tool.replace("list_transformation_", "").replace("_tool", "")
+            elif tool.startswith("apply_") and tool.endswith("_transformation_tool"):
+                tname = tool.replace("apply_", "").replace("_transformation_tool", "")
+            if tname:
+                transformation_tools.add(tname)
+                transformation_to_tools.setdefault(tname, []).append(tool)
+    total_transformations = len(transformation_tools)
+    detected_transformations = 0
+    for tname in transformation_tools:
+        if any(tool in all_missing_tools for tool in transformation_to_tools[tname]):
+            detected_transformations += 1
+    transformation_coverage = detected_transformations / total_transformations if total_transformations else 0
+
+    print(f"\nTool coverage: {detected_tools}/{total_tools} ({tool_coverage*100:.1f}%)")
+    print(f"Transformation coverage: {detected_transformations}/{total_transformations} ({transformation_coverage*100:.1f}%)")
