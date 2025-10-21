@@ -218,12 +218,13 @@ We will choose randomly 200 instructions ( 100 single-tool and 100 Multi-tool), 
 
 ![lexical_diversity](images/lexical_diversity.png)
 
-
 ### ***Result analysis***
 
 #### **DISTANCE Metric (How far apart topics are)**
 
 **Single-Tool & Multi-Tool:**  The LLM creates topically closer instructions. Generated examples cluster around existing patterns, **maintaining semantic fidelity to the seeds** rather than diverging into unrelated topics. This reduction in topical spread indicates the LLM successfully preserves the core meaning and intent of the seed templates while creating variations, a desirable outcome that ensures generated data remains **on-topic and semantically aligned** with the original task domain.
+
+At the same time, the convergence observed suggests that the model tends to remain within familiar transformation scenarios rather than extending far beyond seed representations. High Affinity scores confirm that domain relevance is maintained, while the reduced distance highlights the model’s focus on producing cohesive and contextually appropriate variations of existing patttern types.
 
 ------
 
@@ -247,6 +248,8 @@ We will choose randomly 200 instructions ( 100 single-tool and 100 Multi-tool), 
 
 **Single-Tool & Multi-Tool:** The LLM expands lexical diversity in both datasets (single-tool: ×3.0 from 62 to 189 words; multi-tool: ×3.6 from 65 to 233 words). This increase demonstrates the LLM's ability to **introduce varied terminology and expressions** while maintaining semantic coherence with the seed templates. The generated instructions use a much richer vocabulary, incorporating different technical terms, verbs, and descriptive language that enhance the dataset's linguistic coverage without straying from the model transformation domain.
 
+Importantly, a reduced dispersion does not necessarily imply missing transformation types. Ablation analysis indicate the generated dataset shows the transformation types are well spread over the instructions. In practice, the dataset therefore demonstrates both high semantic alignment and broad coverage: the generated examples prioritize faithful, interpretable expressions of transformation operations while still encompassing the transformation types required for robust evaluation.
+
 **Overall:** Multi-tool shows slightly higher vocabulary expansion (×3.6 vs ×3.0), indicating that the complexity of coordinating two operations naturally requires and produces more diverse word choices to express different transformation combinations and their relationships.
 
 #### Unique 3-grams
@@ -259,7 +262,11 @@ We will choose randomly 200 instructions ( 100 single-tool and 100 Multi-tool), 
 
 #### **Summary: Balancing Semantic Fidelity with Linguistic Diversity**
 
-The dataset generation process demonstrates a trade-off: while the LLM reduces topical and semantic diversity (distance: -6% to -14%, dispersion: -10% to -25%) to maintain faithful alignment with seed templates, it simultaneously achieves substantial gains in linguistic and lexical diversity (vocabulary: ×3.0-3.6, 3-grams: ×12.8-17.4, isocontour: +7.5% for single-tool). This pattern reveals that **semantic convergence does not imply linguistic monotony**, the generated datasets preserve the core meaning and intent of model transformation instructions while exploring rich variation in expression styles, phrase structures, and vocabulary. Overall, the generation process proves effective for scaling datasets while maintaining quality and purpose.
+These results indicate the generator produces many varied linguistic expressions of transformation operations while maintaining domain fidelity. Crucially, coverage analyses and the ablation experiments demonstrate that the dataset still covers the transformation types of interest and exposes agents to relevant tool-dependent scenarios; the lower dispersion thus reflects stronger semantic alignment and shared operational phrasing rather than an absence of transformation types.
+
+**Implications:**
+This outcome is well suited for evaluation tasks that require semantic precision and consistent instruction-following. To further broaden semantic variety where desired, one can combine this approach with targeted scenario authoring or prompt constraints that explicitly encourage novel pattern compositions.
+
 
 # II- Agent and Prompt Enhancement Evaluation
 
