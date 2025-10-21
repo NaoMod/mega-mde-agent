@@ -10,7 +10,7 @@ Instruction_ID,Instruction,Missing_Tools,Score
 102,Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an EMF mo...,apply_KM32EMF_transformation_tool,0.50
 105,Transform the KM3 model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an EMF mo...,apply_KM32EMF_transformation_tool,0.50
 106,Transform the model at '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' to an EMF mode...,apply_KM32EMF_transformation_tool,0.50
-109,Get the configuration settings of the KM3 to EMF transformation; Apply the Families to Persons trans...,apply_Families2Persons_transformation_tool | list_transformation_KM32EMF_tool,0.00
+109,Get the configuration settings of the KM3 to EMF transformation; Apply the Families to Persons trans...,list_transformation_KM32EMF_tool | apply_Families2Persons_transformation_tool,0.00
 111,Transform the KM3 model at '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi' to an EMF ...,apply_KM32EMF_transformation_tool,0.50
 114,"get configuration of the KM3 to EMF transformation
 apply /Users/zakariahachm/Downloads/atl_zoo/RSS2A...",list_transformation_KM32EMF_tool,0.50

@@ -1,3 +1,10 @@
+
+import json
+import csv
+import os
+import matplotlib.pyplot as plt
+import numpy as np
+
 # Define 10 tools to remove (you can modify this list)
 TOOLS_TO_REMOVE = [
     "list_transformation_KM32EMF_tool",
@@ -11,11 +18,7 @@ TOOLS_TO_REMOVE = [
     "list_transformation_Make2Ant_tool",
     "apply_Make2Ant_transformation_tool"
 ]
-import json
-import csv
-import os
 
-# TODO: Planning vs Execution Gap: How often does the agent plan correctly but fail in execution?
 
 def load_execution_results(file_path):
     """Load execution results and organize by instruction index."""
@@ -170,7 +173,6 @@ if __name__ == "__main__":
     main()
 
     # --- Minimal coverage calculation and chart ---
-    import matplotlib.pyplot as plt
     # Parse ALL_MISSING_TOOLS from CSV
     csv_file = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'report_generation.csv')
     all_missing_tools = set()
@@ -213,19 +215,25 @@ if __name__ == "__main__":
     if missing_transformations:
         print(f"Missing transformations: {', '.join(missing_transformations)}")
 
-    # Generate bar chart
+
     labels = ['Removed Tools', 'Transformations']
     values = [tool_coverage * 100, transformation_coverage * 100]
-    plt.figure(figsize=(6, 4))
-    bars = plt.bar(labels, values, color=['#4F81BD', '#C0504D'])
-    plt.ylim(0, 100)
-    plt.ylabel('Coverage (%)')
-    plt.title('Coverage of Removed Tools and Transformations')
+    colors = ['#2E86AB', '#F18F01']
+    fig, ax = plt.subplots(figsize=(7, 5))
+    bars = ax.bar(labels, values, color=colors, width=0.5, edgecolor='black', linewidth=1.2)
+    ax.set_ylim(0, 110)
+    ax.set_ylabel('Coverage (%)', fontsize=14, fontweight='bold')
+    ax.set_title('Coverage of Removed Tools and Transformations', fontsize=16, fontweight='bold', pad=18)
+    ax.grid(axis='y', linestyle='--', alpha=0.5, zorder=0)
+    ax.set_axisbelow(True)
     for bar, val in zip(bars, values):
-        plt.text(bar.get_x() + bar.get_width()/2, val + 2, f'{val:.1f}%', ha='center', va='bottom', fontsize=11)
+        ax.text(bar.get_x() + bar.get_width()/2, val - 7 if val > 15 else val + 3, f'{val:.1f}%',
+                ha='center', va='bottom' if val < 15 else 'top', fontsize=13, color='white' if val > 60 else 'black', fontweight='bold')
+    for spine in ['top', 'right']:
+        ax.spines[spine].set_visible(False)
     plt.tight_layout()
     chart_path = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'coverage_chart.png')
-    plt.savefig(chart_path)
+    plt.savefig(chart_path, dpi=120)
     print(f"\nCoverage chart saved to: {chart_path}")
 
     # Minimal: Parse TOOLS_TO_REMOVE directly from file
