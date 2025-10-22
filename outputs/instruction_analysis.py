@@ -212,6 +212,20 @@ if __name__ == "__main__":
 
     print(f"\nTool coverage: {detected_tools}/{total_tools} ({tool_coverage*100:.1f}%)")
     print(f"Transformation coverage: {detected_transformations}/{total_transformations} ({transformation_coverage*100:.1f}%)")
+    # --- Table output for detailed coverage ---
+    print("\nDetailed Coverage Table:")
+    print("{:<40} {:<15}".format("Removed Tool", "Detected as Missing"))
+    print("-" * 55)
+    for tool in TOOLS_TO_REMOVE:
+        detected = "Yes" if tool in all_missing_tools else "No"
+        print("{:<40} {:<15}".format(tool, detected))
+
+    print("\nTransformation Coverage Table:")
+    print("{:<30} {:<15}".format("Transformation", "Detected as Missing"))
+    print("-" * 45)
+    for tname in transformation_tools:
+        detected = "Yes" if any(tool in all_missing_tools for tool in transformation_to_tools[tname]) else "No"
+        print("{:<30} {:<15}".format(tname, detected))
     if missing_transformations:
         print(f"Missing transformations: {', '.join(missing_transformations)}")
 
@@ -231,6 +245,49 @@ if __name__ == "__main__":
                 ha='center', va='bottom' if val < 15 else 'top', fontsize=13, color='white' if val > 60 else 'black', fontweight='bold')
     for spine in ['top', 'right']:
         ax.spines[spine].set_visible(False)
+    plt.tight_layout()
+    # Add table below the chart for tool detection details
+    from matplotlib.table import Table
+    import matplotlib.gridspec as gridspec
+
+    fig = plt.figure(figsize=(7, 8))
+    gs = gridspec.GridSpec(2, 1, height_ratios=[2, 1])
+    ax1 = fig.add_subplot(gs[0])
+    bars = ax1.bar(labels, values, color=colors, width=0.5, edgecolor='black', linewidth=1.2)
+    ax1.set_ylim(0, 110)
+    ax1.set_ylabel('Coverage (%)', fontsize=14, fontweight='bold')
+    ax1.set_title('Coverage of Removed Tools and Transformations', fontsize=16, fontweight='bold', pad=18)
+    ax1.grid(axis='y', linestyle='--', alpha=0.5, zorder=0)
+    ax1.set_axisbelow(True)
+    for bar, val in zip(bars, values):
+        ax1.text(bar.get_x() + bar.get_width()/2, val - 7 if val > 15 else val + 3, f'{val:.1f}%',
+                ha='center', va='bottom' if val < 15 else 'top', fontsize=13, color='white' if val > 60 else 'black', fontweight='bold')
+    for spine in ['top', 'right']:
+        ax1.spines[spine].set_visible(False)
+
+    # Table for tool detection
+    ax2 = fig.add_subplot(gs[1])
+    ax2.axis('off')
+    col_labels = ["Removed Tool", "Detected as Missing"]
+    table_data = []
+    for tool in TOOLS_TO_REMOVE:
+        detected = "Yes" if tool in all_missing_tools else "No"
+        table_data.append([tool, detected])
+    table = ax2.table(cellText=table_data, colLabels=col_labels, loc='center', cellLoc='left', colWidths=[0.7, 0.3])
+    table.auto_set_font_size(False)
+    table.set_fontsize(11)
+    table.scale(1, 1.3)
+    for (row, col), cell in table.get_celld().items():
+        if row == 0:
+            cell.set_fontsize(12)
+            cell.set_text_props(weight='bold')
+            cell.set_facecolor('#e0e0e0')
+        if col == 1 and row > 0:
+            if cell.get_text().get_text() == "Yes":
+                cell.set_facecolor('#b6e3b6')
+            else:
+                cell.set_facecolor('#f7b6b6')
+
     plt.tight_layout()
     chart_path = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'coverage_chart.png')
     plt.savefig(chart_path, dpi=120)

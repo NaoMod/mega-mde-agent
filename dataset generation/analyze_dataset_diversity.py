@@ -21,30 +21,24 @@ import os
 import json
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from scipy.spatial.distance import pdist
 from sklearn.metrics.pairwise import cosine_similarity
 import re
 from openai import OpenAI
 from typing import List, Dict
 from pathlib import Path
-
-# Set up OpenAI client
-# Try to load from .env file first, then fall back to environment variable
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Load .env file from project root directory
+
 env_path = Path(__file__).resolve().parents[1] / '.env'
 load_dotenv(dotenv_path=env_path)
 
 api_key = os.environ.get("OPENAI_API_KEY")
 if not api_key:
-    # If still not found, raise error
-    raise ValueError("OPENAI_API_KEY not found. Please add it to your .env file or environment variables.")
+    raise ValueError("OPENAI_API_KEY not found.")
 
-# Initialize the OpenAI client with the new API format
+
 client = OpenAI(api_key=api_key)
 
 EMBEDDING_MODEL = "text-embedding-3-small"

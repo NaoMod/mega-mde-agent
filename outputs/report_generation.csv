@@ -43,7 +43,7 @@ Apply the PetriNet to PathExp transformation...",list_transformation_KM32EMF_too
 174,"Get the configuration settings of the first transformation that converts KM3 to EMF, then get the co...",list_transformation_KM32EMF_tool,0.00
 175,Transform the model at /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi into an EMF mode...,apply_KM32EMF_transformation_tool,0.50
 177,Retrieve the configuration settings of the KM3 to EMF transformation and retrieve the configuration ...,list_transformation_KM32EMF_tool,0.50
-179,Apply the KM3 to EMF transformation to '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi...,list_transformation_MySQL2KM3_tool | apply_KM32EMF_transformation_tool,0.00
+179,Apply the KM3 to EMF transformation to '/Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi...,apply_KM32EMF_transformation_tool | list_transformation_MySQL2KM3_tool,0.00
 182,"Retrieve the configuration of the KM3-to-EMF transformation
 Retrieve the configuration of the PNML-t...",list_transformation_KM32EMF_tool,0.50
 183,Transform the KM3 model at path /Users/zakariahachm/Downloads/atl_zoo/KM32EMF/Sample-KM3.xmi to an E...,apply_KM32EMF_transformation_tool,0.50
