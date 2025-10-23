@@ -14,8 +14,8 @@ from src.core.megamodel import MegamodelRegistry
 from scripts.run_agent_versions import populate_registry
 from pipeline import generate_dataset_for_regression_testing, _derive_api
 
-TARGET = 400  # Reduced for testing prompt changes
-OUTPUT_FILE = Path(__file__).parent / "outputs" / "multi_prompt_test.json"
+TARGET = 500  # Generate full UML multi-tool dataset
+OUTPUT_FILE = Path(__file__).parent / "outputs" / "uml_multi_500_dataset.json"
 
 all_instructions: List[dict] = []
 generated_count = 0
@@ -89,63 +89,76 @@ async def main():
         registry = MegamodelRegistry()
         await populate_registry(registry)
         atl_tools = registry.tools_by_server.get("atl_server", [])
+        # Filter for UML tools: name contains 'UML' and starts with 'apply_' or 'list_transformation_'
         tool_names = [getattr(t, "name", "") for t in atl_tools if getattr(t, "name", "")]
-        # Exclude same exclusions as single-tool path does later
         tool_names = [n for n in tool_names if n not in ("list_transformation_samples_tool", "extract_input_metamodel_name")]
-        print(f"Discovered {len(tool_names)} ATL tools usable for workflows")
+        uml_tool_names = [n for n in tool_names if ("UML" in n) and (n.startswith("apply_") or n.startswith("list_transformation_"))]
+        print(f"Discovered {len(uml_tool_names)} UML ATL tools usable for workflows:")
+        for ut in uml_tool_names:
+            print(f"- {ut}")
 
-        workflows = build_two_step_workflows(tool_names)
+
+        # Guarantee equal usage of each UML tool in multi-tool instructions
+        num_tools = len(uml_tool_names)
+        per_tool = TARGET // num_tools
+        remainder = TARGET % num_tools
+        print(f"Each tool will be used in {per_tool} workflows, {remainder} tools will be used in one extra workflow.")
+
+        # Build all possible two-step workflows
+        workflows = build_two_step_workflows(uml_tool_names)
         if not workflows:
             print("No workflows built. Exiting.")
             return
         print(f"Prepared {len(workflows)} candidate two-step workflows")
 
-        # We'll cycle over workflows repeatedly until we hit target
-        wf_index = 0
-        attempts = 0
+        # Track usage for each tool
+        tool_counts = {name: 0 for name in uml_tool_names}
+        # Shuffle workflows for variety
+        random.shuffle(workflows)
 
-        while generated_count < TARGET:
-            if wf_index >= len(workflows):
-                random.shuffle(workflows)
-                wf_index = 0
-            workflow = workflows[wf_index]
-            wf_index += 1
-            attempts += 1
+        # Distribute workflows to guarantee equal usage
+        selected_workflows = []
+        # First, assign per_tool workflows to each tool
+        for tool in uml_tool_names:
+            count = per_tool + (1 if remainder > 0 else 0)
+            if remainder > 0:
+                remainder -= 1
+            # Find workflows where this tool appears (either step)
+            tool_workflows = [wf for wf in workflows if tool in wf]
+            random.shuffle(tool_workflows)
+            selected_workflows.extend(tool_workflows[:count])
+        # Shuffle again for output randomness
+        random.shuffle(selected_workflows)
 
+        # Generate instructions for selected workflows
+        for idx, workflow in enumerate(selected_workflows):
             try:
-                # Direct call: no single-tool generation (per_api=0) only this workflow (per_workflow=1)
                 result = generate_dataset_for_regression_testing(
-                    tools=[],            # Skip single-tool generation
+                    tools=[],
                     workflows=[workflow],
                     per_api=0,
                     per_workflow=1,
                     registry=registry,
                 )
-
                 if result:
-                    # Multi-tool path may return >1 if validation duplicates; keep only first new item
                     for item in result:
-                        # Deduplicate by instruction text
                         instr_text = item.get("instruction", "")
                         if not instr_text:
                             continue
-                        # Prevent duplicate instructions
                         if any(existing.get("instruction") == instr_text for existing in all_instructions):
                             continue
                         all_instructions.append(item)
                         generated_count = len(all_instructions)
+                        # Update tool usage counts
+                        for t in workflow:
+                            if t in tool_counts:
+                                tool_counts[t] += 1
                         pct = (generated_count / TARGET) * 100
                         preview = instr_text[:70].replace("\n", " ")
-                        print(f"{generated_count}/{TARGET} ({pct:.1f}%) - {preview}...")
-                        break  # Only count one per workflow iteration
-
+                        print(f"{generated_count}/{TARGET} ({pct:.1f}%) - {preview}... [{workflow[0]} & {workflow[1]}: {tool_counts[workflow[0]]}, {tool_counts[workflow[1]]}]")
+                        break
                     if generated_count % 10 == 0:
                         save_progress()
-                else:
-                    # Diagnostic print (rare, keep short)
-                    if attempts % 25 == 0:
-                        print(f"Still no output after {attempts} attempts; last workflow: {workflow}")
-
                 await asyncio.sleep(0.4)
             except Exception as e:
                 print(f"Error processing workflow {workflow}: {e}")

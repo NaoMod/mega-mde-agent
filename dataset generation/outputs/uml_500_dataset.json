@@ -1,0 +1,102 @@
+[
+  {
+    "pattern": "get",
+    "instruction": "Show the details of the model-to-model transformation from source: model to target: model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Describe the details of the transformation from UML model to JAVA model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2JAVA.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Transform the UML class diagram model at ./examples/input.xmi into a UML profile model.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Show details of the transformation from a model to a model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2Measure.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Transform the UML model ./examples/input.xmi into a JAVA model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Apply the model at ./examples/input.xmi to MOF model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Transform the UML model ./examples/input.xmi into an OWL model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Show me the details of the transformation from UML model to JAVA model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2JAVA.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get",
+    "instruction": "Retrieve details of the UML-to-KM3 transformation from UML models to KM3 models.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply",
+    "instruction": "Transform the UML model at './examples/input.xmi' into an OWL model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  }
+]

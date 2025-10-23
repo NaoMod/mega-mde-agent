@@ -19,8 +19,8 @@ from scripts.run_agent_versions import populate_registry
 from pipeline import generate_dataset_for_regression_testing
 
 # Configuration
-TARGET = 500  # 480 existing + 20 more = 500 total
-OUTPUT_FILE = Path(__file__).parent / "outputs" / "simple_500_dataset.json"
+TARGET = 500  # Generate full UML dataset
+OUTPUT_FILE = Path(__file__).parent / "outputs" / "uml_500_dataset.json"
 
 # Global variables
 all_instructions = []
@@ -53,12 +53,9 @@ async def main():
     
     print(f"Generating {TARGET} single-tool instructions...")
     
-    # Load existing progress first
-    load_existing_progress()
-    
-    if generated_count >= TARGET:
-        print(f"Target already reached! {generated_count} instructions available.")
-        return
+    # Always start fresh: clear previous instructions and progress
+    all_instructions = []
+    generated_count = 0
     
     remaining_needed = TARGET - generated_count
     print(f"Need to generate {remaining_needed} more instructions to reach {TARGET}")
@@ -68,50 +65,55 @@ async def main():
         registry = MegamodelRegistry()
         await populate_registry(registry)
         
-        # Get all tools
+        # Get all tools, filter for UML input metamodels (name contains 'UML', case-insensitive)
         atl_tools = registry.tools_by_server.get("atl_server", [])
-        tools = [{"name": getattr(t, "name", ""), "description": getattr(t, "description", "")} 
-                for t in atl_tools if getattr(t, "name", "") != "list_transformation_samples_tool"]
-        
-        print(f"Using {len(tools)} tools")
-        
-        # Generate instructions one by one to show real progress
-        tools_cycle = tools * 5  # Repeat tools list 5 times to get 5 instructions per tool
-        random.shuffle(tools_cycle)  # Shuffle for variety
-        
-        for i, tool in enumerate(tools_cycle):
-            if generated_count >= TARGET:
-                break
-                
-            try:
-                # Generate 1 instruction for this tool
-                instructions = generate_dataset_for_regression_testing(
-                    tools=[tool],  # Only one tool at a time
-                    workflows=[],  # No workflows, only single tools
-                    per_api=1,     # 1 instruction per tool
-                    per_workflow=0,
-                    registry=registry
-                )
-                
-                if instructions:
-                    all_instructions.extend(instructions)
-                    generated_count = len(all_instructions)
-                    
-                    # Print progress immediately
-                    percentage = (generated_count / TARGET) * 100
-                    print(f"{generated_count}/{TARGET} ({percentage:.1f}%) - {instructions[0]['instruction'][:60]}...")
-                    
-                    # Save every 10 instructions
-                    if generated_count % 10 == 0:
-                        save_progress()
-                
-                # Small delay to avoid rate limits
-                await asyncio.sleep(0.5)
-                
-            except Exception as e:
-                print(f"Error generating instruction for {tool.get('name', 'unknown')}: {e}")
-                await asyncio.sleep(2)
-        
+        uml_tools = []
+        for t in atl_tools:
+            tool_name = getattr(t, "name", "")
+            if tool_name == "list_transformation_samples_tool":
+                continue
+            # Select tools whose name contains 'UML' and starts with 'apply_' or 'list_transformation_'
+            if ("UML" in tool_name) and (tool_name.startswith("apply_") or tool_name.startswith("list_transformation_")):
+                uml_tools.append({"name": tool_name, "description": getattr(t, "description", "")})
+        print(f"Using {len(uml_tools)} UML tools:")
+        for ut in uml_tools:
+            print(f"- {ut['name']}")
+
+        # Guarantee equal usage of each UML tool
+        num_tools = len(uml_tools)
+        per_tool = TARGET // num_tools
+        remainder = TARGET % num_tools
+        print(f"Each tool will be used {per_tool} times, {remainder} tools will be used one extra time.")
+
+        tool_counts = {tool['name']: 0 for tool in uml_tools}
+        tool_order = uml_tools.copy()
+        random.shuffle(tool_order)
+
+        for idx, tool in enumerate(tool_order):
+            extra = 1 if idx < remainder else 0
+            count = per_tool + extra
+            for _ in range(count):
+                try:
+                    instructions = generate_dataset_for_regression_testing(
+                        tools=[tool],
+                        workflows=[],
+                        per_api=1,
+                        per_workflow=0,
+                        registry=registry
+                    )
+                    if instructions:
+                        all_instructions.extend(instructions)
+                        generated_count = len(all_instructions)
+                        tool_counts[tool['name']] += 1
+                        percentage = (generated_count / TARGET) * 100
+                        print(f"{generated_count}/{TARGET} ({percentage:.1f}%) - {instructions[0]['instruction'][:60]}... [{tool['name']}: {tool_counts[tool['name']]}]")
+                        if generated_count % 10 == 0:
+                            save_progress()
+                    await asyncio.sleep(0.5)
+                except Exception as e:
+                    print(f"Error generating instruction for {tool.get('name', 'unknown')}: {e}")
+                    await asyncio.sleep(2)
+
         # Final save
         save_progress()
         print(f"\nCompleted! Generated {generated_count} instructions")

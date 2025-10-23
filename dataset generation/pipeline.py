@@ -19,10 +19,11 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 from src.core.megamodel import MegamodelRegistry
 import random
-# Single-tool instruction seed examples
-from single_tool_seeds import SingleToolSeeds
-# Multi-tool instruction seed examples
-from multi_tool_seeds import MultiToolSeeds
+
+# Single-tool instruction seed examples (UML tools)
+from seeds.uml_tools.single_tool_seeds import SingleToolSeeds
+# Multi-tool instruction seed examples (UML tools)
+from seeds.uml_tools.multi_tool_seeds import MultiToolSeeds
     
 
 # --- 1) Start with a megamodel repository (populate registry) ---
