@@ -9,7 +9,7 @@ class Seed:
     pattern: str
 
 class SingleToolSeeds:
-    """20 diverse single-tool seeds using only apply and get operations"""
+    """10 diverse single-tool seeds using only apply and get operations"""
 
     @staticmethod
     def get_seeds() -> List[Seed]:
