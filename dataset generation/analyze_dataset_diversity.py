@@ -276,11 +276,12 @@ def main(dataset_type="single"):
     
     # Define file paths based on dataset type
     if dataset_type == "multi":
-        seed_file_path = SCRIPT_DIR / "seeds" / "multi_tool_seeds.py"
-        generated_file_path = SCRIPT_DIR / "outputs" / "multi_500_dataset.json"
+        #uml files
+        seed_file_path = SCRIPT_DIR / "seeds" / "uml_tools" / "multi_tool_seeds.py"
+        generated_file_path = SCRIPT_DIR / "outputs" / "uml_multi_500_dataset.json"
     else:  # default to single
-        seed_file_path = SCRIPT_DIR / "seeds" / "single_tool_seeds.py"
-        generated_file_path = SCRIPT_DIR / "outputs" / "simple_500_dataset.json"
+        seed_file_path = SCRIPT_DIR / "seeds" / "uml_tools" / "single_tool_seeds.py"
+        generated_file_path = SCRIPT_DIR / "outputs" / "uml_500_dataset.json"
     
     # Load datasets
     seed_instructions = load_seed_instructions(seed_file_path, dataset_type)
@@ -339,7 +340,8 @@ def main(dataset_type="single"):
     df_results = pd.DataFrame(results)
     
     # Save results with dataset-specific filename
-    csv_path = OUTPUT_DIR / f"{dataset_type}_tool_comparison.csv"
+  
+    csv_path = OUTPUT_DIR / f"{dataset_type}_uml_tool_comparison.csv"
     df_results.to_csv(csv_path, index=False)
     print(f"Results saved to {csv_path}")
 

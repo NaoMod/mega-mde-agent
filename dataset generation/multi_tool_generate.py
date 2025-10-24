@@ -16,6 +16,7 @@ from pipeline import generate_dataset_for_regression_testing, _derive_api
 
 TARGET = 500  # Generate full UML multi-tool dataset
 OUTPUT_FILE = Path(__file__).parent / "outputs" / "uml_multi_500_dataset.json"
+REMAINDER_FILE = Path(__file__).parent / "outputs" / "uml_multi_remainder.json"
 
 all_instructions: List[dict] = []
 generated_count = 0
@@ -41,6 +42,12 @@ def save_progress() -> None:
         json.dump(all_instructions, f, indent=2)
     pct = (generated_count / TARGET) * 100 if TARGET else 0
     print(f"\nProgress saved: {generated_count}/{TARGET} ({pct:.1f}%) -> {OUTPUT_FILE}")
+
+def save_remainder(remainder_instructions: List[dict]) -> None:
+    REMAINDER_FILE.parent.mkdir(exist_ok=True)
+    with open(REMAINDER_FILE, "w") as f:
+        json.dump(remainder_instructions, f, indent=2)
+    print(f"\nRemainder saved: {len(remainder_instructions)} -> {REMAINDER_FILE}")
 
 
 def build_two_step_workflows(tool_names: List[str]) -> List[List[str]]:
@@ -84,6 +91,131 @@ async def main():
     if generated_count >= TARGET:
         print("Target already satisfied.")
         return
+
+    # Only generate the remainder if previous instructions exist
+    remainder_needed = TARGET - generated_count
+    if remainder_needed <= 0:
+        print("No remainder needed.")
+        return
+    print(f"Generating remainder: {remainder_needed} instructions to reach {TARGET}")
+
+    # Ensure uml_tool_names is defined before use
+    registry = MegamodelRegistry()
+    await populate_registry(registry)
+    atl_tools = registry.tools_by_server.get("atl_server", [])
+    tool_names = [getattr(t, "name", "") for t in atl_tools if getattr(t, "name", "")]
+    tool_names = [n for n in tool_names if n not in ("list_transformation_samples_tool", "extract_input_metamodel_name")]
+    uml_tool_names = [n for n in tool_names if ("UML" in n) and (n.startswith("apply_") or n.startswith("list_transformation_"))]
+    print(f"Discovered {len(uml_tool_names)} UML ATL tools usable for workflows:")
+    for ut in uml_tool_names:
+        print(f"- {ut}")
+
+    # --- Step 1: Generate all unique workflows involving UML2MOF_2 ---
+    uml2mof2_get = None
+    uml2mof2_apply = None
+    for name in uml_tool_names:
+        if name == "list_transformation_UML2MOF_2_tool":
+            uml2mof2_get = name
+        if name == "apply_UML2MOF_2_transformation_tool":
+            uml2mof2_apply = name
+
+    unique_workflows = []
+    # As first tool
+    for other in uml_tool_names:
+        if other == uml2mof2_get or other == uml2mof2_apply:
+            continue
+        if uml2mof2_get:
+            unique_workflows.append([uml2mof2_get, other])
+        if uml2mof2_apply:
+            unique_workflows.append([uml2mof2_apply, other])
+    # As second tool
+    for other in uml_tool_names:
+        if other == uml2mof2_get or other == uml2mof2_apply:
+            continue
+        if uml2mof2_get:
+            unique_workflows.append([other, uml2mof2_get])
+        if uml2mof2_apply:
+            unique_workflows.append([other, uml2mof2_apply])
+
+    # Remove duplicates
+    seen = set()
+    deduped_workflows = []
+    for wf in unique_workflows:
+        key = tuple(wf)
+        if key not in seen:
+            deduped_workflows.append(wf)
+            seen.add(key)
+
+    print(f"Prepared {len(deduped_workflows)} unique UML2MOF_2 workflows")
+
+    # --- Step 2: Generate instructions for these workflows ---
+    remainder_instructions = []
+    for workflow in deduped_workflows:
+        if len(remainder_instructions) >= remainder_needed:
+            break
+        try:
+            result = generate_dataset_for_regression_testing(
+                tools=[],
+                workflows=[workflow],
+                per_api=0,
+                per_workflow=1,
+                registry=registry,
+            )
+            if result:
+                for item in result:
+                    instr_text = item.get("instruction", "")
+                    if not instr_text:
+                        continue
+                    # Skip if already in all_instructions or remainder_instructions
+                    if any(existing.get("instruction") == instr_text for existing in all_instructions):
+                        continue
+                    if any(existing.get("instruction") == instr_text for existing in remainder_instructions):
+                        continue
+                    remainder_instructions.append(item)
+                    pct = ((generated_count + len(remainder_instructions)) / TARGET) * 100
+                    preview = instr_text[:70].replace("\n", " ")
+                    print(f"{generated_count + len(remainder_instructions)}/{TARGET} ({pct:.1f}%) - {preview}... [UML2MOF_2 workflow]")
+                    break
+                if (generated_count + len(remainder_instructions)) % 10 == 0:
+                    save_remainder(remainder_instructions)
+            await asyncio.sleep(0.2)
+        except Exception as e:
+            print(f"Error processing workflow {workflow}: {e}")
+            await asyncio.sleep(1.0)
+
+    # --- Step 3: Fill remainder with non-unique instructions if needed ---
+    while len(remainder_instructions) < remainder_needed:
+        # Repeat from deduped_workflows (or shuffle existing)
+        for workflow in deduped_workflows:
+            if len(remainder_instructions) >= remainder_needed:
+                break
+            try:
+                result = generate_dataset_for_regression_testing(
+                    tools=[],
+                    workflows=[workflow],
+                    per_api=0,
+                    per_workflow=1,
+                    registry=registry,
+                )
+                if result:
+                    for item in result:
+                        instr_text = item.get("instruction", "")
+                        if not instr_text:
+                            continue
+                        remainder_instructions.append(item)
+                        pct = ((generated_count + len(remainder_instructions)) / TARGET) * 100
+                        preview = instr_text[:70].replace("\n", " ")
+                        print(f"{generated_count + len(remainder_instructions)}/{TARGET} ({pct:.1f}%) - {preview}... [FILLER]")
+                        break
+                    if (generated_count + len(remainder_instructions)) % 10 == 0:
+                        save_remainder(remainder_instructions)
+                await asyncio.sleep(0.1)
+            except Exception as e:
+                print(f"Error processing workflow {workflow}: {e}")
+                await asyncio.sleep(0.5)
+
+    save_remainder(remainder_instructions)
+    print(f"\nDone. Generated {len(remainder_instructions)} remainder multi-tool instructions.")
 
     try:
         registry = MegamodelRegistry()
@@ -130,8 +262,11 @@ async def main():
         # Shuffle again for output randomness
         random.shuffle(selected_workflows)
 
-        # Generate instructions for selected workflows
+        # Generate only the remainder instructions and save to separate file
+        remainder_instructions = []
         for idx, workflow in enumerate(selected_workflows):
+            if len(remainder_instructions) >= remainder_needed:
+                break
             try:
                 result = generate_dataset_for_regression_testing(
                     tools=[],
@@ -145,27 +280,29 @@ async def main():
                         instr_text = item.get("instruction", "")
                         if not instr_text:
                             continue
+                        # Skip if already in all_instructions or remainder_instructions
                         if any(existing.get("instruction") == instr_text for existing in all_instructions):
                             continue
-                        all_instructions.append(item)
-                        generated_count = len(all_instructions)
+                        if any(existing.get("instruction") == instr_text for existing in remainder_instructions):
+                            continue
+                        remainder_instructions.append(item)
                         # Update tool usage counts
                         for t in workflow:
                             if t in tool_counts:
                                 tool_counts[t] += 1
-                        pct = (generated_count / TARGET) * 100
+                        pct = ((generated_count + len(remainder_instructions)) / TARGET) * 100
                         preview = instr_text[:70].replace("\n", " ")
-                        print(f"{generated_count}/{TARGET} ({pct:.1f}%) - {preview}... [{workflow[0]} & {workflow[1]}: {tool_counts[workflow[0]]}, {tool_counts[workflow[1]]}]")
+                        print(f"{generated_count + len(remainder_instructions)}/{TARGET} ({pct:.1f}%) - {preview}... [{workflow[0]} & {workflow[1]}: {tool_counts[workflow[0]]}, {tool_counts[workflow[1]]}]")
                         break
-                    if generated_count % 10 == 0:
-                        save_progress()
+                    if (generated_count + len(remainder_instructions)) % 10 == 0:
+                        save_remainder(remainder_instructions)
                 await asyncio.sleep(0.4)
             except Exception as e:
                 print(f"Error processing workflow {workflow}: {e}")
                 await asyncio.sleep(1.5)
 
-        save_progress()
-        print(f"\nDone. Generated {generated_count} multi-tool instructions.")
+        save_remainder(remainder_instructions)
+        print(f"\nDone. Generated {len(remainder_instructions)} remainder multi-tool instructions.")
 
     except KeyboardInterrupt:
         print(f"\nInterrupted at {generated_count}. Saving...")

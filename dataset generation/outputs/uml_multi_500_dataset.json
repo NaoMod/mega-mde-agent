@@ -5290,5 +5290,1713 @@
         "arguments": ""
       }
     ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Retrieve the configuration for the UML diagram to UML profile transformation.\nApply './examples/input.xmi' to a MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Apply the UML input at /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi to KM3\n\nApply the same input at /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi to KM3 again",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      },
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Retrieve the input configuration of the transformation that converts UML diagrams to SVG.\nRetrieve the output configuration of the transformation that converts UML diagrams to SVG.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLDI2SVG.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLDI2SVG.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform /Users/zakariahachm/Downloads/atl_zoo/UML22Measure/. to Measure model and then convert ./examples/input.xmi to SVG model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2Measure.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/."
+      },
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "1) Get configuration for UML to SVG transformation\n2) Apply the transformation to input './examples/input.xmi' to SVG model",
+    "relevant_apis": [
+      {
+        "api_name": "UMLDI2SVG.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Convert ./examples/input.xmi to the UML profile model, and then create the OWL model from ./examples/input.xmi.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "- Get the configuration settings of the UML-to-OWL transformation.\n- Apply the UML-to-KM3 transformation to /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi; target: KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Show me the configuration for the UML to KM3 transformation.\nTransform ./examples/input.xmi from UML model to JAVA model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Fetch the configuration for the transformation that converts UML to MOF; fetch the configuration for the transformation that converts UML to OWL.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Convert /Users/zakariahachm/Downloads/atl_zoo/UML22Measure/. to a Measure model.\nRender ./examples/input.xmi as an SVG model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2Measure.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/."
+      },
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "- Show me the configuration for the UML-to-MOF mapping.\n- Retrieve the configuration for the UML-to-MOF mapping.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model at /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi to a KM3 model.\n\nConvert the UML model at ./examples/input.xmi to an OWL model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      },
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform the UML model ./examples/input.xmi to JAVA; Retrieve the configuration for the transformation that converts UML class diagrams to UML profiles.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi to KM3 model, then Transform the KM3 model ./examples/input.xmi to SVG model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      },
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Get the configuration settings of the UML-to-Measure transformation, then get the configuration settings of the UML-to-KM3 transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2Measure.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Apply the UML to JAVA transformation to ./examples/input.xmi for a JAVA model.\nGet the MOF configuration for the UML to MOF transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform ./examples/input.xmi from a UML class diagram to a UML profile.\n\nRetrieve the configuration for the UML to KM3 transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform ./examples/input.xmi to SVG.\nRetrieve the configuration of the UML to Measure transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2Measure.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get configuration settings of the UMLDI to SVG transformation.\nApply ./examples/input.xmi to a UML Profile model.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLDI2SVG.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform './examples/input.xmi' into an SVG model, and then get the configuration for the UML-to-OWL transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Apply the UML model at /Users/zakariahachm/Downloads/atl_zoo/UML22Measure/. Target: Measure model.\nGet the configuration details of the transformation from Measure to OWL.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2Measure.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/."
+      },
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get configuration of the UML to MOF transformation.\nApply ./examples/input.xmi to a MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform ./examples/input.xmi to JAVA model and then transform ./examples/input.xmi to SVG model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get configuration for UML to OWL transformation. Apply ./examples/input.xmi to SVG model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "- Apply /Users/zakariahachm/Downloads/atl_zoo/UML22Measure/.. Target: Measure model.\n- Get the KM3 configuration details.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2Measure.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/."
+      },
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform ./examples/input.xmi into a UML profile.\nThen transform /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi into a KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Show the KM3-model configuration settings for the UML-to-KM3 transformation and then fetch the JAVA-model configuration settings for the UML-to-JAVA transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2JAVA.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Show me the configuration of the UML to KM3 transformation.\nTransform /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi from UML model to KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi into a KM3 model and then Transform the UML model ./examples/input.xmi into a MOF model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      },
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model at /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi to KM3 model and then Transform the UML model at ./examples/input.xmi to JAVA model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      },
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "1. Show the configuration for the UML class diagram to UML profile transformation.\n2. Apply /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi to KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "- Transform ./examples/input.xmi into OWL model and then transform /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi into KM3 model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      }
+    ]
+  },
+    {
+    "pattern": "get>apply",
+    "instruction": "1) Get the configuration of the UML-to-MOF transformation.\n2) Apply './examples/input.xmi' MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model ./examples/input.xmi to MOF model and then transform this model ./examples/input.xmi to MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Get the configuration details of the first model transformation in the sequence.\nGet the configuration details of the UML to MOF transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform ./examples/input.xmi from UML to MOF model.\nRetrieve the configuration for the MOF transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "1) get the configuration for the UML to MOF transformation.\n2) apply /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi into KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Convert the model at ./examples/input.xmi to a MOF model, and then translate the model at /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi to a KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Retrieve the configuration settings of the transformation that converts a UML model to a MOF model.\nExtract the configuration settings of the transformation that converts a UML model to a KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform ./examples/input.xmi to KM3 model, then Inspect the configuration of the UML to KM3 transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get the configuration details of the UML-to-MOF transformation.\n\nApply the transformation to ./examples/input.xmi; target: SVG model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model ./examples/input.xmi to MOF model and then transform the MOF model produced from the first step using ./examples/input.xmi to SVG diagram",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "- Retrieve the configuration for the UML-to-MOF transformation.\n- Retrieve the configuration for the UML diagram to SVG transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLDI2SVG.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform the UML model ./examples/input.xmi to MOF model.\nRetrieve the configuration of the next tool for SVG.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UMLDI2SVG.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "1) Get the configuration settings for the UMLCLASSDIAGRAM to UMLPROFILE mapping.\n2) Apply the transformation on ./examples/input.xmi from a UMLCLASSDIAGRAM to a UMLPROFILE; target: UMLPROFILE model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform ./examples/input.xmi to MOF model and then transform ./examples/input.xmi to UML profile",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "- Get the configuration for the transformation from UML diagram to MOF model.\n- Show me the configuration for the transformation from UMLCLASSDIAGRAM to UMLPROFILE.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform ./examples/input.xmi to MOF model and then retrieve the configuration of the UMLCLASSDIAGRAM to UMLPROFILE mapping.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get the configuration for the UML to MOF transformation.\nApply './examples/input.xmi' into JAVA model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform ./examples/input.xmi to MOF model and then Transform ./examples/input.xmi to JAVA model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Retrieve the configuration for the UML-to-MOF transformation, and then review the configuration for the UML-to-JAVA transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2JAVA.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform the UML model ./examples/input.xmi to a MOF model.\nRetrieve the configuration for the JAVA generation of the MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2JAVA.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "get configuration settings for the UML to MOF transformation.\nthen apply ./examples/input.xmi to OWL model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform ./examples/input.xmi to MOF model, then Transform ./examples/input.xmi to OWL model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "1) Show me the configuration of the UML to MOF transformation\n2) Then outline the configuration of the UML to OWL transformation",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform ./examples/input.xmi to MOF model, then Retrieve the UML to OWL transformation configuration.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "- Retrieve configuration of the UML-to-Measure transformation.\n- Apply to a UML model at /Users/zakariahachm/Downloads/atl_zoo/UML22Measure/. Target: Measure model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2Measure.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/."
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model at ./examples/input.xmi to the MOF model.\nConvert the MOF model at /Users/zakariahachm/Downloads/atl_zoo/UML22Measure/. to the Measure model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2Measure.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/."
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Show me the configuration settings of the transformation that converts UML to MOF, and then show me the configuration settings of the transformation that converts UML to Measure.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2Measure.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform the UML model ./examples/input.xmi to MOF model, and retrieve the configuration of the UML-to-Measure transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2Measure.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Apply ./examples/input.xmi to MOF model\nGet the configuration for the UML-to-MOF transformation",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML input ./examples/input.xmi to MOF model and then transform the UML input ./examples/input.xmi to MOF model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "- Show me the configuration of the UML to MOF transformation.\n- Show me the configuration of the UML to MOF transformation for the second tool instance.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get the configuration for the UML to MOF transformation.\nApply to ./examples/input.xmi; Target model: MOF.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi into KM3 model\n\nRetrieve the configuration of the UML to KM3 transformation",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi to KM3 model, and then transform the KM3 model ./examples/input.xmi to MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Retrieve the configuration details for the UML to KM3 transformation; then retrieve the configuration details for the UML to MOF transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Show me the configuration of the UML to KM3 transformation. Apply './examples/input.xmi' to a MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform ./examples/input.xmi to SVG model. Retrieve the configuration information for the transformation mapping SVG to MOF.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform './examples/input.xmi' to an SVG model, and then transform './examples/input.xmi' to a MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "- Get the configuration of the transformation from UMLDI to SVG.\n- Fetch the configuration of the transformation from UML to MOF.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLDI2SVG.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get the configuration of the UML-to-SVG transformation.\nApply './examples/input.xmi' to MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLDI2SVG.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform ./examples/input.xmi from UMLCLASSDIAGRAM to UMLPROFILE.\nRetrieve configuration details for the UMLCLASSDIAGRAM-to-UMLPROFILE transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Apply ./examples/input.xmi to UMLPROFILE; then Apply ./examples/input.xmi to MOF model",
+    "relevant_apis": [
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Query the configuration of the UMLCLASSDIAGRAM to UMLPROFILE transformation.\nRetrieve the configuration of the UML to MOF transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "- Show the configuration of the UML class diagram to UML profile transformation.\n- Apply to ./examples/input.xmi the UML class diagram to UML profile transformation, target model: UML profile.",
+    "relevant_apis": [
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform ./examples/input.xmi to JAVA model.\nGet the configuration for the transformation that converts JAVA to MOF.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Apply ./examples/input.xmi to JAVA model and then apply ./examples/input.xmi to MOF model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Show me the configuration for the UML-to-JAVA transformation, and then show me the configuration for the UML-to-MOF transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2JAVA.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get the configuration for the UML to JAVA transformation.\nApply the UML to MOF transformation using ./examples/input.xmi to produce a MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2JAVA.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Apply the UML-to-OWL transformation to './examples/input.xmi'; target: OWL model.\nRetrieve the configuration details of the next UML-to-MOF mapping.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform ./examples/input.xmi into OWL model and then transform ./examples/input.xmi into MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Retrieve the configuration of the transformation that converts UML to an OWL model.\nRetrieve the configuration of the transformation that converts UML to a MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "- Get the configuration for the UML-to-OWL transformation.\n- Apply ./examples/input.xmi to MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "- Apply the UML to Measure transformation at (/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/.); Target: Measure model.\n- Get configuration details for the Measure model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2Measure.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/."
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model at /Users/zakariahachm/Downloads/atl_zoo/UML22Measure/. to a Measure model, and then transform the UML model at ./examples/input.xmi to a MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2Measure.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/."
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Get the configuration settings of the transformation that converts UML to Measure; then get the configuration settings of the transformation that converts UML to MOF.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2Measure.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Retrieve the configuration of the UML to Measure transformation.\nApply the UML to MOF transformation to ./examples/input.xmi into a MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2Measure.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get the configuration of the UML-to-MOF transformation.\nApply to './examples/input.xmi'; target: MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Apply ./examples/input.xmi to MOF model, and then apply ./examples/input.xmi into MOF model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "First, reveal the configuration settings of the first UML-to-MOF transformation.\nSubsequently, display the configuration settings of the second UML-to-MOF transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Apply './examples/input.xmi' MOF model\nGet configuration details of the MOF model produced in the previous step",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get the configuration of the UML to KM3 transformation; apply /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi to KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the model at './examples/input.xmi' to a MOF model, then transform the UML model at '/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi' to a KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "- Get the configuration for the transformation that converts UML to MOF model.\n- Get the configuration for the transformation that converts UML to KM3 model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Apply ./examples/input.xmi to KM3 model and then get the configuration details of the UML to KM3 transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2KM3.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "1) Get the configuration of the UML-to-MOF transformation.\n2) Apply the transformation to ./examples/input.xmi into an SVG model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model ./examples/input.xmi to the MOF model and then transform the MOF model produced from ./examples/input.xmi to the SVG model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UMLDI2SVG.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "- Show me the configuration settings of the transformation that converts UML to MOF.\n- Then show me the configuration settings of the transformation that converts UML Diagram Interchange to SVG.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLDI2SVG.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "- Transform ./examples/input.xmi to MOF model\n- Get the configuration for the diagram-to-SVG rendering step",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UMLDI2SVG.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Retrieve configuration for the UMLCLASSDIAGRAM to UMLPROFILE transformation.\nApply ./examples/input.xmi into a UMLPROFILE model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform UML model ./examples/input.xmi to MOF model and then transform UML model ./examples/input.xmi into UML profile",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "- Fetch the configuration of the model transformation from UML to MOF.\n- Review the configuration of the transformation mapping UML class diagrams to UML profiles.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Apply the UML-to-MOF transformation to './examples/input.xmi' to produce a MOF model.\nGet the configuration details for the UMLCLASSDIAGRAM-to-UMLPROFILE transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UMLCLASSDIAGRAM2UMLPROFILE.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get the configuration settings for the UML to JAVA transformation.\nApply the transformation to ./examples/input.xmi; JAVA model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform ./examples/input.xmi into MOF model\nTransform ./examples/input.xmi MOF model into JAVA model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2JAVA.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Retrieve the configuration for the transformation that converts UML to MOF.\nFetch the configuration for the transformation that converts UML to JAVA.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2JAVA.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Apply './examples/input.xmi' UML to MOF model, and Get configuration of the UML to JAVA transformation.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2JAVA.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "Get the configuration for the UML to MOF transformation, then apply the UML to OWL transformation on ./examples/input.xmi to OWL model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform ./examples/input.xmi to MOF model and then Transform ./examples/input.xmi to OWL model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2OWL.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Show me the configuration settings of the transformation that converts UML to MOF, and then retrieve the configuration settings of the transformation that converts UML to OWL.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "Transform ./examples/input.xmi to MOF model and then retrieve the configuration for the transformation that converts UML to OWL",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2OWL.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "- Get me the configuration of the transformation from UML to Measure.\n- Apply the transformation to a UML model at /Users/zakariahachm/Downloads/atl_zoo/UML22Measure/. (Target: Measure model)",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2Measure.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/."
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform ./examples/input.xmi to MOF model and then Transform /Users/zakariahachm/Downloads/atl_zoo/UML22Measure/. to Measure model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2Measure.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML22Measure/."
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Step 1: Get the UML-to-MOF model transformation configuration.\nStep 2: Get the UML-to-Measure model transformation configuration.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2Measure.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "- Apply './examples/input.xmi' to MOF model.\n- Get the UML-to-Measure transformation configuration.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2Measure.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "- Transform UML model ./examples/input.xmi to MOF model\n- Retrieve the configuration of the UML-to-MOF transformation",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model ./examples/input.xmi to MOF model and then Transform the MOF model ./examples/input.xmi to JAVA model",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.apply",
+        "arguments": "./examples/input.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "get>get",
+    "instruction": "Get the configuration of the transformation that converts UML to MOF.\nGet the configuration of the next model transformation in the sequence.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "get>apply",
+    "instruction": "- Show me the configuration of the UML-to-MOF transformation.\n- Apply to ./examples/input.xmi for a MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2MOF.get_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
+  },
+  {
+    "pattern": "apply>get",
+    "instruction": "- Transform /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi into a KM3 model\n- Retrieve the configuration details for the UML to KM3 transformation",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.get_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "apply>apply",
+    "instruction": "Transform the UML model at /Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi into a KM3 model, and then transform the UML model at ./examples/input.xmi into a MOF model.",
+    "relevant_apis": [
+      {
+        "api_name": "UML2KM3.apply",
+        "arguments": "/Users/zakariahachm/Downloads/atl_zoo/UML2KM3/ExampleUML.xmi"
+      },
+      {
+        "api_name": "UML2MOF_2.apply",
+        "arguments": "./examples/input.xmi"
+      }
+    ]
   }
 ]

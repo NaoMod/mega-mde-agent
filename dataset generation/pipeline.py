@@ -356,8 +356,10 @@ def generate_multi_tool_instructions(
                 patterns.append(pat)
                 
                 # Extract tool type info
-                if "2" in api:
-                    source, target = api.split(".")[0].split("2")
+                # Only split on '2' if it is not part of a longer suffix (e.g., '_2_')
+                api_base = api.split(".")[0]
+                if "2" in api_base and not api_base.endswith("_2") and api_base.count("2") == 1:
+                    source, target = api_base.split("2")
                     tool_types.append(f"{source} to {target}")
                 else:
                     tool_types.append("model transformation")
