@@ -21,9 +21,9 @@ from src.core.megamodel import MegamodelRegistry
 import random
 
 # Single-tool instruction seed examples (UML tools)
-from seeds.uml_tools.single_tool_seeds import SingleToolSeeds
+from seeds.table_tools.table_single_tool_seeds import TableSingleToolSeeds
 # Multi-tool instruction seed examples (UML tools)
-from seeds.uml_tools.multi_tool_seeds import MultiToolSeeds
+from seeds.table_tools.table_multi_tool_seeds import TableMultiToolSeeds
     
 
 # --- 1) Start with a megamodel repository (populate registry) ---
@@ -238,7 +238,7 @@ def generate_single_tool_instructions(
                     model_path = sample_by_name[base]
             
             # Get seeds by pattern and select 3 from different levels
-            all_seeds = SingleToolSeeds.get_seeds()
+            all_seeds = TableSingleToolSeeds.get_seeds()
             pattern_seeds = [s for s in all_seeds if s.pattern == pattern]
             
             selected_seeds = []
@@ -316,7 +316,7 @@ def generate_multi_tool_instructions(
                     sample_by_name[key] = samples[0]
     
     # Get all seeds once
-    all_seeds = MultiToolSeeds.get_seeds()
+            all_seeds = TableMultiToolSeeds.get_seeds()
     get_get_seeds = [s for s in all_seeds if s.pattern == "get, get"]
     get_apply_seeds = [s for s in all_seeds if s.pattern == "get, apply"]
     apply_get_seeds = [s for s in all_seeds if s.pattern == "apply, get"]
