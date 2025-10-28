@@ -14,9 +14,9 @@ from src.core.megamodel import MegamodelRegistry
 from scripts.run_agent_versions import populate_registry
 from pipeline import generate_dataset_for_regression_testing, _derive_api
 
-TARGET = 500  # Generate full Table multi-tool dataset
-OUTPUT_FILE = Path(__file__).parent / "outputs" / "table_multi_500_dataset.json"
-REMAINDER_FILE = Path(__file__).parent / "outputs" / "table_multi_remainder.json"
+TARGET = 5  # Generate full Table multi-tool dataset
+OUTPUT_FILE = Path(__file__).parent / "outputs" / "openRewrite_multi_500_dataset.json"
+REMAINDER_FILE = Path(__file__).parent / "outputs" / "openRewrite_multi_remainder.json"
 
 all_instructions: List[dict] = []
 generated_count = 0
@@ -54,18 +54,18 @@ def build_two_step_workflows(tool_names: List[str]) -> List[List[str]]:
     """Create 4 categories of two-step workflows: get->get, get->apply, apply->get, apply->apply.
     We first classify tool names by derived pattern from _derive_api.
     """
-    gets = []
-    applies = []
+    recipe_apps = []
+    recipe_infos = []
     for name in tool_names:
         api, pat = _derive_api(name)
-        if pat == "get":
-            gets.append(name)
-        elif pat == "apply":
-            applies.append(name)
+        if pat == "recipe_application":
+            recipe_apps.append(name)
+        elif pat == "recipe_info":
+            recipe_infos.append(name)
 
     workflows: List[List[str]] = []
     # Helper to sample pairs (limit size to avoid explosion)
-    def pairwise(a, b, limit=150):  # limit keeps total manageable
+    def pairwise(a, b, limit=150):
         pairs = []
         for x in a:
             for y in b:
@@ -74,10 +74,10 @@ def build_two_step_workflows(tool_names: List[str]) -> List[List[str]]:
                     return pairs
         return pairs
 
-    workflows += pairwise(gets, gets, limit=120)       # get, get
-    workflows += pairwise(gets, applies, limit=120)    # get, apply
-    workflows += pairwise(applies, gets, limit=120)    # apply, get
-    workflows += pairwise(applies, applies, limit=120) # apply, apply
+    workflows += pairwise(recipe_apps, recipe_apps, limit=120)       # recipe_application, recipe_application
+    workflows += pairwise(recipe_apps, recipe_infos, limit=120)      # recipe_application, recipe_info
+    workflows += pairwise(recipe_infos, recipe_apps, limit=120)      # recipe_info, recipe_application
+    workflows += pairwise(recipe_infos, recipe_infos, limit=120)     # recipe_info, recipe_info
 
     random.shuffle(workflows)
     return workflows
@@ -99,40 +99,40 @@ async def main():
         return
     print(f"Generating remainder: {remainder_needed} instructions to reach {TARGET}")
 
-    # Discover Table tools
+
+    # Discover OpenRewrite tools
     registry = MegamodelRegistry()
     await populate_registry(registry)
-    atl_tools = registry.tools_by_server.get("atl_server", [])
-    tool_names = [getattr(t, "name", "") for t in atl_tools if getattr(t, "name", "")]
-    tool_names = [n for n in tool_names if n not in ("list_transformation_samples_tool", "extract_input_metamodel_name")]
-    table_tool_names = [n for n in tool_names if ("Table" in n) and (n.startswith("apply_") or n.startswith("list_transformation_"))]
-    print(f"Discovered {len(table_tool_names)} Table ATL tools usable for workflows:")
+    or_tools = registry.tools_by_server.get("openrewrite_server", [])
+    tool_names = [getattr(t, "name", "") for t in or_tools if getattr(t, "name", "")]
+    # Optionally filter out meta/utility tools (minimal change: keep all except list_/extract_)
+    tool_names = [n for n in tool_names if not (n.startswith("list_") or n.startswith("extract_"))]
+    print(f"Discovered {len(tool_names)} OpenRewrite tools usable for workflows:")
 
-    for tt in table_tool_names:
+    for tt in tool_names:
         print(f"- {tt}")
 
-    # Table multi-tool workflow generation
-    num_tools = len(table_tool_names)
-    num_tools = len(table_tool_names)
+    # Workflow generation
+    num_tools = len(tool_names)
     per_tool = TARGET // num_tools
     remainder = TARGET % num_tools
     print(f"Each tool will be used in {per_tool} workflows, {remainder} tools will be used in one extra workflow.")
 
     # Build all possible two-step workflows
-    workflows = build_two_step_workflows(table_tool_names)
+    workflows = build_two_step_workflows(tool_names)
     if not workflows:
         print("No workflows built. Exiting.")
         return
     print(f"Prepared {len(workflows)} candidate two-step workflows")
 
     # Track usage for each tool
-    tool_counts = {name: 0 for name in table_tool_names}
+    tool_counts = {name: 0 for name in tool_names}
     # Shuffle workflows for variety
     random.shuffle(workflows)
 
     # Distribute workflows to guarantee equal usage
     selected_workflows = []
-    for tool in table_tool_names:
+    for tool in tool_names:
         count = per_tool + (1 if remainder > 0 else 0)
         if remainder > 0:
             remainder -= 1

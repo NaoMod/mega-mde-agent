@@ -107,18 +107,27 @@ RECIPES = [
 ]
 
 # Create dynamic tools for each recipe
+
+# Register apply and get-details tools for each recipe
 for recipe in RECIPES:
     recipe_name = recipe["name"]
     recipe_desc = recipe["description"]
-    
-    def create_recipe_tool(name: str, description: str):
+
+    def create_recipe_tools(name: str, description: str, recipe_obj: dict):
+        # Apply tool
         @mcp.tool(name=f"apply_{name}_recipe_tool", description=description)
         async def apply_recipe(**kwargs) -> str:
             """Apply an OpenRewrite recipe (mock implementation)."""
             return f"Recipe '{name}' applied successfully"
-        return apply_recipe
-    
-    create_recipe_tool(recipe_name, recipe_desc)
+
+        # Get details tool
+        @mcp.tool(name=f"get_{name}_details_tool", description=f"Get details for the '{name}' OpenRewrite recipe.")
+        async def get_recipe_details_tool() -> str:
+            return json.dumps(recipe_obj, indent=2)
+
+        return apply_recipe, get_recipe_details_tool
+
+    create_recipe_tools(recipe_name, recipe_desc, recipe)
 
 
 @mcp.tool(

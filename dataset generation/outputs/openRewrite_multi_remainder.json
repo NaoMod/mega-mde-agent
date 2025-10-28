@@ -1,0 +1,30 @@
+[
+  {
+    "pattern": "recipe_application>recipe_info",
+    "instruction": "1) Apply fixes from the static-analysis recipe.\n2) Retrieve details about the package rename.",
+    "relevant_apis": [
+      {
+        "api_name": "apply_fix_static_analysis_issues_recipe_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "get_refactor_package_rename_details_tool",
+        "arguments": ""
+      }
+    ]
+  },
+  {
+    "pattern": "recipe_info>recipe_info",
+    "instruction": "1) Identify static analysis issues.\n2) Retrieve recipe details using the identified fixes.",
+    "relevant_apis": [
+      {
+        "api_name": "get_fix_static_analysis_issues_details_tool",
+        "arguments": ""
+      },
+      {
+        "api_name": "get_recipe_details_tool",
+        "arguments": ""
+      }
+    ]
+  }
+]

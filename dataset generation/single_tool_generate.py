@@ -18,8 +18,8 @@ from src.core.megamodel import MegamodelRegistry
 from scripts.run_agent_versions import populate_registry
 from pipeline import generate_dataset_for_regression_testing
 
-TARGET = 500  # Generate full Table dataset
-OUTPUT_FILE = Path(__file__).parent / "outputs" / "table_500_dataset.json"
+TARGET = 500  # Generate a small test set
+OUTPUT_FILE = Path(__file__).parent / "outputs" / "table_10_dataset.json"
 
 # Global variables
 all_instructions = []
@@ -50,7 +50,7 @@ def save_progress():
 async def main():
     global all_instructions, generated_count
     
-    print(f"Generating {TARGET} single-tool instructions for Table transformations...")
+    print(f"Generating {TARGET} single-tool instructions for OpenRewrite tools...")
 
     # Always start fresh: clear previous instructions and progress
     all_instructions = []
@@ -64,27 +64,27 @@ async def main():
         registry = MegamodelRegistry()
         await populate_registry(registry)
 
-        # Get all tools, filter for Table input metamodels (name contains 'Table', case-insensitive)
-        atl_tools = registry.tools_by_server.get("atl_server", [])
-        table_tools = []
-        for t in atl_tools:
+        # Get all OpenRewrite tools
+        or_tools = registry.tools_by_server.get("openrewrite_server", [])
+        # Filter: only include tools that are not utility/meta tools (minimal change: keep all for now)
+        openrewrite_tools = []
+        for t in or_tools:
             tool_name = getattr(t, "name", "")
-            if tool_name == "list_transformation_samples_tool":
+            # Example: skip meta/utility tools if needed (customize as needed)
+            if tool_name.startswith("list_") or tool_name.startswith("extract_"):
                 continue
-            # Select tools whose name contains 'Table' and starts with 'apply_' or 'list_transformation_'
-            if ("Table" in tool_name) and (tool_name.startswith("apply_") or tool_name.startswith("list_transformation_")):
-                table_tools.append({"name": tool_name, "description": getattr(t, "description", "")})
-        print(f"Using {len(table_tools)} Table tools:")
-        for tt in table_tools:
+            openrewrite_tools.append({"name": tool_name, "description": getattr(t, "description", "")})
+        print(f"Using {len(openrewrite_tools)} OpenRewrite tools:")
+        for tt in openrewrite_tools:
             print(f"- {tt['name']}")
-        # Guarantee equal usage of each Table tool
-        num_tools = len(table_tools)
+        # Guarantee equal usage of each tool
+        num_tools = len(openrewrite_tools)
         per_tool = TARGET // num_tools if num_tools > 0 else 0
         remainder = TARGET % num_tools if num_tools > 0 else 0
         print(f"Each tool will be used {per_tool} times, {remainder} tools will be used one extra time.")
 
-        tool_counts = {tool['name']: 0 for tool in table_tools}
-        tool_order = table_tools.copy()
+        tool_counts = {tool['name']: 0 for tool in openrewrite_tools}
+        tool_order = openrewrite_tools.copy()
         random.shuffle(tool_order)
 
         for idx, tool in enumerate(tool_order):

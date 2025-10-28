@@ -29,18 +29,35 @@ from src.agents.execution import MCPInvocation
 async def populate_registry(registry):
     integrator = MCPServerIntegrator(registry)
     
+
     # Get server script paths
     atl_server_script = os.path.join(os.path.dirname(__file__), '..', 'mcp_servers', 'atl_server', 'atl_mcp_server.py')
     emf_server_script = os.path.join(os.path.dirname(__file__), '..', 'mcp_servers', 'emf_server', 'stateless_emf_server.py')
-    
+    openrewrite_server_script = os.path.join(os.path.dirname(__file__), '..', 'mcp_servers', 'openRewrite_servers', 'openrewrite_server.py')
+
     # Setup servers with script paths in metadata
     atl_server = integrator.setup_atl_server()
     emf_server = integrator.setup_emf_server()
-    
-    # Add script paths to metadata
+    # For OpenRewrite, add a generic server registration if needed
+
+    # Setup OpenRewrite server (mimic ATL/EMF pattern)
+    from src.mcp_ext.infrastructure import MCPServer, MCPCapability
+    openrewrite_server = MCPServer(
+        host="localhost",
+        port=8089,
+        name="openrewrite_server",
+        tools_port=8083
+    )
+    openrewrite_server.add_capability(MCPCapability(
+        input_types=["java", "xml", "yml", "properties"],
+        output_types=["java", "xml", "yml", "properties"],
+        can_execute=True,
+        description="OpenRewrite code transformations"
+    ))
+    integrator.registry.register_mcp_server("openrewrite_server", openrewrite_server)
+    openrewrite_server.metadata["script_path"] = openrewrite_server_script
     atl_server.metadata["script_path"] = atl_server_script
     emf_server.metadata["script_path"] = emf_server_script
-    
 
     # Get ATL tools
     atl_client = MCPClient()
@@ -51,9 +68,7 @@ async def populate_registry(registry):
         response = await session.list_tools()
         tools = response.tools
     finally:
-        # Close streams in the same task to avoid anyio cancel-scope warnings
         await atl_client.cleanup()
-    
     atl_tools = tools
 
     # Discover EMF tools using MCP protocol
@@ -65,14 +80,25 @@ async def populate_registry(registry):
         response = await session.list_tools()
         tools = response.tools
     finally:
-        # Close streams in the same task to avoid anyio cancel-scope warnings
         await emf_client.cleanup()
-    
     emf_tools = tools
-    
+
+    # Discover OpenRewrite tools using MCP protocol
+    openrewrite_client = MCPClient()
+    tools = []
+    try:
+        await openrewrite_client.connect_to_server(openrewrite_server_script)
+        session = await openrewrite_client.get_session()
+        response = await session.list_tools()
+        tools = response.tools
+    finally:
+        await openrewrite_client.cleanup()
+    openrewrite_tools = tools
+
     # Register tools with the megamodel registry
     registry.tools_by_server["atl_server"] = atl_tools
     registry.tools_by_server["emf_server"] = emf_tools
+    registry.tools_by_server["openrewrite_server"] = openrewrite_tools
 
     # Call ATL server to get enabled transformations
     enabled_transformations = fetch_transformations()
