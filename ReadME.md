@@ -1,5 +1,5 @@
 # A Megamodel-based Approach to Support Ecosystems of LLM Agents for Model-Based Engineering
-
+TODO: Add the affinity values in the chart.
 ## Abstract
 
 ### Context
