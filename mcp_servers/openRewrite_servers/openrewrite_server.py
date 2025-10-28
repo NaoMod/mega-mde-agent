@@ -4,7 +4,8 @@ import json
 from mcp.server.fastmcp import FastMCP
 from fastapi import FastAPI
 import uvicorn
-
+# Start FastAPI server in a separate thread
+import threading
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
@@ -114,8 +115,7 @@ for recipe in RECIPES:
         @mcp.tool(name=f"apply_{name}_recipe_tool", description=description)
         async def apply_recipe(**kwargs) -> str:
             """Apply an OpenRewrite recipe (mock implementation)."""
-            args_str = ", ".join([f"{k}={v}" for k, v in kwargs.items()])
-            return f"Recipe '{name}' applied successfully with arguments: {args_str}"
+            return f"Recipe '{name}' applied successfully"
         return apply_recipe
     
     create_recipe_tool(recipe_name, recipe_desc)
@@ -163,11 +163,9 @@ if __name__ == "__main__":
                 tools.append({"name": name, "description": desc})
         return {"tools": tools}
 
-    # Start FastAPI server in a separate thread
-    import threading
     def run_fastapi():
         logger.info("Starting FastAPI server on port 8082")
-        uvicorn.run(app, host="0.0.0.0", port=8082, log_level="info")
+        uvicorn.run(app, host="0.0.0.0", port=8089, log_level="info")
 
     threading.Thread(target=run_fastapi, daemon=True).start()
 
