@@ -351,7 +351,7 @@ The following chart summarizes the coverage of removed tools and transformations
 
 ### [Evaluating the evaluation of diversity in natural language generation](https://arxiv.org/abs/2004.02990) cited: 130, distinct‑n lexical metrics
 
-### [Diversity, density, and homogeneity: Quantitative characteristic metrics for text collections](https://arxiv.org/abs/2003.08529) cited : 28,  isocontour radius = embedding diversity
+### [Diversity, density, and homogeneity: Quantitative characteristic metrics for text collections](https://arxiv.org/abs/2003.08529) cited : 28,  isocontour radius = embedding diversity ; Proceedings of the Twelfth Language Resources and Evaluation Conference",
 
 ### [Can data diversity enhance learning generalization?](https://aclanthology.org/2022.coling-1.437/) Published & cited : 49, embedding dispersion as pairwise cosine distances
 
