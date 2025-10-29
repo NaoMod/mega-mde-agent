@@ -28,8 +28,8 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 
 def load_data():
     """Load the CSV data files"""
-    single_tool_path = OUTPUT_DIR / "single_openRewrite_tool_comparison.csv"
-    multi_tool_path = OUTPUT_DIR / "multi_openRewrite_tool_comparison.csv"
+    single_tool_path = OUTPUT_DIR / "single_uml_tool_comparison.csv"
+    multi_tool_path = OUTPUT_DIR / "multi_uml_tool_comparison.csv"
     
     single_df = pd.read_csv(single_tool_path)
     multi_df = pd.read_csv(multi_tool_path)
@@ -127,16 +127,16 @@ def create_full_metric_comparison(single_df, multi_df):
             return 'Table'
         if 'all' in fname:
             return 'All Tools'
-        return 'Dataset'
+        return 'All Tools'
 
     # Get the label from the loaded CSVs
-    single_label = get_dataset_label(single_df.attrs.get('filepath_or_buffer', OUTPUT_DIR / 'single_openRewrite_tool_comparison.csv'))
-    multi_label = get_dataset_label(multi_df.attrs.get('filepath_or_buffer', OUTPUT_DIR / 'multi_openRewrite_tool_comparison.csv'))
+    single_label = get_dataset_label(single_df.attrs.get('filepath_or_buffer', OUTPUT_DIR / 'single_uml_tool_comparison.csv'))
+    multi_label = get_dataset_label(multi_df.attrs.get('filepath_or_buffer', OUTPUT_DIR / 'multi_uml_tool_comparison.csv'))
     # Compose a title
     dataset_title = f"Metrics for {single_label} Single Tool and Multi Tool"
     fig.suptitle(dataset_title, fontsize=16, fontweight='bold', y=1.04)
     plt.tight_layout()
-    plt.savefig("metric_comparison_final.png", dpi=300, bbox_inches='tight')
+    plt.savefig(f"metric_{single_label}_comparison_final.png", dpi=300, bbox_inches='tight')
 
 
 def create_summary_dashboard():
