@@ -28,8 +28,8 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 
 def load_data():
     """Load the CSV data files"""
-    single_tool_path = OUTPUT_DIR / "single_table_tool_comparison.csv"
-    multi_tool_path = OUTPUT_DIR / "multi_table_tool_comparison.csv"
+    single_tool_path = OUTPUT_DIR / "single_openRewrite_tool_comparison.csv"
+    multi_tool_path = OUTPUT_DIR / "multi_openRewrite_tool_comparison.csv"
     
     single_df = pd.read_csv(single_tool_path)
     multi_df = pd.read_csv(multi_tool_path)
@@ -92,7 +92,7 @@ def create_bar_comparison(single_df, multi_df):
     
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.15)  # Make room for the legend
-    plt.savefig(OUTPUT_DIR / "table_bar_comparison.png", dpi=300, bbox_inches='tight')
+    plt.savefig(OUTPUT_DIR / "openRewrite_bar_comparison.png", dpi=300, bbox_inches='tight')
 
 def create_lexical_diversity_chart(single_df, multi_df):
     """Create a comparison of lexical diversity metrics"""
@@ -150,7 +150,7 @@ def create_lexical_diversity_chart(single_df, multi_df):
         axs[i].legend()
         
     plt.tight_layout()
-    plt.savefig(OUTPUT_DIR / "table_lexical_diversity.png", dpi=300, bbox_inches='tight')
+    plt.savefig(OUTPUT_DIR / "openRewrite_lexical_diversity.png", dpi=300, bbox_inches='tight')
 
 # Affinity gauge function removed as requested
 

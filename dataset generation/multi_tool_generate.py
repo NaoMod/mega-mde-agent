@@ -14,7 +14,7 @@ from src.core.megamodel import MegamodelRegistry
 from scripts.run_agent_versions import populate_registry
 from pipeline import generate_dataset_for_regression_testing, _derive_api
 
-TARGET = 5  # Generate full Table multi-tool dataset
+TARGET = 500 # Generate full Table multi-tool dataset
 OUTPUT_FILE = Path(__file__).parent / "outputs" / "openRewrite_multi_500_dataset.json"
 REMAINDER_FILE = Path(__file__).parent / "outputs" / "openRewrite_multi_remainder.json"
 
