@@ -3,31 +3,31 @@
 ## Recipe 1: Common static analysis issue remediation
 
 This recipe automatically resolves common static analysis issues in the codebase
-In: build.gradle    out: project with fixed static issues
+``In: build.gradle    out: project with fixed static issues``
 
 
 ## Recipe 2: Automatically fix Checkstyle violations
 This recipe automatically reformats Java code to ensure consistent indentation, spacing, and brace placement, aligning the codebase with Checkstyle formatting rules.
-In: build.gradle    out: project with unified formatting
+``In: build.gradle    out: project with unified formatting``
 
 ## Recipe 3: Migrate to Java 17
 This recipe automatically upgrade an older java codebase to Java 17 
-In: build.gradle    out: project conforming to java 17
+``In: build.gradle    out: project conforming to java 17``
 
 
 ## Recipe 4: Migrate to Java 21
 This recipe automatically upgrade your Java 8 or Java 11 projects to Java 21
-In: build.gradle    out: project conforming to java 21
+``In: build.gradle    out: project conforming to java 21``
 
 
 ## Recipe 5: Migrate to Java 25
 This recipe automatically upgrade your Java 8, 11, or 17 projects to Java 25.
-In: build.gradle    out: project conforming to java 25
+``In: build.gradle    out: project conforming to java 25``
 
 
 ## Recipe 6: Migrate to JUnit 5 from JUnit 4
 This recipe perform an automated migration from the venerable JUnit 4 testing framework to its successor JUnit 5.
-In: build.gradle    out: project using  JUnit 5.
+``In: build.gradle    out: project using  JUnit 5.``
 
 
 ## Recipe 7: Migrate to JUnit 5 from JUnit 4
