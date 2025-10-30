@@ -37,7 +37,7 @@ def find_latest_agent_files() -> List[Tuple[int, Path]]:
     results: List[Tuple[int, Path]] = []
     for i in range(1, 8):
         # pattern like agent_execution_results_agent3_*.json
-        pattern = f"agent_execution_results_agent{i}_*.json"
+        pattern = f"agent_execution_results_seeds_agent{i}_*.json"
         matches = sorted(outputs_dir.glob(pattern))
         if not matches:
             # Try without timestamp fallback: agent_execution_results_agent{i}.json
@@ -99,7 +99,7 @@ def create_accuracy_plot():
     for xi, yi in zip(x, accuracies_pct):
         plt.text(xi, yi + 1, f"{yi:.1f}%", ha='center', va='bottom', fontsize=9, fontweight='bold')
 
-    plt.title('Agent Accuracy by Version (Latest results)', fontsize=12, fontweight='bold', pad=12)
+    plt.title('Agent Accuracy by Version (Seeds Dataset)', fontsize=12, fontweight='bold', pad=12)
     plt.xlabel('Agent Version', fontsize=11)
     plt.ylabel('Accuracy (%)', fontsize=11)
     plt.ylim(0, 100)
@@ -107,7 +107,7 @@ def create_accuracy_plot():
     plt.xticks(x, labels, rotation=0)
     plt.tight_layout()
 
-    output_file = Path(__file__).parent / "agent_accuracy_progression.png"
+    output_file = Path(__file__).parent / "agent_accuracy_progression_seeds.png"
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     print(f"Plot saved to: {output_file}")
     plt.close()
