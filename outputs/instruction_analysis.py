@@ -69,8 +69,8 @@ def main():
     
 
     # Load both baseline and reduced tools results
-    reduced_tools_data = load_execution_results(os.path.join(current_dir, 'agent_execution_results_MCPAgent_reduced_tools_20251020_122115.json'))
-    baseline_data = load_execution_results(os.path.join(current_dir, 'agent_execution_results_MCPAgent_baseline_20251020_134540.json'))
+    reduced_tools_data = load_execution_results(os.path.join(current_dir, 'agent_execution_results_MCPAgent_reduced_tools_seeds_20251030_140658.json'))
+    baseline_data = load_execution_results(os.path.join(current_dir, 'agent_execution_results_MCPAgent_seeds_baseline_20251030_142008.json'))
     num_instructions = min(len(reduced_tools_data), len(baseline_data))
 
 
@@ -78,7 +78,7 @@ def main():
     print("-" * 60)
 
     # Create CSV report
-    csv_file = os.path.join(current_dir, 'report_generation.csv')
+    csv_file = os.path.join(current_dir, 'seeds_report_generation.csv')
 
     with open(csv_file, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
@@ -174,7 +174,7 @@ if __name__ == "__main__":
 
     # --- Minimal coverage calculation and chart ---
     # Parse ALL_MISSING_TOOLS from CSV
-    csv_file = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'report_generation.csv')
+    csv_file = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'seeds_report_generation.csv')
     all_missing_tools = set()
     with open(csv_file, 'r') as f:
         reader = csv.DictReader(f)
@@ -258,7 +258,7 @@ if __name__ == "__main__":
                 cell.set_facecolor('#f7b6b6')
 
     plt.tight_layout()
-    chart_path = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'coverage_chart.png')
+    chart_path = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'coverage_chart_seeds.png')
     plt.savefig(chart_path, dpi=120)
     print(f"\nCoverage chart saved to: {chart_path}")
 
@@ -279,7 +279,7 @@ if __name__ == "__main__":
                     TOOLS_TO_REMOVE.append(line)
 
     # Parse ALL_MISSING_TOOLS from CSV
-    csv_file = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'report_generation.csv')
+    csv_file = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'seeds_report_generation.csv')
     all_missing_tools = set()
     with open(csv_file, 'r') as f:
         reader = csv.DictReader(f)
