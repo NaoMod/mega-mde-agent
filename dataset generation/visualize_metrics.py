@@ -17,26 +17,33 @@ from pathlib import Path
 plt.style.use('ggplot')
 sns.set_palette('viridis')
 plt.rcParams['font.family'] = 'DejaVu Sans'
-plt.rcParams['font.size'] = 10
-plt.rcParams['axes.titlesize'] = 14
-plt.rcParams['axes.labelsize'] = 12
+plt.rcParams['font.size'] = 14  # Increased from 10
+plt.rcParams['axes.titlesize'] = 18  # Increased from 14
+plt.rcParams['axes.labelsize'] = 16  # Increased from 12
 
 # Output directory
 OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
-def load_data():
-    """Load the CSV data files"""
-    single_tool_path = OUTPUT_DIR / "single_tool_comparison.csv"
-    multi_tool_path = OUTPUT_DIR / "multi_tool_comparison.csv"
+def load_data(dataset_type="all"):
+    """Load the CSV data files for specified dataset type"""
+    if dataset_type == "uml":
+        single_tool_path = OUTPUT_DIR / "single_uml_tool_comparison.csv"
+        multi_tool_path = OUTPUT_DIR / "multi_uml_tool_comparison.csv"
+    elif dataset_type == "openrewrite":
+        single_tool_path = OUTPUT_DIR / "single_openRewrite_tool_comparison.csv"
+        multi_tool_path = OUTPUT_DIR / "multi_openRewrite_tool_comparison.csv"
+    else:  # all tools
+        single_tool_path = OUTPUT_DIR / "single_tool_comparison.csv"
+        multi_tool_path = OUTPUT_DIR / "multi_tool_comparison.csv"
     
     single_df = pd.read_csv(single_tool_path)
     multi_df = pd.read_csv(multi_tool_path)
     
     return single_df, multi_df
 
-def create_full_metric_comparison(single_df, multi_df):
+def create_full_metric_comparison(single_df, multi_df, dataset_label="All Tools"):
     metrics = [
         'Distance', 'Dispersion', 'Isocontour Radius',
         'Affinity', 'Vocabulary Size', 'Unique 3-grams'
@@ -76,12 +83,12 @@ def create_full_metric_comparison(single_df, multi_df):
                 bar.set_hatch(hatches[j])
                 # Value labels
                 ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(values)*0.01,
-                        f'{values[j]:.2f}', ha='center', va='bottom', fontsize=9)
+                        f'{values[j]:.2f}', ha='center', va='bottom', fontsize=14, fontweight='bold')  # Increased from 9
 
             ax.set_xticks([0, 1])
-            ax.set_xticklabels(labels)
+            ax.set_xticklabels(labels, fontsize=16, fontweight='bold')  # Increased from 14 and added bold
             ax.set_ylim(0, max(values) * 1.2)
-            ax.set_title(metric, fontsize=10)
+            ax.set_title(metric, fontsize=16, fontweight='bold')  # Increased from 10
             ax.spines[['top', 'right']].set_visible(False)
 
         else:
@@ -104,47 +111,46 @@ def create_full_metric_comparison(single_df, multi_df):
                 # Value labels
                 if not np.isnan(values[j]):
                     ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(values)*0.01,
-                            f'{values[j]:.2f}', ha='center', va='bottom', fontsize=9)
+                            f'{values[j]:.2f}', ha='center', va='bottom', fontsize=14, fontweight='bold')  # Increased from 9
                 else:
                     ax.text(bar.get_x() + bar.get_width()/2, max(values)*0.01,
-                            'N/A', ha='center', va='bottom', fontsize=9, color='#cccccc', fontstyle='italic')
+                            'N/A', ha='center', va='bottom', fontsize=14, color='#cccccc', fontstyle='italic')  # Increased from 9
 
             ax.set_xticks([0.175, 1.175])
-            ax.set_xticklabels(['Single Tool', 'Multi Tool'], fontsize=9)
+            ax.set_xticklabels(['Single Tool', 'Multi Tool'], fontsize=16, fontweight='bold')  # Increased from 14 and added bold
             ax.set_ylim(0, np.nanmax(values) * 1.2)
-            ax.set_title(metric, fontsize=10)
+            ax.set_title(metric, fontsize=16, fontweight='bold')  # Increased from 10
             ax.spines[['top', 'right']].set_visible(False)
 
-    # Determine dataset type from CSV filename
-    import re
-    def get_dataset_label(path):
-        fname = str(path).lower()
-        if 'openrewrite' in fname:
-            return 'OpenRewrite'
-        if 'uml' in fname:
-            return 'UML'
-        if 'table' in fname:
-            return 'Table'
-        if 'all' in fname:
-            return 'All Tools'
-        return 'All Tools'
-
-    # Get the label from the loaded CSVs
-    single_label = get_dataset_label(single_df.attrs.get('filepath_or_buffer', OUTPUT_DIR / 'single_tool_comparison.csv'))
-    multi_label = get_dataset_label(multi_df.attrs.get('filepath_or_buffer', OUTPUT_DIR / 'multi_tool_comparison.csv'))
-    # Compose a title
-    dataset_title = f"Metrics for {single_label} Single Tool and Multi Tool"
-    fig.suptitle(dataset_title, fontsize=16, fontweight='bold', y=1.04)
+    # Compose a title using the passed dataset label
+    dataset_title = f"Metrics for {dataset_label} Single Tool and Multi Tool"
+    fig.suptitle(dataset_title, fontsize=20, fontweight='bold', y=1.04)  # Increased from 16
     plt.tight_layout()
-    plt.savefig(f"metric_{single_label}_comparison_final.png", dpi=300, bbox_inches='tight')
+    plt.savefig(f"metric_{dataset_label}_comparison_final.png", dpi=300, bbox_inches='tight')
 
 
 def create_summary_dashboard():
     """Generate all visualizations in a single dashboard"""
-    single_df, multi_df = load_data()
-    create_full_metric_comparison(single_df, multi_df)
-    print("✅ All 6-metric visualizations created successfully!")
-    print(f"📁 Output saved to: {OUTPUT_DIR}")
+    
+    # Generate graphs for all three dataset types
+    datasets = [
+        ("all", "All Tools"),
+        ("uml", "UML"), 
+        ("openrewrite", "OpenRewrite")
+    ]
+    
+    for dataset_type, dataset_label in datasets:
+        try:
+            print(f"Generating visualization for {dataset_label}...")
+            single_df, multi_df = load_data(dataset_type)
+            create_full_metric_comparison(single_df, multi_df, dataset_label)
+            print(f"{dataset_label} visualization created successfully!")
+        except FileNotFoundError as e:
+            print(f"Skipping {dataset_label}: {e}")
+        except Exception as e:
+            print(f"Error creating {dataset_label} visualization: {e}")
+    
+    print(f"All outputs saved to: {OUTPUT_DIR}")
 
 
 if __name__ == "__main__":
