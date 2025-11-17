@@ -110,8 +110,10 @@ def create_full_metric_comparison(single_df, multi_df, dataset_label="All Tools"
                 bar.set_hatch(hatches[j])
                 # Value labels
                 if not np.isnan(values[j]):
+                    # Use 3 decimal places for Isocontour Radius, 2 for others
+                    format_str = f'{values[j]:.3f}' if metric == 'Isocontour Radius' else f'{values[j]:.2f}'
                     ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(values)*0.01,
-                            f'{values[j]:.2f}', ha='center', va='bottom', fontsize=14, fontweight='bold')  # Increased from 9
+                            format_str, ha='center', va='bottom', fontsize=14, fontweight='bold')  # Increased from 9
                 else:
                     ax.text(bar.get_x() + bar.get_width()/2, max(values)*0.01,
                             'N/A', ha='center', va='bottom', fontsize=14, color='#cccccc', fontstyle='italic')  # Increased from 9
