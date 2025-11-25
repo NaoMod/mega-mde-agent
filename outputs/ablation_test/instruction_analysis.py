@@ -1,3 +1,7 @@
+"""this script analyzes the execution results of an agent
+on a dataset where certain tools were removed, to see which instructions
+failed due to the missing tools. It generates a report and calculates
+coverage metrics based on the missing tools."""
 
 import json
 import csv

@@ -1,4 +1,7 @@
-
+"""This script generates a multi-tool dataset by creating
+two-step workflows using various tools. It ensures balanced usage
+of each tool across the generated instructions. The dataset is saved incrementally
+to allow resumption in case of interruptions."""
 import sys
 import json
 import asyncio

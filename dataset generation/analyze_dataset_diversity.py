@@ -3,7 +3,7 @@
 Dataset Diversity Comparison Script
 
 This script compares a small original dataset of seeds with a larger generated dataset
-using diversity metrics from the paper "Diversity-oriented Data Augmentation with Large Language Models" and the metrics used in the dataset augmentation's studies.
+using diversity metrics and the metrics used in the dataset augmentation's studies.
 
 It calculates:
 - Distance (average pairwise Euclidean distance)
