@@ -33,15 +33,20 @@ def find_latest_agent_files() -> List[Tuple[int, Path]]:
     """Find the latest result file for each agent1..agent7.
     Returns a list of (agent_index, path) tuples ordered by agent index.
     """
-    outputs_dir = Path(__file__).parent
+    base_dir = Path(__file__).parent
     results: List[Tuple[int, Path]] = []
     for i in range(1, 8):
-        # pattern like agent_execution_results_agent3_*.json
+        # Look in version-specific subdirectory
+        version_dir = base_dir / f"version_{i}"
+        if not version_dir.exists():
+            continue
+            
+        # pattern like agent_execution_results_seeds_agent3_*.json
         pattern = f"agent_execution_results_seeds_agent{i}_*.json"
-        matches = sorted(outputs_dir.glob(pattern))
+        matches = sorted(version_dir.glob(pattern))
         if not matches:
             # Try without timestamp fallback: agent_execution_results_agent{i}.json
-            fallback = outputs_dir / f"agent_execution_results_agent{i}.json"
+            fallback = version_dir / f"agent_execution_results_agent{i}.json"
             if fallback.exists():
                 matches = [fallback]
         if matches:
@@ -85,7 +90,7 @@ def create_accuracy_plot():
     """Create a line chart showing agent index vs accuracy."""
     pairs = compute_agent_accuracies()
     if not pairs:
-        raise RuntimeError("No matching agent_execution_results_agentX files found in outputs/")
+        raise RuntimeError("No matching agent_execution_results_agentX files found in version_*/ subdirectories")
 
     # Maintain the natural ordering by agent index (1 .. 7)
     pairs.sort(key=lambda x: x[2])
@@ -107,7 +112,9 @@ def create_accuracy_plot():
     plt.xticks(x, labels, rotation=0)
     plt.tight_layout()
 
-    output_file = Path(__file__).parent / "agent_accuracy_progression_seeds.png"
+    plots_dir = Path(__file__).parent.parent / "plots"
+    plots_dir.mkdir(exist_ok=True)
+    output_file = plots_dir / "agent_accuracy_progression_seeds.png"
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     print(f"Plot saved to: {output_file}")
     plt.close()

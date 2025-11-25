@@ -254,8 +254,8 @@ if __name__ == "__main__":
                 print("--- End Execution ---")
 
             if all_execution_results:
-                outputs_dir = Path(__file__).parent.parent / "outputs"
-                outputs_dir.mkdir(exist_ok=True)
+                outputs_dir = Path(__file__).parent.parent / "outputs" / "ablation_test"
+                outputs_dir.mkdir(parents=True, exist_ok=True)
                 try:
                     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
                     output_filename = f"agent_execution_results_{agent_name}_seeds_baseline_{timestamp}.json"

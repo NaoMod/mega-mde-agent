@@ -32,10 +32,15 @@ def find_agent_files(is_seeds: bool = False) -> List[Tuple[int, Path]]:
         is_seeds: If True, look for seeds dataset files; otherwise regular dataset files
     Returns a list of (agent_index, path) tuples ordered by agent index.
     """
-    outputs_dir = Path(__file__).parent
+    base_dir = Path(__file__).parent / "agent_version_logs"
     results: List[Tuple[int, Path]] = []
     
     for i in range(1, 8):
+        # Look in version-specific subdirectory
+        version_dir = base_dir / f"version_{i}"
+        if not version_dir.exists():
+            continue
+            
         if is_seeds:
             # pattern like agent_execution_results_seeds_agent3_*.json
             pattern = f"agent_execution_results_seeds_agent{i}_*.json"
@@ -43,11 +48,11 @@ def find_agent_files(is_seeds: bool = False) -> List[Tuple[int, Path]]:
             # pattern like agent_execution_results_agent3_*.json (not seeds)
             pattern = f"agent_execution_results_agent{i}_*.json"
         
-        matches = sorted(outputs_dir.glob(pattern))
+        matches = sorted(version_dir.glob(pattern))
         
         if not matches and not is_seeds:
             # Try without timestamp fallback: agent_execution_results_agent{i}.json
-            fallback = outputs_dir / f"agent_execution_results_agent{i}.json"
+            fallback = version_dir / f"agent_execution_results_agent{i}.json"
             if fallback.exists():
                 matches = [fallback]
                 
@@ -96,7 +101,7 @@ def create_comparison_plot():
     seeds_data = compute_agent_accuracies(is_seeds=True)
     
     if not regular_data and not seeds_data:
-        raise RuntimeError("No matching agent execution result files found in outputs/")
+        raise RuntimeError("No matching agent execution result files found in outputs/agent_version_logs/version_*/")
     
     # Sort by agent index and convert to separate lists
     regular_data.sort(key=lambda x: x[2])
@@ -153,7 +158,9 @@ def create_comparison_plot():
     
     plt.tight_layout()
 
-    output_file = Path(__file__).parent / "agent_accuracy_comparison.png"
+    plots_dir = Path(__file__).parent / "plots"
+    plots_dir.mkdir(exist_ok=True)
+    output_file = plots_dir / "agent_accuracy_comparison.png"
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     print(f"Comparison plot saved to: {output_file}")
     plt.show()

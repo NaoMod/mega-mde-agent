@@ -130,14 +130,16 @@ def main():
     
     # Define the paths to the result files
     outputs_dir = Path(__file__).parent
+    agent_logs_dir = outputs_dir / "agent_version_logs"
+    ablation_dir = outputs_dir / "ablation_test"
     
     # File mappings: (file_path, display_name)
     files_to_evaluate = [
-        (outputs_dir / "agent_execution_results_MCPAgent_baseline_20251020_134540.json", "Baseline"),
+        (agent_logs_dir / "agent_execution_results_MCPAgent_baseline_20251020_134540.json", "Baseline"),
         (outputs_dir / "minimal_prompt_v0_file.json", "V0"),
         (outputs_dir / "prompt_v1.json", "V1"),
         (outputs_dir / "prompt_V2.json", "V2"),
-        (outputs_dir / "agent_execution_results_MCPAgent_reduced_tools_20251020_122115.json", "Reduced Tools"),
+        (ablation_dir / "agent_execution_results_MCPAgent_reduced_tools_20251020_122115.json", "Reduced Tools"),
     ]
     
     print("=== Agent Execution Results Accuracy Evaluation ===\n")

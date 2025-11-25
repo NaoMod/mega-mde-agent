@@ -69,7 +69,7 @@ def evaluate_instruction(instruction_data):
     return success, expected_tools
 
 def main():
-    current_dir = '/Users/zakariahachm/Downloads/llm-agents-mde/outputs'
+    current_dir = os.path.dirname(__file__)
     
 
     # Load both baseline and reduced tools results
@@ -81,8 +81,9 @@ def main():
     print(f"Analyzing {num_instructions} instructions across 2 versions")
     print("-" * 60)
 
-    # Create CSV report
-    csv_file = os.path.join(current_dir, 'seeds_report_generation.csv')
+    # Create CSV report in agent_version_logs directory
+    agent_logs_dir = os.path.join(os.path.dirname(current_dir), 'agent_version_logs')
+    csv_file = os.path.join(agent_logs_dir, 'seeds_report_generation.csv')
 
     with open(csv_file, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
@@ -178,7 +179,7 @@ if __name__ == "__main__":
 
     # --- Minimal coverage calculation and chart ---
     # Parse ALL_MISSING_TOOLS from CSV
-    csv_file = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'seeds_report_generation.csv')
+    csv_file = os.path.join(os.path.dirname(__file__), '..', 'agent_version_logs', 'seeds_report_generation.csv')
     all_missing_tools = set()
     with open(csv_file, 'r') as f:
         reader = csv.DictReader(f)
@@ -262,7 +263,9 @@ if __name__ == "__main__":
                 cell.set_facecolor('#f7b6b6')
 
     plt.tight_layout()
-    chart_path = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'coverage_chart_seeds.png')
+    plots_dir = os.path.join(os.path.dirname(__file__), '..', 'plots')
+    os.makedirs(plots_dir, exist_ok=True)
+    chart_path = os.path.join(plots_dir, 'coverage_chart_seeds.png')
     plt.savefig(chart_path, dpi=120)
     print(f"\nCoverage chart saved to: {chart_path}")
 
@@ -283,7 +286,7 @@ if __name__ == "__main__":
                     TOOLS_TO_REMOVE.append(line)
 
     # Parse ALL_MISSING_TOOLS from CSV
-    csv_file = os.path.join('/Users/zakariahachm/Downloads/llm-agents-mde/outputs', 'seeds_report_generation.csv')
+    csv_file = os.path.join(os.path.dirname(__file__), '..', 'agent_version_logs', 'seeds_report_generation.csv')
     all_missing_tools = set()
     with open(csv_file, 'r') as f:
         reader = csv.DictReader(f)

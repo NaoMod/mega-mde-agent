@@ -1,4 +1,4 @@
-# A Megamodel-based Approach to Support Ecosystems of LLM Agents for Model-Based Engineering
+# A Megamodel-based Approach to Evaluate Ecosystems of LLM-based Agents
 
 ## Dataset generation
 

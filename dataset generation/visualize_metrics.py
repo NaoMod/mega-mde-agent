@@ -29,14 +29,17 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 def load_data(dataset_type="all"):
     """Load the CSV data files for specified dataset type"""
     if dataset_type == "uml":
-        single_tool_path = OUTPUT_DIR / "single_uml_tool_comparison.csv"
-        multi_tool_path = OUTPUT_DIR / "multi_uml_tool_comparison.csv"
+        subdir = OUTPUT_DIR / "uml"
+        single_tool_path = subdir / "single_uml_tool_comparison.csv"
+        multi_tool_path = subdir / "multi_uml_tool_comparison.csv"
     elif dataset_type == "openrewrite":
-        single_tool_path = OUTPUT_DIR / "single_openRewrite_tool_comparison.csv"
-        multi_tool_path = OUTPUT_DIR / "multi_openRewrite_tool_comparison.csv"
-    else:  # all tools
-        single_tool_path = OUTPUT_DIR / "single_tool_comparison.csv"
-        multi_tool_path = OUTPUT_DIR / "multi_tool_comparison.csv"
+        subdir = OUTPUT_DIR / "openRewrite"
+        single_tool_path = subdir / "single_openRewrite_tool_comparison.csv"
+        multi_tool_path = subdir / "multi_openRewrite_tool_comparison.csv"
+    else:  # all tools (atl_tools)
+        subdir = OUTPUT_DIR / "atl_tools"
+        single_tool_path = subdir / "single_tool_comparison.csv"
+        multi_tool_path = subdir / "multi_tool_comparison.csv"
     
     single_df = pd.read_csv(single_tool_path)
     multi_df = pd.read_csv(multi_tool_path)
@@ -128,7 +131,12 @@ def create_full_metric_comparison(single_df, multi_df, dataset_label="ATL Tools"
     dataset_title = f"Metrics for {dataset_label} Single Tool and Multi Tool"
     fig.suptitle(dataset_title, fontsize=20, fontweight='bold', y=1.04)  # Increased from 16
     plt.tight_layout()
-    plt.savefig(f"metric_{dataset_label}_comparison_final.png", dpi=300, bbox_inches='tight')
+    
+    # Determine output directory based on dataset label
+    tool_type = dataset_label.lower().replace(' ', '_')
+    output_dir = Path(__file__).parent / "experimentation_charts" / tool_type
+    output_dir.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_dir / f"metric_{dataset_label}_comparison_final.png", dpi=300, bbox_inches='tight')
 
 
 def create_selected_metrics_comparison(single_df, multi_df, dataset_label="ATL Tools"):
@@ -211,7 +219,12 @@ def create_selected_metrics_comparison(single_df, multi_df, dataset_label="ATL T
     dataset_title = f"Selected Metrics for {dataset_label} Single Tool and Multi Tool"
     fig.suptitle(dataset_title, fontsize=20, fontweight='bold', y=1.04)
     plt.tight_layout()
-    plt.savefig(f"metric_{dataset_label}_selected_comparison.png", dpi=300, bbox_inches='tight')
+    
+    # Determine output directory based on dataset label
+    tool_type = dataset_label.lower().replace(' ', '_')
+    output_dir = Path(__file__).parent / "experimentation_charts" / tool_type
+    output_dir.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_dir / f"metric_{dataset_label}_selected_comparison.png", dpi=300, bbox_inches='tight')
 
 
 def create_summary_dashboard():

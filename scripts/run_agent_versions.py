@@ -354,8 +354,10 @@ if __name__ == "__main__":
                             print("--- End Execution ---")
                         # Save all results
                         if all_execution_results:
-                            outputs_dir = Path(__file__).parent.parent / "outputs"
-                            outputs_dir.mkdir(exist_ok=True)
+                            # Extract version number from agent name (e.g., agent1 -> version_1)
+                            version_num = agent_name.replace('agent', '')
+                            outputs_dir = Path(__file__).parent.parent / "outputs" / "agent_version_logs" / f"version_{version_num}"
+                            outputs_dir.mkdir(parents=True, exist_ok=True)
                             try:
                                 # Save results with a unique prefix for seedsdataset
                                 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
