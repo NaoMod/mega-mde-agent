@@ -278,7 +278,7 @@ def main(dataset_type="single"):
     if dataset_type == "multi":
         #uml files
         seed_file_path = SCRIPT_DIR / "seeds" / "open_rewrite_tools" / "multi_tool_seeds.py"
-        generated_file_path = SCRIPT_DIR / "outputs" / "openRewrite_multi_remainder.json"
+        generated_file_path = SCRIPT_DIR / "outputs" / "multi_openRewrite_500_dataset.json"
     else:  # default to single
         seed_file_path = SCRIPT_DIR / "seeds" / "open_rewrite_tools" / "single_tool_seeds.py"
         generated_file_path = SCRIPT_DIR / "outputs" / "single_openRewrite_500_dataset.json"

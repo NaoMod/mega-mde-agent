@@ -8,15 +8,12 @@ class MegamodelRegistry:
     """Central registry for the extended AM3 megamodel"""
     
     def __init__(self):
-        # AM3 Core elements
+    
         self.entities: Dict[str, Entity] = {}
         self.relationships: List[Relationship] = []
-        
-        # MCP Infrastructure  
+
         self.mcp_servers: Dict[str, Any] = {}  # Will store MCPServer objects
         self.tools_by_server: Dict[str, List[Any]] = {}  # Will store MCPTool objects
-        
-        # Agent Execution & Planning
         self.sessions: Dict[str, Any] = {}  # Will store AgentSession objects
         self.workflow_plans: Dict[str, Any] = {}  # Will store WorkflowPlan objects
         
@@ -32,7 +29,6 @@ class MegamodelRegistry:
         """Register an entity in the megamodel"""
         self.entities[entity.uri] = entity
         
-        # Update indexes if it is a model (search by the model type)
         if isinstance(entity, Model):
             model_type = entity.model_type.value
             if model_type in self._models_by_type:
@@ -64,7 +60,6 @@ class MegamodelRegistry:
                 results.append(rel)
         return results
     
-    #  MCP Server Management 
     
     def register_mcp_server(self, name: str, server: Any) -> None:
         """Register MCP server"""
