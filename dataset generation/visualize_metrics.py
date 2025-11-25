@@ -17,9 +17,9 @@ from pathlib import Path
 plt.style.use('ggplot')
 sns.set_palette('viridis')
 plt.rcParams['font.family'] = 'DejaVu Sans'
-plt.rcParams['font.size'] = 14  # Increased from 10
-plt.rcParams['axes.titlesize'] = 18  # Increased from 14
-plt.rcParams['axes.labelsize'] = 16  # Increased from 12
+plt.rcParams['font.size'] = 14  
+plt.rcParams['axes.titlesize'] = 18 
+plt.rcParams['axes.labelsize'] = 16 
 
 # Output directory
 OUTPUT_DIR = Path(__file__).resolve().parent / "outputs"
