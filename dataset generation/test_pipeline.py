@@ -262,7 +262,7 @@ def main() -> None:
     # Generate dataset with only "get" tools
     get_only_dataset = generate_single_tool_instructions(
         selected_apis=get_tools_sample,
-        per_api=1.0,     # Generate 1 instruction per tool
+        per_api=1,     # Generate 1 instruction per tool
         llm_max_calls=10,  # Allow up to 10 calls (one per tool)
         registry=registry,
     )

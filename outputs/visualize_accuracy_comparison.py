@@ -107,8 +107,8 @@ def create_comparison_plot():
     regular_data.sort(key=lambda x: x[2])
     seeds_data.sort(key=lambda x: x[2])
     
-    # Create the plot
-    plt.figure(figsize=(12, 8))
+    # Create the plot with smaller figure size for paper
+    plt.figure(figsize=(9, 5))
     
     # Plot regular dataset (if available)
     if regular_data:
@@ -117,13 +117,13 @@ def create_comparison_plot():
         x = np.arange(len(labels))
         
         line1 = plt.plot(x, accuracies_pct, marker='o', linestyle='-', 
-                        color='#1f77b4', linewidth=2, markersize=6, 
+                        color='#1f77b4', linewidth=2, markersize=5, 
                         label='Augmented Dataset', alpha=0.8)[0]
         
         # Add value labels
         for xi, yi in zip(x, accuracies_pct):
             plt.text(xi, yi + 1.5, f"{yi:.1f}%", ha='center', va='bottom', 
-                    fontsize=9, fontweight='bold', color='#1f77b4')
+                    fontsize=8, fontweight='bold', color='#1f77b4')
     
     # Plot seeds dataset (if available)
     if seeds_data:
@@ -132,29 +132,27 @@ def create_comparison_plot():
         x_seeds = np.arange(len(labels_seeds))
         
         line2 = plt.plot(x_seeds, accuracies_pct_seeds, marker='s', linestyle='-', 
-                        color='#ff7f0e', linewidth=2, markersize=6, 
+                        color='#ff7f0e', linewidth=2, markersize=5, 
                         label='Seeds Dataset', alpha=0.8)[0]
         
         # Add value labels
         for xi, yi in zip(x_seeds, accuracies_pct_seeds):
             plt.text(xi, yi - 3, f"{yi:.1f}%", ha='center', va='top', 
-                    fontsize=9, fontweight='bold', color='#ff7f0e')
+                    fontsize=8, fontweight='bold', color='#ff7f0e')
     
     # Use the labels from whichever dataset we have (they should be the same)
     if regular_data:
-        plt.xticks(x, labels, rotation=0)
+        plt.xticks(x, labels, rotation=0, fontsize=10)
     elif seeds_data:
-        plt.xticks(x_seeds, labels_seeds, rotation=0)
+        plt.xticks(x_seeds, labels_seeds, rotation=0, fontsize=10)
     
-    plt.title('Agent Accuracy by Version - Dataset Comparison', 
-              fontsize=14, fontweight='bold', pad=20)
-    plt.xlabel('Agent Version', fontsize=12)
-    plt.ylabel('Accuracy (%)', fontsize=12)
+    plt.xlabel('Agent Version', fontsize=11)
+    plt.ylabel('Accuracy (%)', fontsize=11)
     plt.ylim(0, 100)
     plt.grid(axis='y', alpha=0.3, linestyle='--')
     
-    # Add legend
-    plt.legend(loc='lower right', fontsize=11, framealpha=0.9)
+    # Add legend at bottom right, more compact
+    plt.legend(loc='lower right', fontsize=10, framealpha=0.9)
     
     plt.tight_layout()
 
