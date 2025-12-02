@@ -3,13 +3,11 @@
 Comparison visualization script for agent accuracy progression
 Plots both regular dataset and seeds dataset on the same figure with different colors
 """
-
-import json
 import re
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import List, Tuple
 
 # Reuse the evaluator that understands how to score execution results
 try:

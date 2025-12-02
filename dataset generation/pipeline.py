@@ -1,6 +1,6 @@
-"""This script contains functions to generate datasets of model transformation tools, both single-tool and multi-tool instructions."""
 import json
 import os
+from itertools import combinations
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 import sys
@@ -19,9 +19,10 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 from src.core.megamodel import MegamodelRegistry
 import random
-
-from seeds.open_rewrite_tools.single_tool_seeds import SingleToolSeeds
-from seeds.open_rewrite_tools.multi_tool_seeds import MultiToolSeeds
+# Single-tool instruction seed examples
+from single_tool_seeds import SingleToolSeeds
+# Multi-tool instruction seed examples
+from multi_tool_seeds import MultiToolSeeds
     
 
 # --- 1) Start with a megamodel repository (populate registry) ---
@@ -182,12 +183,16 @@ def sample_apis(components: Dict[str, Any], insights: Dict[str, Any]) -> List[Di
 
 # --- Utilité: Instead of working with long tool names like "apply_Class2Relational_transformation_tool", We get simple patterns like "apply" or "get" 
 def _derive_api(tool_name: str) -> Tuple[str, str]:
-    # OpenRewrite: use recipe_application for apply_*_recipe_tool, else call
-    if tool_name.startswith("apply_") and tool_name.endswith("_recipe_tool"):
-        return tool_name, "recipe_application"
-    if tool_name.startswith("get_") and tool_name.endswith("_details_tool"):
-        return tool_name, "recipe_info"
-    return  "call"
+    if tool_name.startswith("list_transformation_") and tool_name.endswith("_tool"):
+        base = tool_name[len("list_transformation_"):-len("_tool")]
+        return f"{base}.get_tool", "get"
+    if tool_name.startswith("apply_") and tool_name.endswith("_transformation_tool"):
+        base = tool_name[len("apply_"):-len("_transformation_tool")]
+        return f"{base}.apply", "apply"
+    if tool_name.startswith("extract_"):
+        # Map extract tools to "get" pattern since they retrieve information
+        return f"model.{tool_name}", "get"
+    return tool_name, "call"
 
 def generate_single_tool_instructions(
     selected_apis: List[Dict[str, Any]],
@@ -201,7 +206,18 @@ def generate_single_tool_instructions(
     items: List[Dict[str, Any]] = []
     if not selected_apis:
         return items
-
+    
+    # Map transformation name -> first sample source path from registry (if available)
+    sample_by_name: Dict[str, str] = {}
+    if registry is not None:
+        for e in getattr(registry, "entities", {}).values():
+            name = getattr(e, "name", None)
+            samples = getattr(e, "sample_sources", None)
+            if name and samples:
+                key = str(name).strip().lower()
+                if key not in sample_by_name and isinstance(samples, list) and samples:
+                    sample_by_name[key] = samples[0]
+    
     llm_calls = 0
     n = max(1, int(per_api))
     for tool in selected_apis:
@@ -210,20 +226,32 @@ def generate_single_tool_instructions(
         for _ in range(n):
             if llm is None or llm_calls >= llm_max_calls:
                 continue
-
-            # Use OpenRewrite seeds
+            
+            # Default path
+            model_path = "./examples/input.xmi"
+            
+            # Try to get real path from registry if available
+            if pattern == "apply":
+                base = api_name.split(".")[0].strip().lower()
+                if base in sample_by_name:
+                    model_path = sample_by_name[base]
+            
+            # Get seeds by pattern and select 3 from different levels
             all_seeds = SingleToolSeeds.get_seeds()
             pattern_seeds = [s for s in all_seeds if s.pattern == pattern]
-
+            
             selected_seeds = []
+            # Select random seeds from available pattern seeds
             if pattern_seeds:
+                # Select up to 3 random seeds
                 num_to_select = min(3, len(pattern_seeds))
                 selected_seeds = random.sample(pattern_seeds, num_to_select)
-
+            
+            # Get instructions from selected seeds to use as examples
             seed_examples = "\n".join([f"- {s.instruction}" for s in selected_seeds])
-
+            
             p = prompt or (
-                f"You will be provided with a transformation tool and its description. Your task is to generate a single instruction for using this tool.\n\n"
+                f"You will be provided with a tool, its description, and expected operation. Your task is to generate a single instruction for using this tool.\n\n"
                 f"Tool: {api_name}\n"
                 f"Operation: {pattern}\n"
                 f"Description: {desc}\n\n"
@@ -231,14 +259,14 @@ def generate_single_tool_instructions(
                 "1. Use exactly one action verb\n"
                 "2. Do not mention tool names\n"
                 "3. Keep the instruction concise and focused\n"
-                "4. Make instructions practical and concrete, not vague\n"
-                "5. Vary the sentence structure and wording for each instruction.\n\n"
-                "Example instructions you can take inspiration from:\n"
+                f"4. For 'apply': Include the specific target type and the exact path '{model_path}'\n"
+                "5. Make instructions practical and concrete, not vague\n"
+                "6. Include details about the source and target model types when relevant\n\n"
+                "Example instructions:\n"
                 f"{seed_examples}\n\n"
-                "Generate your instruction that would make sense to a user who wants to work with this code transformation:"
+                "Generate your instruction that would make sense to a user who wants to work with these model transformations:"
             )
-            #print(f"Prompt for tool {name}:\n{p}\n---")
-
+            
             try:
                 msg = llm.invoke(p)
                 instruction = getattr(msg, "content", str(msg)).strip()
@@ -249,7 +277,7 @@ def generate_single_tool_instructions(
             items.append({
                 "pattern": pattern,
                 "instruction": instruction,
-                "relevant_apis": [{"api_name": api_name, "arguments": ""}],
+                "relevant_apis": [{"api_name": api_name, "arguments": model_path if pattern == "apply" else ""}],
             })
     return items
 
@@ -274,56 +302,85 @@ def generate_multi_tool_instructions(
     if not workflows or len(workflows) == 0:
         return items
     
-
-    # Use OpenRewrite multi-tool seeds
+    # Map transformation name -> first sample source path from registry (if available)
+    sample_by_name: Dict[str, str] = {}
+    if registry is not None:
+        for e in getattr(registry, "entities", {}).values():
+            name = getattr(e, "name", None)
+            samples = getattr(e, "sample_sources", None)
+            if name and samples:
+                key = str(name).strip().lower()
+                if key not in sample_by_name and isinstance(samples, list) and samples:
+                    sample_by_name[key] = samples[0]
+    
+    # Get all seeds once
     all_seeds = MultiToolSeeds.get_seeds()
-    # Helper to map internal pattern to seed pattern
-    def map_pattern(p):
-        return "application" if p == "recipe_application" else ("info" if p == "recipe_info" else p)
-
-    # Build pattern-to-seeds map dynamically
-    pattern_seeds_map = {}
-    for s in all_seeds:
-        pattern_key = s.pattern.replace(" ", "")  # e.g. "application,info"
-        pattern_seeds_map.setdefault(pattern_key, []).append(s)
-
+    get_get_seeds = [s for s in all_seeds if s.pattern == "get, get"]
+    get_apply_seeds = [s for s in all_seeds if s.pattern == "get, apply"]
+    apply_get_seeds = [s for s in all_seeds if s.pattern == "apply, get"]
+    apply_apply_seeds = [s for s in all_seeds if s.pattern == "apply, apply"]
+    
     # Initialize
     llm_calls = 0
-
+    
     # Process each workflow directly
     for workflow in workflows:
         if len(workflow) < chain_len:
             continue
-
+            
         # Process each segment of length chain_len in the workflow
         for i in range(len(workflow) - chain_len + 1):
             tool_combo = workflow[i:i+chain_len]
-
-
+            
             # Extract API info and patterns directly from tool names
             apis = []
             patterns = []
+            model_paths = []
+            tool_types = []
+            
             for tool_name in tool_combo:
                 api, pat = _derive_api(tool_name)
-                apis.append({"api_name": api, "arguments": ""})
+                # Default path
+                model_path = "./examples/input.xmi" if pat == "apply" else ""
+                
+                # Try to get real path from registry if available
+                if pat == "apply":
+                    base = api.split(".")[0].strip().lower()
+                    if base in sample_by_name:
+                        model_path = sample_by_name[base]
+                
+                model_paths.append(model_path)
+                apis.append({"api_name": api, "arguments": model_path if pat == "apply" else ""})
                 patterns.append(pat)
-
-            # Map internal patterns to seed patterns
-            mapped_patterns = [map_pattern(p) for p in patterns]
-            pattern_key = ",".join(mapped_patterns)
-
-
+                
+                # Extract tool type info
+                if "2" in api:
+                    source, target = api.split(".")[0].split("2")
+                    tool_types.append(f"{source} to {target}")
+                else:
+                    tool_types.append("model transformation")
+            
+            pattern_key = ", ".join(patterns)
+            
             # Generate instructions per combination
             for _ in range(max(1, int(per_item))):
+                # Pattern mapping
+                pattern_seeds_map = {
+                    "get, get": get_get_seeds,
+                    "get, apply": get_apply_seeds,
+                    "apply, get": apply_get_seeds,
+                    "apply, apply": apply_apply_seeds
+                }
+                
                 # Select 3 seeds from matching pattern
                 selected_seeds = []
                 pattern_seeds = pattern_seeds_map.get(pattern_key, [])
-
+                
                 # Select random seeds from available pattern seeds
                 if pattern_seeds:
                     num_to_select = min(3, len(pattern_seeds))
                     selected_seeds = random.sample(pattern_seeds, num_to_select)
-
+                
                 # Fill remaining slots if we don't have 3
                 while len(selected_seeds) < 3:
                     other_patterns = [k for k in pattern_seeds_map.keys() if k != pattern_key]
@@ -334,25 +391,33 @@ def generate_multi_tool_instructions(
                         if other_seeds:
                             selected_seeds.append(random.choice(other_seeds))
                     break
-
+                
                 # Build the prompt with all three seeds
                 seed_examples = "\n".join([f"- {s.instruction}" for s in selected_seeds])
-
+                
+                path_instructions = []
+                for j, (pat, path) in enumerate(zip(patterns, model_paths)):
+                    if pat == "apply":
+                        path_instructions.append(f"Step {j+1} ('apply'): Include path '{path}'")
+                
+                # Update the prompt to include actual paths
                 p = prompt or (
                     "You will be provided with a sequence of tools and their operations. Your task is to generate a single instruction that covers using these tools in sequence.\n\n"
                     f"Tool sequence: {' → '.join([api['api_name'] for api in apis])}\n"
-                    f"Operations: {' → '.join(patterns)}\n\n"
+                    f"Operations: {' → '.join(patterns)}\n"
+                    f"Transformations: {' → '.join(tool_types)}\n\n"
                     "Rules for multi-step instructions:\n"
                     "1. Use exactly one verb for each step (two verbs total)\n"
                     "2. Do not mention tool names\n"
                     "3. Keep steps in the correct logical order\n"
-                    "4. Make instructions practical and concrete, not vague\n"
-                    "5. Vary the sentence structure and wording for each instruction.\n\n"
-                    "Three example instructions (various patterns) you can take inspiration from:\n"
+                    f"4. Paths for 'apply' operations:\n   {chr(10).join(path_instructions) if path_instructions else '   No apply operations in this sequence'}\n"
+                    "5. For 'get' operations: Focus on retrieving specific configuration information\n"
+                    "6.For every 'apply' step explicitly state the TARGET model type produced (source model mention optional)\n"
+                    "Three example instructions (various patterns):\n"
                     f"{seed_examples}\n\n"
-                    "Generate your instruction that clearly connects the two operations in a meaningful way"
+                    "Generate your instruction that clearly connects the two operations in a meaningful way:"
                 )
-
+                
                 # Generate the instruction
                 instruction = ""
                 try:
@@ -362,18 +427,18 @@ def generate_multi_tool_instructions(
                         llm_calls += 1
                     else:
                         # Fallback instruction if no LLM is available or max calls reached
-                        instruction = f"First, {patterns[0]} using the first tool, then {patterns[1]} using the second tool."
+                        instruction = f"Using {patterns[0]} to process a {tool_types[0]} model, then {patterns[1]} to complete the transformation to {tool_types[1]}"
                 except Exception:
                     # Fallback instruction
-                    instruction = f"First, {patterns[0]} using the first tool, then {patterns[1]} using the second tool."
-
+                    instruction = f"Using {patterns[0]} to process a {tool_types[0]} model, then {patterns[1]} to complete the transformation to {tool_types[1]}"
+                
                 # Add the instruction
                 items.append({
                     "pattern": ">".join(patterns),
                     "instruction": instruction,
                     "relevant_apis": apis,
                 })
-
+    
     return items
 
 def validate_dataset(examples: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
