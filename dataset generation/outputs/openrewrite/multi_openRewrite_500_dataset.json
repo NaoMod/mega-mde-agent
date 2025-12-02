@@ -47,11 +47,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-service"
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-service"
       }
     ]
   },
@@ -61,7 +61,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-springboot-app"
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
@@ -107,7 +107,7 @@
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -131,11 +131,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       }
     ]
   },
@@ -215,7 +215,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/notification-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_springboot_3_3_details_tool",
@@ -229,7 +229,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_recipe_details_tool",
@@ -299,7 +299,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/app"
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
@@ -317,7 +317,7 @@
       },
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -327,11 +327,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       }
     ]
   },
@@ -369,11 +369,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/demo-service/build.gradle"
       },
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/demo-service/build.gradle"
       }
     ]
   },
@@ -401,7 +401,7 @@
       },
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-app/build.gradle"
       }
     ]
   },
@@ -411,7 +411,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/micronaut-app/build.gradle"
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
@@ -429,7 +429,7 @@
       },
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/project/build.gradle"
       }
     ]
   },
@@ -439,7 +439,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_hamcrest_to_assertj_details_tool",
@@ -481,7 +481,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/inventory-service/build.gradle"
       },
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
@@ -509,7 +509,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_log4j_to_slf4j_details_tool",
@@ -551,7 +551,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
@@ -569,7 +569,7 @@
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/quarkus-app/build.gradle"
       }
     ]
   },
@@ -579,7 +579,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform/build.gradle"
       },
       {
         "api_name": "get_recipe_details_tool",
@@ -593,7 +593,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/springboot-application/build.gradle"
       },
       {
         "api_name": "get_fix_checkstyle_violations_details_tool",
@@ -607,7 +607,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app"
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
@@ -621,7 +621,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_25_details_tool",
@@ -667,7 +667,7 @@
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/project/build.gradle"
       }
     ]
   },
@@ -691,11 +691,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/auth-service/build.gradle"
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/auth-service/build.gradle"
       }
     ]
   },
@@ -705,7 +705,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service"
       },
       {
         "api_name": "get_migrate_to_springboot_3_3_details_tool",
@@ -719,7 +719,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/sample-app/build.gradle"
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
@@ -737,7 +737,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -765,7 +765,7 @@
       },
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -775,7 +775,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
@@ -789,7 +789,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_springboot_3_3_details_tool",
@@ -803,11 +803,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/pom.xml"
       }
     ]
   },
@@ -821,7 +821,7 @@
       },
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -831,7 +831,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-project/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_25_details_tool",
@@ -859,7 +859,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/notification-service/build.gradle"
       },
       {
         "api_name": "get_migrate_quarkus1_to_quarkus2_details_tool",
@@ -873,7 +873,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/inventory-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_springboot_3_3_details_tool",
@@ -887,7 +887,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_quarkus1_to_quarkus2_details_tool",
@@ -901,11 +901,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       }
     ]
   },
@@ -919,7 +919,7 @@
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/spring-boot-app"
       }
     ]
   },
@@ -957,11 +957,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       }
     ]
   },
@@ -989,7 +989,7 @@
       },
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       }
     ]
   },
@@ -1073,7 +1073,7 @@
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -1083,7 +1083,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
@@ -1097,7 +1097,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/banking-app/build.gradle"
       },
       {
         "api_name": "get_migrate_hamcrest_to_assertj_details_tool",
@@ -1111,7 +1111,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_springboot_3_3_details_tool",
@@ -1125,11 +1125,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace"
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace"
       }
     ]
   },
@@ -1139,7 +1139,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       },
       {
         "api_name": "get_migrate_springboot1_to_springboot2_details_tool",
@@ -1167,7 +1167,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/notification-service/build.gradle"
       },
       {
         "api_name": "get_recipe_details_tool",
@@ -1185,7 +1185,7 @@
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -1195,7 +1195,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project/build.gradle"
       },
       {
         "api_name": "get_manage_maven_dependencies_details_tool",
@@ -1209,11 +1209,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       }
     ]
   },
@@ -1223,7 +1223,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project/build.gradle"
       },
       {
         "api_name": "get_fix_static_analysis_issues_details_tool",
@@ -1237,7 +1237,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
@@ -1265,7 +1265,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/product-service"
       },
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
@@ -1293,7 +1293,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut2_to_micronaut3_details_tool",
@@ -1335,7 +1335,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       },
       {
         "api_name": "get_fix_checkstyle_violations_details_tool",
@@ -1363,7 +1363,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/billing-app/build.gradle"
       },
       {
         "api_name": "get_manage_maven_dependencies_details_tool",
@@ -1405,7 +1405,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api"
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
@@ -1433,7 +1433,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_refactor_package_rename_details_tool",
@@ -1447,7 +1447,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/microservice/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut3_to_micronaut4_details_tool",
@@ -1461,7 +1461,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/notification-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut3_to_micronaut4_details_tool",
@@ -1475,7 +1475,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-project"
       },
       {
         "api_name": "get_migrate_micronaut2_to_micronaut3_details_tool",
@@ -1489,11 +1489,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/springboot-app"
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/micronaut-app"
       }
     ]
   },
@@ -1503,7 +1503,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/inventory-service/build.gradle"
       },
       {
         "api_name": "get_use_slf4j_parameterized_logging_details_tool",
@@ -1535,7 +1535,7 @@
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -1573,7 +1573,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_quarkus1_to_quarkus2_details_tool",
@@ -1605,7 +1605,7 @@
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -1615,7 +1615,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/auth-service/build.gradle"
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
@@ -1629,7 +1629,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/inventory-service/build.gradle"
       },
       {
         "api_name": "get_recipe_details_tool",
@@ -1647,7 +1647,7 @@
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/app-core/build.gradle"
       }
     ]
   },
@@ -1703,7 +1703,7 @@
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -1727,11 +1727,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app"
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app"
       }
     ]
   },
@@ -1759,7 +1759,7 @@
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -1783,7 +1783,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_refactor_package_rename_details_tool",
@@ -1797,11 +1797,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/enterprise-service"
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/enterprise-service"
       }
     ]
   },
@@ -1825,7 +1825,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_refactor_package_rename_details_tool",
@@ -1885,7 +1885,7 @@
       },
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-java-app/build.gradle"
       }
     ]
   },
@@ -1895,11 +1895,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./quarkus-app/build.gradle"
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./quarkus-app/build.gradle"
       }
     ]
   },
@@ -1909,7 +1909,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/inventory-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut3_to_micronaut4_details_tool",
@@ -1965,7 +1965,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./applications/banking-app/build.gradle"
       },
       {
         "api_name": "get_migrate_quarkus1_to_quarkus2_details_tool",
@@ -1983,7 +1983,7 @@
       },
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -1997,7 +1997,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-project"
       }
     ]
   },
@@ -2035,7 +2035,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut2_to_micronaut3_details_tool",
@@ -2063,7 +2063,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut2_to_micronaut3_details_tool",
@@ -2081,7 +2081,7 @@
       },
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-project/build.gradle"
       }
     ]
   },
@@ -2119,7 +2119,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_springboot2_to_springboot3_details_tool",
@@ -2151,7 +2151,7 @@
       },
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -2161,7 +2161,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/web-app/build.gradle"
       },
       {
         "api_name": "get_migrate_quarkus1_to_quarkus2_details_tool",
@@ -2189,7 +2189,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       },
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
@@ -2231,7 +2231,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/example-service/build.gradle"
       },
       {
         "api_name": "get_use_slf4j_parameterized_logging_details_tool",
@@ -2259,7 +2259,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/banking-app/build.gradle"
       },
       {
         "api_name": "get_migrate_springboot1_to_springboot2_details_tool",
@@ -2291,7 +2291,7 @@
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -2301,7 +2301,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_use_slf4j_parameterized_logging_details_tool",
@@ -2319,7 +2319,7 @@
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       }
     ]
   },
@@ -2361,7 +2361,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-project"
       }
     ]
   },
@@ -2371,7 +2371,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/banking-app/build.gradle"
       },
       {
         "api_name": "get_migrate_to_springboot_3_3_details_tool",
@@ -2399,7 +2399,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_junit4_to_junit5_details_tool",
@@ -2413,7 +2413,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
@@ -2431,7 +2431,7 @@
       },
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/sample-app/build.gradle"
       }
     ]
   },
@@ -2515,7 +2515,7 @@
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -2529,7 +2529,7 @@
       },
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -2539,7 +2539,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-project/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut3_to_micronaut4_details_tool",
@@ -2553,7 +2553,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
@@ -2581,7 +2581,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_25_details_tool",
@@ -2595,7 +2595,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/enterprise-service"
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
@@ -2627,7 +2627,7 @@
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/commerce-platform/build.gradle"
       }
     ]
   },
@@ -2679,7 +2679,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_log4j_to_slf4j_details_tool",
@@ -2707,7 +2707,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
@@ -2753,7 +2753,7 @@
       },
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -2791,7 +2791,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./service-app"
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
@@ -2837,7 +2837,7 @@
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -2851,7 +2851,7 @@
       },
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -2865,7 +2865,7 @@
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/banking-app"
       }
     ]
   },
@@ -2875,7 +2875,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/notification-service/build.gradle"
       },
       {
         "api_name": "get_migrate_log4j_to_slf4j_details_tool",
@@ -2903,7 +2903,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_17_details_tool",
@@ -2959,7 +2959,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/critical-service/build.gradle"
       },
       {
         "api_name": "get_fix_static_analysis_issues_details_tool",
@@ -2977,7 +2977,7 @@
       },
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform/build.gradle"
       }
     ]
   },
@@ -2987,11 +2987,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       },
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       }
     ]
   },
@@ -3005,7 +3005,7 @@
       },
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -3015,7 +3015,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_log4j_to_slf4j_details_tool",
@@ -3061,7 +3061,7 @@
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform/build.gradle"
       }
     ]
   },
@@ -3099,11 +3099,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/auth-service/build.gradle"
       },
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/auth-service"
       }
     ]
   },
@@ -3127,7 +3127,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/banking-app/build.gradle"
       },
       {
         "api_name": "get_fix_static_analysis_issues_details_tool",
@@ -3141,7 +3141,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
@@ -3155,7 +3155,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_manage_maven_dependencies_details_tool",
@@ -3187,7 +3187,7 @@
       },
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/spring-boot-app/build.gradle"
       }
     ]
   },
@@ -3201,7 +3201,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -3211,11 +3211,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./apps/spring-api"
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./apps/micronaut-api"
       }
     ]
   },
@@ -3225,7 +3225,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_junit4_to_junit5_details_tool",
@@ -3253,7 +3253,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
@@ -3271,7 +3271,7 @@
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/myapp/build.gradle"
       }
     ]
   },
@@ -3295,7 +3295,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/notification-service/build.gradle"
       },
       {
         "api_name": "get_migrate_springboot2_to_springboot3_details_tool",
@@ -3309,7 +3309,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
@@ -3323,7 +3323,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/sample-service/build.gradle"
       },
       {
         "api_name": "get_manage_maven_dependencies_details_tool",
@@ -3337,7 +3337,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
@@ -3355,7 +3355,7 @@
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/project"
       }
     ]
   },
@@ -3379,11 +3379,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       },
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       }
     ]
   },
@@ -3397,7 +3397,7 @@
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -3421,11 +3421,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       }
     ]
   },
@@ -3453,7 +3453,7 @@
       },
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-project"
       }
     ]
   },
@@ -3477,11 +3477,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       }
     ]
   },
@@ -3509,7 +3509,7 @@
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -3537,7 +3537,7 @@
       },
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/project/build.gradle"
       }
     ]
   },
@@ -3575,7 +3575,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_17_details_tool",
@@ -3673,7 +3673,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_use_slf4j_parameterized_logging_details_tool",
@@ -3701,11 +3701,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/auth-service/build.gradle"
       },
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/auth-service/build.gradle"
       }
     ]
   },
@@ -3747,7 +3747,7 @@
       },
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-project"
       }
     ]
   },
@@ -3771,7 +3771,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       },
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
@@ -3785,7 +3785,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/micronaut-app/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut3_to_micronaut4_details_tool",
@@ -3799,7 +3799,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_use_slf4j_parameterized_logging_details_tool",
@@ -3817,7 +3817,7 @@
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/retail-platform/pom.xml"
       }
     ]
   },
@@ -3841,7 +3841,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app"
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
@@ -3901,7 +3901,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-application"
       }
     ]
   },
@@ -3911,7 +3911,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/auth-service/build.gradle"
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
@@ -3925,7 +3925,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut2_to_micronaut3_details_tool",
@@ -3939,7 +3939,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/notification-service/build.gradle"
       },
       {
         "api_name": "get_migrate_springboot1_to_springboot2_details_tool",
@@ -3953,7 +3953,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
@@ -3995,7 +3995,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_17_details_tool",
@@ -4009,7 +4009,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/app-service/build.gradle"
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
@@ -4037,7 +4037,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_21_details_tool",
@@ -4069,7 +4069,7 @@
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-legacy-app/build.gradle"
       }
     ]
   },
@@ -4093,7 +4093,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/sample-service/build.gradle"
       },
       {
         "api_name": "get_recipe_details_tool",
@@ -4107,7 +4107,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_17_details_tool",
@@ -4121,11 +4121,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/auth-service/build.gradle"
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/auth-service/src/main/java"
       }
     ]
   },
@@ -4139,7 +4139,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -4149,7 +4149,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       },
       {
         "api_name": "get_recipe_details_tool",
@@ -4195,7 +4195,7 @@
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -4205,7 +4205,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/application"
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
@@ -4219,7 +4219,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
@@ -4247,7 +4247,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-service/build.gradle"
       },
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
@@ -4261,7 +4261,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       },
       {
         "api_name": "get_migrate_junit4_to_junit5_details_tool",
@@ -4289,7 +4289,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
@@ -4307,7 +4307,7 @@
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/enterprise-app/build.gradle"
       }
     ]
   },
@@ -4331,7 +4331,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./apps/my-service/build.gradle"
       },
       {
         "api_name": "get_fix_static_analysis_issues_details_tool",
@@ -4363,7 +4363,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app/build.gradle"
       }
     ]
   },
@@ -4373,11 +4373,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/sample-app"
       },
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/sample-app"
       }
     ]
   },
@@ -4387,7 +4387,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_hamcrest_to_assertj_details_tool",
@@ -4429,7 +4429,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       },
       {
         "api_name": "get_recipe_details_tool",
@@ -4475,7 +4475,7 @@
       },
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -4499,11 +4499,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-app"
       },
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-app"
       }
     ]
   },
@@ -4513,7 +4513,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/sample-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut3_to_micronaut4_details_tool",
@@ -4527,7 +4527,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_use_slf4j_parameterized_logging_details_tool",
@@ -4541,11 +4541,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-app"
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-app"
       }
     ]
   },
@@ -4559,7 +4559,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/banking-app/build.gradle"
       }
     ]
   },
@@ -4569,7 +4569,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_refactor_package_rename_details_tool",
@@ -4583,11 +4583,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       },
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       }
     ]
   },
@@ -4597,7 +4597,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/order-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut2_to_micronaut3_details_tool",
@@ -4615,7 +4615,7 @@
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       }
     ]
   },
@@ -4639,11 +4639,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/app"
       },
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/app"
       }
     ]
   },
@@ -4653,7 +4653,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/example-app/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_17_details_tool",
@@ -4671,7 +4671,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app/build.gradle"
       }
     ]
   },
@@ -4713,7 +4713,7 @@
       },
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/project/build.gradle"
       }
     ]
   },
@@ -4741,7 +4741,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app"
       }
     ]
   },
@@ -4751,11 +4751,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api"
       },
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api"
       }
     ]
   },
@@ -4769,7 +4769,7 @@
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -4779,11 +4779,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       },
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       }
     ]
   },
@@ -4811,7 +4811,7 @@
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -4863,7 +4863,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-service"
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
@@ -4877,7 +4877,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut2_to_micronaut3_details_tool",
@@ -4895,7 +4895,7 @@
       },
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -4905,7 +4905,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/enterprise-app/springboot-module"
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
@@ -4919,7 +4919,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
@@ -4937,7 +4937,7 @@
       },
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/project"
       }
     ]
   },
@@ -4947,11 +4947,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/spring-boot-app/build.gradle"
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/quarkus-app/build.gradle"
       }
     ]
   },
@@ -4975,7 +4975,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/inventory-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_springboot_3_3_details_tool",
@@ -4993,7 +4993,7 @@
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/enterprise-service/pom.xml"
       }
     ]
   },
@@ -5049,7 +5049,7 @@
       },
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -5063,7 +5063,7 @@
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -5087,7 +5087,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_springboot2_to_springboot3_details_tool",
@@ -5101,7 +5101,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/notification-service/build.gradle"
       },
       {
         "api_name": "get_migrate_hamcrest_to_assertj_details_tool",
@@ -5157,7 +5157,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app/build.gradle"
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
@@ -5171,11 +5171,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp/build.gradle"
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp/build.gradle"
       }
     ]
   },
@@ -5231,7 +5231,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app/build.gradle"
       }
     ]
   },
@@ -5241,7 +5241,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       },
       {
         "api_name": "get_migrate_log4j_to_slf4j_details_tool",
@@ -5259,7 +5259,7 @@
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-spring-boot-app"
       }
     ]
   },
@@ -5269,7 +5269,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_25_details_tool",
@@ -5283,7 +5283,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api"
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
@@ -5297,11 +5297,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/app-service"
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/app-service"
       }
     ]
   },
@@ -5343,7 +5343,7 @@
       },
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -5367,7 +5367,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_recipe_details_tool",
@@ -5385,7 +5385,7 @@
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/project"
       }
     ]
   },
@@ -5409,7 +5409,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api"
       },
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
@@ -5427,7 +5427,7 @@
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-maven-app"
       }
     ]
   },
@@ -5437,7 +5437,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/inventory-service/build.gradle"
       },
       {
         "api_name": "get_migrate_springboot2_to_springboot3_details_tool",
@@ -5455,7 +5455,7 @@
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -5479,7 +5479,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
@@ -5521,11 +5521,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       }
     ]
   },
@@ -5567,7 +5567,7 @@
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/crm-system/build.gradle"
       }
     ]
   },
@@ -5581,7 +5581,7 @@
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -5591,7 +5591,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/api-service/build.gradle"
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
@@ -5609,7 +5609,7 @@
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-project"
       }
     ]
   },
@@ -5619,7 +5619,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/sales-service/build.gradle"
       },
       {
         "api_name": "get_migrate_quarkus1_to_quarkus2_details_tool",
@@ -5633,7 +5633,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
@@ -5675,7 +5675,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-service/build.gradle"
       },
       {
         "api_name": "get_refactor_package_rename_details_tool",
@@ -5689,11 +5689,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api"
       }
     ]
   },
@@ -5703,7 +5703,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/inventory-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_17_details_tool",
@@ -5759,7 +5759,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_quarkus1_to_quarkus2_details_tool",
@@ -5773,7 +5773,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_21_details_tool",
@@ -5791,7 +5791,7 @@
       },
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-app/build.gradle"
       }
     ]
   },
@@ -5815,7 +5815,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_refactor_package_rename_details_tool",
@@ -5829,7 +5829,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
@@ -5847,7 +5847,7 @@
       },
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/quarkus-app"
       }
     ]
   },
@@ -5899,7 +5899,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_springboot1_to_springboot2_details_tool",
@@ -5913,11 +5913,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./services/order-service"
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./services/order-service"
       }
     ]
   },
@@ -5941,7 +5941,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/project/build.gradle"
       },
       {
         "api_name": "get_recipe_details_tool",
@@ -5959,7 +5959,7 @@
       },
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/portfolio-system/build.gradle"
       }
     ]
   },
@@ -5969,7 +5969,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_25_details_tool",
@@ -6001,7 +6001,7 @@
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-application/build.gradle"
       }
     ]
   },
@@ -6011,11 +6011,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api"
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api"
       }
     ]
   },
@@ -6043,7 +6043,7 @@
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/project/pom.xml"
       }
     ]
   },
@@ -6053,7 +6053,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/banking-app/build.gradle"
       },
       {
         "api_name": "get_migrate_hamcrest_to_assertj_details_tool",
@@ -6071,7 +6071,7 @@
       },
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-springboot-project"
       }
     ]
   },
@@ -6099,7 +6099,7 @@
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/pom.xml"
       }
     ]
   },
@@ -6165,7 +6165,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       },
       {
         "api_name": "get_migrate_springboot1_to_springboot2_details_tool",
@@ -6193,7 +6193,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/notification-service/build.gradle"
       },
       {
         "api_name": "get_migrate_log4j_to_slf4j_details_tool",
@@ -6221,7 +6221,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/ecommerce-service/build.gradle"
       },
       {
         "api_name": "get_migrate_springboot1_to_springboot2_details_tool",
@@ -6235,11 +6235,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       }
     ]
   },
@@ -6249,7 +6249,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       },
       {
         "api_name": "get_use_slf4j_parameterized_logging_details_tool",
@@ -6309,7 +6309,7 @@
       },
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-project/build.gradle"
       }
     ]
   },
@@ -6319,7 +6319,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-service/build.gradle"
       },
       {
         "api_name": "get_fix_static_analysis_issues_details_tool",
@@ -6333,7 +6333,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/orders-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut3_to_micronaut4_details_tool",
@@ -6379,7 +6379,7 @@
       },
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -6389,7 +6389,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_21_details_tool",
@@ -6417,7 +6417,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       },
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
@@ -6459,7 +6459,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api"
       },
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
@@ -6473,7 +6473,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api"
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
@@ -6487,7 +6487,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       },
       {
         "api_name": "get_migrate_junit4_to_junit5_details_tool",
@@ -6505,7 +6505,7 @@
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-application"
       }
     ]
   },
@@ -6515,7 +6515,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut3_to_micronaut4_details_tool",
@@ -6547,7 +6547,7 @@
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -6561,7 +6561,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app/build.gradle"
       }
     ]
   },
@@ -6575,7 +6575,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app"
       }
     ]
   },
@@ -6585,7 +6585,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/notification-service/build.gradle"
       },
       {
         "api_name": "get_use_slf4j_parameterized_logging_details_tool",
@@ -6613,7 +6613,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_micronaut3_to_micronaut4_details_tool",
@@ -6627,7 +6627,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service/build.gradle"
       },
       {
         "api_name": "get_migrate_to_java_17_details_tool",
@@ -6655,7 +6655,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-service/src/test"
       },
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
@@ -6673,7 +6673,7 @@
       },
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-spring-app"
       }
     ]
   },
@@ -6725,7 +6725,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api/build.gradle"
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
@@ -6739,7 +6739,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       },
       {
         "api_name": "get_fix_checkstyle_violations_details_tool",
@@ -6785,7 +6785,7 @@
       },
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app/build.gradle"
       }
     ]
   },
@@ -6809,7 +6809,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/orders-service/build.gradle"
       },
       {
         "api_name": "get_manage_maven_dependencies_details_tool",
@@ -6823,7 +6823,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       },
       {
         "api_name": "get_migrate_hamcrest_to_assertj_details_tool",
@@ -6837,7 +6837,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/api-service/build.gradle"
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
@@ -6879,11 +6879,11 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-erp"
       }
     ]
   },
@@ -6893,7 +6893,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/spring-boot-app"
       },
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
@@ -6939,7 +6939,7 @@
       },
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       }
     ]
   },
@@ -6953,7 +6953,7 @@
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/analytics-platform"
       }
     ]
   },
@@ -6963,7 +6963,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-application"
       },
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",

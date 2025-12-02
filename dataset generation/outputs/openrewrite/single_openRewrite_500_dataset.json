@@ -15,7 +15,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       }
     ]
   },
@@ -25,7 +25,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -35,7 +35,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/root"
       }
     ]
   },
@@ -55,7 +55,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       }
     ]
   },
@@ -65,7 +65,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/project"
       }
     ]
   },
@@ -75,7 +75,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/root"
       }
     ]
   },
@@ -85,7 +85,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your-app"
       }
     ]
   },
@@ -95,7 +95,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       }
     ]
   },
@@ -105,7 +105,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       }
     ]
   },
@@ -115,7 +115,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/root"
       }
     ]
   },
@@ -125,7 +125,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/ecommerce-platform"
       }
     ]
   },
@@ -145,7 +145,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_springboot_3_3_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/root"
       }
     ]
   },
@@ -155,7 +155,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app"
       }
     ]
   },
@@ -175,7 +175,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/spring-boot-app"
       }
     ]
   },
@@ -215,7 +215,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./my-springboot-app"
       }
     ]
   },
@@ -265,7 +265,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./root-project"
       }
     ]
   },
@@ -285,7 +285,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot2_to_springboot3_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/root"
       }
     ]
   },
@@ -305,7 +305,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -315,7 +315,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -325,7 +325,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -335,7 +335,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -345,7 +345,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -355,7 +355,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -365,7 +365,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your-project/build.gradle"
       }
     ]
   },
@@ -375,7 +375,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -385,7 +385,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -395,7 +395,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -405,7 +405,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -415,7 +415,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -425,7 +425,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -435,7 +435,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -445,7 +445,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_17_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/app-service/build.gradle"
       }
     ]
   },
@@ -905,7 +905,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "/11"
       }
     ]
   },
@@ -915,7 +915,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -925,7 +925,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -935,7 +935,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -945,7 +945,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -955,7 +955,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -965,7 +965,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -975,7 +975,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -985,7 +985,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "/11"
       }
     ]
   },
@@ -995,7 +995,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/build.gradle"
       }
     ]
   },
@@ -1005,7 +1005,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -1015,7 +1015,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -1035,7 +1035,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -1045,7 +1045,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_21_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project/build.gradle"
       }
     ]
   },
@@ -1225,7 +1225,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-quarkus-app"
       }
     ]
   },
@@ -1245,7 +1245,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-quarkus-app"
       }
     ]
   },
@@ -1255,7 +1255,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/root-project"
       }
     ]
   },
@@ -1265,7 +1265,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-quarkus-app"
       }
     ]
   },
@@ -1275,7 +1275,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./apps/legacy-quarkus-1"
       }
     ]
   },
@@ -1315,7 +1315,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/root-project"
       }
     ]
   },
@@ -1345,7 +1345,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_quarkus1_to_quarkus2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/quarkus-app"
       }
     ]
   },
@@ -1505,7 +1505,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your-project/build.gradle"
       }
     ]
   },
@@ -1515,7 +1515,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./your-project/build.gradle"
       }
     ]
   },
@@ -1525,7 +1525,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/ecommerce-platform/build.gradle"
       }
     ]
   },
@@ -1535,7 +1535,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/build.gradle"
       }
     ]
   },
@@ -1545,7 +1545,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/your-app/build.gradle"
       }
     ]
   },
@@ -1555,7 +1555,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       }
     ]
   },
@@ -1565,7 +1565,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -1575,7 +1575,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/build.gradle"
       }
     ]
   },
@@ -1585,7 +1585,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       }
     ]
   },
@@ -1595,7 +1595,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/payment-service/build.gradle"
       }
     ]
   },
@@ -1605,7 +1605,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -1615,7 +1615,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -1625,7 +1625,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project/build.gradle"
       }
     ]
   },
@@ -1635,7 +1635,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_manage_maven_dependencies_recipe_tool",
-        "arguments": ""
+        "arguments": "./project/build.gradle"
       }
     ]
   },
@@ -1665,7 +1665,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./path-to-project"
       }
     ]
   },
@@ -1695,7 +1695,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       }
     ]
   },
@@ -1745,7 +1745,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./<root-project-path>"
       }
     ]
   },
@@ -1775,7 +1775,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_hamcrest_to_assertj_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project"
       }
     ]
   },
@@ -2765,7 +2765,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/project"
       }
     ]
   },
@@ -2775,7 +2775,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       }
     ]
   },
@@ -2785,7 +2785,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/micronaut-app"
       }
     ]
   },
@@ -2795,7 +2795,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-service"
       }
     ]
   },
@@ -2815,7 +2815,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project"
       }
     ]
   },
@@ -2865,7 +2865,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/project"
       }
     ]
   },
@@ -2875,7 +2875,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/app"
       }
     ]
   },
@@ -2885,7 +2885,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut3_to_micronaut4_recipe_tool",
-        "arguments": ""
+        "arguments": "./path"
       }
     ]
   },
@@ -3185,7 +3185,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/ecommerce-platform/build.gradle"
       }
     ]
   },
@@ -3195,7 +3195,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -3205,7 +3205,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/build.gradle"
       }
     ]
   },
@@ -3215,7 +3215,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       }
     ]
   },
@@ -3225,7 +3225,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -3235,7 +3235,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/app/build.gradle"
       }
     ]
   },
@@ -3245,7 +3245,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -3255,7 +3255,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-app/build.gradle"
       }
     ]
   },
@@ -3265,7 +3265,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -3275,7 +3275,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project/build.gradle"
       }
     ]
   },
@@ -3285,7 +3285,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -3295,7 +3295,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/billing-service/build.gradle"
       }
     ]
   },
@@ -3305,7 +3305,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -3315,7 +3315,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_junit4_to_junit5_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -3465,7 +3465,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -3475,7 +3475,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -3485,7 +3485,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "/build.gradle"
       }
     ]
   },
@@ -3495,7 +3495,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/build.gradle"
       }
     ]
   },
@@ -3505,7 +3505,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/my-service/build.gradle"
       }
     ]
   },
@@ -3515,7 +3515,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -3525,7 +3525,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -3535,7 +3535,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your-project/build.gradle"
       }
     ]
   },
@@ -3545,7 +3545,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -3565,7 +3565,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -3575,7 +3575,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/ecommerce-platform/build.gradle"
       }
     ]
   },
@@ -3585,7 +3585,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -3595,7 +3595,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_to_java_25_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/project/build.gradle"
       }
     ]
   },
@@ -3815,7 +3815,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_use_slf4j_parameterized_logging_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project"
       }
     ]
   },
@@ -3925,7 +3925,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./my-micronaut-app"
       }
     ]
   },
@@ -3935,7 +3935,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./my-app"
       }
     ]
   },
@@ -3955,7 +3955,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/micronaut-app"
       }
     ]
   },
@@ -3965,7 +3965,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/micronaut-app"
       }
     ]
   },
@@ -3975,7 +3975,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-mn2-app"
       }
     ]
   },
@@ -3985,7 +3985,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/myapp"
       }
     ]
   },
@@ -3995,7 +3995,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_micronaut2_to_micronaut3_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/root-project"
       }
     ]
   },
@@ -4025,7 +4025,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       }
     ]
   },
@@ -4135,7 +4135,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       }
     ]
   },
@@ -4145,7 +4145,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_refactor_package_rename_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/project"
       }
     ]
   },
@@ -4165,7 +4165,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api-gateway/build.gradle"
       }
     ]
   },
@@ -4175,7 +4175,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -4185,7 +4185,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api-gateway/build.gradle"
       }
     ]
   },
@@ -4195,7 +4195,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your-service/build.gradle"
       }
     ]
   },
@@ -4205,7 +4205,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4215,7 +4215,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project/build.gradle"
       }
     ]
   },
@@ -4225,7 +4225,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -4235,7 +4235,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4245,7 +4245,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4255,7 +4255,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/api-gateway/build.gradle"
       }
     ]
   },
@@ -4265,7 +4265,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4275,7 +4275,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project/build.gradle"
       }
     ]
   },
@@ -4295,7 +4295,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_checkstyle_violations_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -4445,7 +4445,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4455,7 +4455,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4465,7 +4465,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/payment-service/build.gradle"
       }
     ]
   },
@@ -4475,7 +4475,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4485,7 +4485,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/payment-service/build.gradle"
       }
     ]
   },
@@ -4495,7 +4495,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4505,7 +4505,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -4515,7 +4515,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/billing-service/build.gradle"
       }
     ]
   },
@@ -4525,7 +4525,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/billing-service/build.gradle"
       }
     ]
   },
@@ -4535,7 +4535,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4545,7 +4545,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your/project/build.gradle"
       }
     ]
   },
@@ -4555,7 +4555,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/billing-service/build.gradle"
       }
     ]
   },
@@ -4565,7 +4565,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4575,7 +4575,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_fix_static_analysis_issues_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/ecommerce-platform/build.gradle"
       }
     ]
   },
@@ -4585,7 +4585,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/your-service/build.gradle"
       }
     ]
   },
@@ -4595,7 +4595,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/billing-service/build.gradle"
       }
     ]
   },
@@ -4605,7 +4605,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -4615,7 +4615,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -4625,7 +4625,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -4635,7 +4635,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -4645,7 +4645,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4655,7 +4655,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4665,7 +4665,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/build.gradle"
       }
     ]
   },
@@ -4675,7 +4675,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4685,7 +4685,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app/build.gradle"
       }
     ]
   },
@@ -4705,7 +4705,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/order-service/build.gradle"
       }
     ]
   },
@@ -4715,7 +4715,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_springboot1_to_springboot2_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app/build.gradle"
       }
     ]
   },
@@ -4765,7 +4765,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       }
     ]
   },
@@ -4775,7 +4775,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./path/to/your-project"
       }
     ]
   },
@@ -4785,7 +4785,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/legacy-app"
       }
     ]
   },
@@ -4815,7 +4815,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./workspace/billing-service"
       }
     ]
   },
@@ -4855,7 +4855,7 @@
     "relevant_apis": [
       {
         "api_name": "apply_migrate_log4j_to_slf4j_recipe_tool",
-        "arguments": ""
+        "arguments": "./projects/my-app"
       }
     ]
   },
