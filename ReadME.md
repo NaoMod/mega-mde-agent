@@ -1,5 +1,13 @@
 # LLM Agent Evaluation for Model-Driven Engineering
 
+## Requirements
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## 1. Megamodel and Registry
 
 The megamodel provides descriptions of LLM-based agents, associated tools, underlying artifacts/models, and execution traces. It is organized in four parts: core artifacts (models, metamodels, transformation models), tooling artifacts (tools, servers), agent artifacts (agents, workflows, steps), and execution traces (traces, invocations).
@@ -31,9 +39,9 @@ Both subdatasets are combined and undergo final validation to produce the final 
   - `uml_tools/` - UML tool seeds
   - `openrewrite/` - OpenRewrite seeds
 - **Generated datasets**: `dataset generation/outputs/`
-  - `atl_tools/` - Contains `simple_500_dataset.json`, `multi_500_dataset.json`
-  - `uml/` - Contains `uml_500_dataset.json`, `uml_multi_500_dataset.json`
-  - `openRewrite/` - Contains `single_openRewrite_500_dataset.json` , `multi_openRewrite_500_dataset.json`
+  - `atl_tools/` - Contains `single_500_dataset.json`, `multi_500_dataset.json`
+  - `uml/` - Contains `single_uml_500_dataset.json`, `multi_uml_500_dataset.json`
+  - `openRewrite/` - Contains `single_openRewrite_500_dataset.json`, `multi_openRewrite_500_dataset.json`
   
 **To generate datasets**:
 
@@ -50,8 +58,8 @@ Both subdatasets are combined and undergo final validation to produce the final 
    python3 pipeline.py  # Runs the full generation pipeline for all tool categories
    ```
 
-- **LLM used**: GPT-5 nano for instruction generation
-- **Embedding model**: text-embedding-3-small in the dataset validation (for diversity metrics)
+- **LLM used**: GPT-4o-mini for instruction generation
+- **Embedding model**: text-embedding-3-small for dataset validation (diversity metrics)
 
 ## 3. Dataset Validation Metrics
 
@@ -82,14 +90,12 @@ Validates dataset diversity using six metrics from dataset augmentation research
    python3 visualize_metrics.py  # Generates PNG charts
    ```
 
-- **Output charts**: `dataset generation/experimentation_charts/`
-  - `atl_tools/` - ATL and All Tools metric visualizations
-  - `uml_tools/` - UML metric visualizations
-  - `openrewrite_tools/` - OpenRewrite metric visualizations
+- **Output charts**: `dataset generation/outputs/`
+  - Charts are generated for each tool category (ATL, UML, OpenRewrite) showing diversity metric comparisons
 
 ## 4. Agent Benchmarking
 
-Evaluates seven agent versions against the generated dataset and the seed dataset.
+Evaluates seven agent versions (representing different architectural improvements and model choices) against both the augmented dataset and the original seed dataset.
 
 - **Agent versions**: `evaluation/agent_versions/` (agent1.py through agent7.py)
 - **Execution script**: `scripts/run_agent_versions.py`
@@ -110,17 +116,9 @@ Tests agent performance with reduced tool availability.
 - **Results**: `outputs/ablation_test/`
 - **Coverage charts**: `outputs/plots/coverage_chart_seeds.png`
 
-## MCP Servers used in the paper
+## 6. MCP Servers
 
-Servers expose tools via the Model Context Protocol for agent execution.
+Servers expose tools via the Model Context Protocol (MCP) for agent execution.
 
 - **ATL server**: `mcp_servers/atl_server/` - Model transformations (includes UML transformations)
-- **OpenRewrite servers**: `mcp_servers/openRewrite_servers/` - Code refactoring
-
-## Requirements
-
-Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
+- **OpenRewrite server**: `mcp_servers/openRewrite_servers/` - Java code refactoring and migration recipes
