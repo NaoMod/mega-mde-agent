@@ -94,33 +94,50 @@ def _build_type_graph(capabilities: List[Dict[str, Any]]) -> Dict[str, Any]:
 def build_workflows(type_graph: Dict[str, Any]) -> List[List[str]]:
     """Generate all valid 2-tool workflow chains from the type graph.
     
-    Creates type-compatible chains (apply → apply) using follow_edges where 
-    the output of the first tool matches the input of the second tool.
+    Creates four types of workflow chains:
+    1. apply → apply: Only type-compatible chains (from follow_edges where output matches input)
+    2. apply → get: All combinations of apply tools followed by get tools
+    3. get → get: All combinations of get tools (excluding same tool)
+    4. get → apply: All combinations of get tools followed by apply tools
     
     Args:
         type_graph: The type graph returned by _build_type_graph containing
-                   follow_edges and precede_edges.
+                   tool_io, follow_edges and precede_edges.
     
     Returns:
         A list of workflows, where each workflow is a list of 2 tool names
-        [tool_A, tool_B] meaning tool_A can be followed by tool_B.
-        
-    Example:
-        If follow_edges shows:
-            apply_PathExp2PetriNet -> [apply_PetriNet2XML, apply_PetriNet2PNML]
-        Then returns:
-            [["apply_PathExp2PetriNet_transformation_tool", "apply_PetriNet2XML_transformation_tool"],
-             ["apply_PathExp2PetriNet_transformation_tool", "apply_PetriNet2PNML_transformation_tool"]]
+        [tool_A, tool_B] representing a valid chain.
     """
     workflows: List[List[str]] = []
     follow_edges = type_graph.get("follow_edges", {})
+    tool_io = type_graph.get("tool_io", {})
     
-    # Type-compatible apply → apply chains (from follow_edges)
+    # Get all tool names and categorize them
+    all_tools = list(tool_io.keys())
+    apply_tools = [t for t in all_tools if t.startswith("apply_")]
+    get_tools = [t for t in all_tools if t.startswith("get_") or t.startswith("list_")]
+    
+    # 1. apply -> apply: Only type-compatible chains (from follow_edges)
     for tool_a, followers in follow_edges.items():
         for tool_b in followers:
-            # Only include if both are apply tools
             if tool_a.startswith("apply_") and tool_b.startswith("apply_"):
                 workflows.append([tool_a, tool_b])
+    
+    # 2. apply -> get: All combinations
+    for apply_tool in apply_tools:
+        for get_tool in get_tools:
+            workflows.append([apply_tool, get_tool])
+    
+    # 3. get -> get: All combinations (excluding same tool)
+    for get_tool_a in get_tools:
+        for get_tool_b in get_tools:
+            if get_tool_a != get_tool_b:
+                workflows.append([get_tool_a, get_tool_b])
+    
+    # 4. get -> apply: All combinations
+    for get_tool in get_tools:
+        for apply_tool in apply_tools:
+            workflows.append([get_tool, apply_tool])
     
     return workflows
 
