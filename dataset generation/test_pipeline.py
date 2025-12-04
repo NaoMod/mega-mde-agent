@@ -1,5 +1,6 @@
 import sys
 import random
+import asyncio
 from pathlib import Path
 WORKDIR = Path(__file__).resolve().parents[1]
 if str(WORKDIR) not in sys.path:
@@ -20,20 +21,20 @@ from pipeline import (
 )
 
 
-def main() -> None:
+async def main() -> None:
     # 1. Get a populated registry
     registry = MegamodelRegistry()
-    populate_registry(registry)
+    await populate_registry(registry)  # Now properly awaited!
     
-    # Then run the agent to generate some execution history
-    print("\nExecuting agent to generate history...")
-    agent = MCPAgent(registry)  # Use same registry instance
+    # # Then run the agent to generate some execution history
+    # print("\nExecuting agent to generate history...")
+    # agent = MCPAgent(registry)  # Use same registry instance
 
-    # # Ask the agent to transform Class to Relational 
-    user_goal = "transform this Class model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model"
-    result = agent.run(user_goal)  # This will create session/traces in our registry
+    # # # Ask the agent to transform Class to Relational 
+    # user_goal = "transform this Class model /Users/zakariahachm/Downloads/llm-agents-mde/src/examples/class.xmi to a Relational model"
+    # result = agent.run(user_goal)  # This will create session/traces in our registry
     
-    print("\nAgent execution completed. Now testing pipeline components...")
+    # print("\nAgent execution completed. Now testing pipeline components...")
 
     # # Test 2: Type graph building
     print("\nTesting _build_type_graph:")
@@ -283,4 +284,4 @@ def main() -> None:
     print(f"\n'Get' tool instructions dataset saved to: {get_only_output_path}")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

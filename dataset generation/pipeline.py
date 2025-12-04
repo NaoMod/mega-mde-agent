@@ -1,6 +1,5 @@
 import json
 import os
-from itertools import combinations
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 import sys
@@ -30,7 +29,8 @@ def _norm_transfo_name(name: str) -> str:
     return (name or "").strip().lower()
 
 def _infer_capabilities_from_registry(registry: MegamodelRegistry, tools: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Discovers what models each transformation tool can process by looking up their input/output metamodel types in the registry."""
+    """Discovers what models each transformation tool can process by looking up their input/output metamodel types in the registry. 
+    Returns a list of dictionaries with tool_name, input_types, and output_types for each tool"""
     # Get transformation name -> (in_uri, out_uri) from registry
     transfo_types = {
         _norm_transfo_name(getattr(e, "name", "")): (
@@ -60,7 +60,7 @@ def _infer_capabilities_from_registry(registry: MegamodelRegistry, tools: List[D
 
 
 def _build_type_graph(capabilities: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Build a simple type graph to find possible 2-tool chains.
+    """Build a simple type graph to find possible 2-tool chains. This enables finding valid 2-tool chains where the output of one tool feeds into the next.
 
     Returns dict with:
       - tool_io: {tool_name: {"in": set, "out": set}}
@@ -177,8 +177,6 @@ def sample_apis(components: Dict[str, Any], insights: Dict[str, Any]) -> List[Di
     # Deterministic tail
     fallback = [t for t in tools if t.get("name", "") not in by_name]
     return (ranked + fallback)[:10]
-
-
 
 
 # --- Utilité: Instead of working with long tool names like "apply_Class2Relational_transformation_tool", We get simple patterns like "apply" or "get" 
