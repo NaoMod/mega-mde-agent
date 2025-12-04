@@ -19,9 +19,9 @@ if str(SRC_DIR) not in sys.path:
 from src.core.megamodel import MegamodelRegistry
 import random
 # Single-tool instruction seed examples
-from single_tool_seeds import SingleToolSeeds
+from seeds.all_tools.single_tool_seeds import SingleToolSeeds
 # Multi-tool instruction seed examples
-from multi_tool_seeds import MultiToolSeeds
+from seeds.all_tools.multi_tool_seeds import MultiToolSeeds
     
 
 # --- 1) Start with a megamodel repository (populate registry) ---
@@ -66,6 +66,8 @@ def _build_type_graph(capabilities: List[Dict[str, Any]]) -> Dict[str, Any]:
       - tool_io: {tool_name: {"in": set, "out": set}}
       - follow_edges: {tool_name: [tool_name,...]} where out intersects next.in
       - precede_edges: inverse of follow_edges
+
+    The _build_type_graph function builds a dependency graph showing which transformation tools can be chained together based on type compatibility (i.e., the output of one tool matches the input of another).
     """
     tool_io: Dict[str, Dict[str, set]] = {}
     for c in capabilities or []:
@@ -87,6 +89,40 @@ def _build_type_graph(capabilities: List[Dict[str, Any]]) -> Dict[str, Any]:
         for b in bs:
             precede_edges[b].append(a)
     return {"tool_io": tool_io, "follow_edges": follow_edges, "precede_edges": precede_edges}
+
+
+def build_workflows(type_graph: Dict[str, Any]) -> List[List[str]]:
+    """Generate all valid 2-tool workflow chains from the type graph.
+    
+    Creates type-compatible chains (apply → apply) using follow_edges where 
+    the output of the first tool matches the input of the second tool.
+    
+    Args:
+        type_graph: The type graph returned by _build_type_graph containing
+                   follow_edges and precede_edges.
+    
+    Returns:
+        A list of workflows, where each workflow is a list of 2 tool names
+        [tool_A, tool_B] meaning tool_A can be followed by tool_B.
+        
+    Example:
+        If follow_edges shows:
+            apply_PathExp2PetriNet -> [apply_PetriNet2XML, apply_PetriNet2PNML]
+        Then returns:
+            [["apply_PathExp2PetriNet_transformation_tool", "apply_PetriNet2XML_transformation_tool"],
+             ["apply_PathExp2PetriNet_transformation_tool", "apply_PetriNet2PNML_transformation_tool"]]
+    """
+    workflows: List[List[str]] = []
+    follow_edges = type_graph.get("follow_edges", {})
+    
+    # Type-compatible apply → apply chains (from follow_edges)
+    for tool_a, followers in follow_edges.items():
+        for tool_b in followers:
+            # Only include if both are apply tools
+            if tool_a.startswith("apply_") and tool_b.startswith("apply_"):
+                workflows.append([tool_a, tool_b])
+    
+    return workflows
 
 
 def _serialize_historical_executions(registry: MegamodelRegistry) -> List[Dict[str, Any]]:
@@ -493,7 +529,14 @@ def generate_dataset_for_regression_testing(
         
         items.extend(single_items)
     
-    # 2) Then generate multi-tool instructions if workflows are provided
+    # 2) Build workflows from type graph if not provided
+    if workflows is None and registry is not None:
+        # Infer capabilities from registry and build type graph
+        capabilities = _infer_capabilities_from_registry(registry, tools)
+        type_graph = _build_type_graph(capabilities)
+        workflows = build_workflows(type_graph)
+    
+    # 3) Generate multi-tool instructions from workflows
     if workflows:
         multi_items = generate_multi_tool_instructions(
             chain_len=2,
@@ -505,6 +548,6 @@ def generate_dataset_for_regression_testing(
         
         items.extend(multi_items)
 
-    # 3) Validate but don't limit to just 10 items
+    # 4) Validate but don't limit to just 10 items
     items = validate_dataset(items)
     return items
