@@ -18,9 +18,9 @@ from src.core.megamodel import MegamodelRegistry
 from scripts.run_agent_versions import populate_registry
 from pipeline import generate_dataset_for_regression_testing, _derive_api, build_workflows, _infer_capabilities_from_registry, _build_type_graph
 
-TARGET = 20 # Generate 20 multi-tool instructions for testing
-OUTPUT_FILE = Path(__file__).parent / "outputs" / "all_tools_multi_20_dataset.json"
-REMAINDER_FILE = Path(__file__).parent / "outputs" / "all_tools_multi_remainder.json"
+TARGET = 500 # Generate 500 multi-tool instructions
+OUTPUT_FILE = Path(__file__).parent / "outputs" / "atl_multi_500_dataset.json"
+REMAINDER_FILE = Path(__file__).parent / "outputs" / "atl_multi_remainder.json"
 
 all_instructions: List[dict] = []
 generated_count = 0
@@ -145,12 +145,11 @@ async def main():
 
     # Track usage for each tool
     tool_counts = {name: 0 for name in tool_names}
-    # Shuffle workflows for variety
-    random.shuffle(workflows)
-
-    # Select workflows (just use shuffled workflows directly)
-    selected_workflows = workflows[:min(len(workflows), TARGET * 2)]  # Take enough workflows
+    
+    # Use ALL workflows (all 4 patterns)
+    selected_workflows = workflows.copy()
     random.shuffle(selected_workflows)
+    print(f"\nUsing all workflows: {len(selected_workflows)}")
 
     # Load existing remainder progress if available
     remainder_instructions = []
