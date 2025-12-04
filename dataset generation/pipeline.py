@@ -404,10 +404,14 @@ def generate_multi_tool_instructions(
                 apis.append({"api_name": api, "arguments": model_path if pat == "apply" else ""})
                 patterns.append(pat)
                 
-                # Extract tool type info
+                # Extract tool type info (split on first '2' only to handle names like XML2R2ML)
                 if "2" in api:
-                    source, target = api.split(".")[0].split("2")
-                    tool_types.append(f"{source} to {target}")
+                    parts = api.split(".")[0].split("2", 1)  # Split only on first '2'
+                    if len(parts) == 2:
+                        source, target = parts
+                        tool_types.append(f"{source} to {target}")
+                    else:
+                        tool_types.append("model transformation")
                 else:
                     tool_types.append("model transformation")
             

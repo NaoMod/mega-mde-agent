@@ -11,15 +11,16 @@ from typing import List
 
 WORKDIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(WORKDIR))
+sys.path.insert(0, str(WORKDIR / "src"))  # Add src directory for relative imports in megamodel.py
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from src.core.megamodel import MegamodelRegistry
 from scripts.run_agent_versions import populate_registry
-from pipeline import generate_dataset_for_regression_testing, _derive_api
+from pipeline import generate_dataset_for_regression_testing, _derive_api, build_workflows, _infer_capabilities_from_registry, _build_type_graph
 
-TARGET = 500 # Generate full Table multi-tool dataset
-OUTPUT_FILE = Path(__file__).parent / "outputs" / "openRewrite_multi_500_dataset.json"
-REMAINDER_FILE = Path(__file__).parent / "outputs" / "openRewrite_multi_remainder.json"
+TARGET = 20 # Generate 20 multi-tool instructions for testing
+OUTPUT_FILE = Path(__file__).parent / "outputs" / "all_tools_multi_20_dataset.json"
+REMAINDER_FILE = Path(__file__).parent / "outputs" / "all_tools_multi_remainder.json"
 
 all_instructions: List[dict] = []
 generated_count = 0
@@ -103,45 +104,52 @@ async def main():
     print(f"Generating remainder: {remainder_needed} instructions to reach {TARGET}")
 
 
-    # Discover OpenRewrite tools
+    # Discover ATL tools only (exclude EMF tools like list_features, get_session_info)
     registry = MegamodelRegistry()
     await populate_registry(registry)
-    or_tools = registry.tools_by_server.get("openrewrite_server", [])
-    tool_names = [getattr(t, "name", "") for t in or_tools if getattr(t, "name", "")]
-    # Optionally filter out meta/utility tools (minimal change: keep all except list_/extract_)
-    tool_names = [n for n in tool_names if not (n.startswith("list_") or n.startswith("extract_"))]
-    print(f"Discovered {len(tool_names)} OpenRewrite tools usable for workflows:")
+    
+    atl_tools = registry.tools_by_server.get("atl_server", [])
+    all_tools = atl_tools  # Only ATL tools, no EMF
+    
+    tools_dicts = [
+        {"name": getattr(t, "name", ""), "description": getattr(t, "description", "")}
+        for t in all_tools if getattr(t, "name", "")
+    ]
+    tool_names = [t["name"] for t in tools_dicts]
+    print(f"Discovered {len(tool_names)} tools (ATL + EMF) usable for workflows:")
 
     for tt in tool_names:
         print(f"- {tt}")
 
-    # Workflow generation
-    num_tools = len(tool_names)
-    per_tool = TARGET // num_tools
-    remainder = TARGET % num_tools
-    print(f"Each tool will be used in {per_tool} workflows, {remainder} tools will be used in one extra workflow.")
-
-    # Build all possible two-step workflows
-    workflows = build_two_step_workflows(tool_names)
+    # Build workflows using the type graph (apply->apply type-compatible, all other combos)
+    capabilities = _infer_capabilities_from_registry(registry, tools_dicts)
+    type_graph = _build_type_graph(capabilities)
+    workflows = build_workflows(type_graph)
+    
     if not workflows:
         print("No workflows built. Exiting.")
         return
-    print(f"Prepared {len(workflows)} candidate two-step workflows")
+    
+    # Categorize for display
+    apply_apply = [w for w in workflows if w[0].startswith("apply_") and w[1].startswith("apply_")]
+    apply_get = [w for w in workflows if w[0].startswith("apply_") and (w[1].startswith("get_") or w[1].startswith("list_"))]
+    get_get = [w for w in workflows if (w[0].startswith("get_") or w[0].startswith("list_")) and (w[1].startswith("get_") or w[1].startswith("list_"))]
+    get_apply = [w for w in workflows if (w[0].startswith("get_") or w[0].startswith("list_")) and w[1].startswith("apply_")]
+    
+    print(f"\nWorkflow Breakdown:")
+    print(f"  apply → apply (type-compatible): {len(apply_apply)}")
+    print(f"  apply → get (all combinations):  {len(apply_get)}")
+    print(f"  get → get (excluding same tool): {len(get_get)}")
+    print(f"  get → apply (all combinations):  {len(get_apply)}")
+    print(f"  Total: {len(workflows)} candidate two-step workflows")
 
     # Track usage for each tool
     tool_counts = {name: 0 for name in tool_names}
     # Shuffle workflows for variety
     random.shuffle(workflows)
 
-    # Distribute workflows to guarantee equal usage
-    selected_workflows = []
-    for tool in tool_names:
-        count = per_tool + (1 if remainder > 0 else 0)
-        if remainder > 0:
-            remainder -= 1
-        tool_workflows = [wf for wf in workflows if tool in wf]
-        random.shuffle(tool_workflows)
-        selected_workflows.extend(tool_workflows[:count])
+    # Select workflows (just use shuffled workflows directly)
+    selected_workflows = workflows[:min(len(workflows), TARGET * 2)]  # Take enough workflows
     random.shuffle(selected_workflows)
 
     # Load existing remainder progress if available

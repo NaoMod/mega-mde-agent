@@ -72,10 +72,42 @@ async def main() -> None:
     workflows = build_workflows(type_graph)
     print(f"\nTotal valid 2-tool workflows: {len(workflows)}")
     
-    # Show first 10 workflows as examples
-    print("\nSample workflows (first 10):")
-    for i, workflow in enumerate(workflows[:10], 1):
-        print(f"  {i}. {workflow[0]} -> {workflow[1]}")
+    # Categorize workflows by type
+    apply_apply = [w for w in workflows if w[0].startswith("apply_") and w[1].startswith("apply_")]
+    apply_get = [w for w in workflows if w[0].startswith("apply_") and (w[1].startswith("get_") or w[1].startswith("list_"))]
+    get_get = [w for w in workflows if (w[0].startswith("get_") or w[0].startswith("list_")) and (w[1].startswith("get_") or w[1].startswith("list_"))]
+    get_apply = [w for w in workflows if (w[0].startswith("get_") or w[0].startswith("list_")) and w[1].startswith("apply_")]
+    
+    print(f"\n--- Workflow Breakdown ---")
+    print(f"  apply → apply (type-compatible): {len(apply_apply)}")
+    print(f"  apply → get (all combinations):  {len(apply_get)}")
+    print(f"  get → get (excluding same tool): {len(get_get)}")
+    print(f"  get → apply (all combinations):  {len(get_apply)}")
+    
+    # Show samples from each category
+    print("\n--- Sample apply → apply (type-compatible chains) ---")
+    for w in apply_apply[:5]:
+        print(f"  {w[0]} -> {w[1]}")
+    if len(apply_apply) > 5:
+        print(f"  ... and {len(apply_apply) - 5} more")
+    
+    print("\n--- Sample apply → get ---")
+    for w in apply_get[:5]:
+        print(f"  {w[0]} -> {w[1]}")
+    if len(apply_get) > 5:
+        print(f"  ... and {len(apply_get) - 5} more")
+    
+    print("\n--- Sample get → get ---")
+    for w in get_get[:5]:
+        print(f"  {w[0]} -> {w[1]}")
+    if len(get_get) > 5:
+        print(f"  ... and {len(get_get) - 5} more")
+    
+    print("\n--- Sample get → apply ---")
+    for w in get_apply[:5]:
+        print(f"  {w[0]} -> {w[1]}")
+    if len(get_apply) > 5:
+        print(f"  ... and {len(get_apply) - 5} more")
     
     if len(workflows) > 10:
         print(f"  ... and {len(workflows) - 10} more workflows")
